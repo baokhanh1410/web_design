@@ -1,0 +1,10 @@
+sqlalchemy
+psycopg2-binary
+pandas
+python-dotenv
+bcrypt
+# FastAPI
+fastapi
+uvicorn[standard]
+python-jose[cryptography]
+python-multipart

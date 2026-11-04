@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventHub - Đặt Vé Sự Kiện & Trải Nghiệm Phong Cách Traveloka</title>
+  <meta name="description" content="Nền tảng tìm kiếm, đặt vé sự kiện, hội thảo, đại nhạc hội hàng đầu Việt Nam với E-Ticket QR thông minh và gợi ý giá AI.">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP HEADER & NAVIGATION BAR
+       ======================================================================== -->
+  <header class="header">
+    <div class="container header-content">
+      <!-- Brand Logo -->
+      <a href="#" class="logo" onclick="switchView('explore'); return false;">
+        <div class="logo-badge">✈️</div>
+        <span>EventHub</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="nav-links" aria-label="Điều hướng chính">
+        <a href="#explore" id="nav-explore" class="nav-item active" onclick="switchView('explore'); return false;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+          Khám phá
+        </a>
+        <a href="#my-bookings" id="nav-my-bookings" class="nav-item" onclick="switchView('my-bookings'); return false;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
+          Vé của tôi
+        </a>
+        <a href="#admin" id="nav-admin" class="nav-item" onclick="switchView('admin'); return false;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          Quản trị & ML
+        </a>
+      </nav>
+
+      <!-- User Profile & Quick Actions -->
+      <div class="nav-actions" id="user-nav-actions">
+        <!-- Dynamically rendered by app.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       VIEW 1: EXPLORE & EVENTS CATALOG (HOME)
+       ======================================================================== -->
+  <main id="view-explore">
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-pattern"></div>
+      <div class="hero-glow-1"></div>
+      <div class="hero-glow-2"></div>
+
+      <div class="container hero-content">
+        <div class="hero-tag">
+          <span>✨</span> Trải Nghiệm Hoạt Động & Sự Kiện Đỉnh Cao
+        </div>
+        <h1 class="hero-title">
+          Khám Phá Vé Sự Kiện & <span>Đại Nhạc Hội</span>
+        </h1>
+        <p class="hero-subtitle">
+          Đặt vé nhanh chóng, nhận E-Ticket QR tức thì và hưởng ưu đãi lên đến 20% cùng EventHub.
+        </p>
+
+        <div class="hero-perks">
+          <div class="hero-perk-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFD56B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Vé điện tử QR 1-giây</span>
+          </div>
+          <div class="hero-perk-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFD56B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Điểm danh thông minh</span>
+          </div>
+          <div class="hero-perk-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFD56B" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Gợi ý giá tối ưu bằng AI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Floating Search & Filter Widget -->
+    <div class="container search-widget-wrapper">
+      <div class="search-widget">
+        <form id="search-form" class="search-grid">
+          <!-- Keyword -->
+          <div class="search-field">
+            <label class="search-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Tìm kiếm sự kiện
+            </label>
+            <div class="search-input-box">
+              <input type="text" id="search-keyword" placeholder="Nhập tên sự kiện, ca sĩ, địa điểm...">
+            </div>
+          </div>
+
+          <!-- Category -->
+          <div class="search-field">
+            <label class="search-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              Thể loại
+            </label>
+            <div class="search-input-box">
+              <select id="search-category">
+                <option value="Tất cả">Tất cả thể loại</option>
+                <option value="Âm nhạc & Lễ hội">Âm nhạc & Lễ hội</option>
+                <option value="Công nghệ & AI">Công nghệ & AI</option>
+                <option value="Hội thảo kỹ năng">Hội thảo kỹ năng</option>
+                <option value="Ẩm thực & Đời sống">Ẩm thực & Đời sống</option>
+                <option value="Nghệ thuật & Triển lãm">Nghệ thuật & Triển lãm</option>
+                <option value="Thể thao & Giải trí">Thể thao & Giải trí</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Date -->
+          <div class="search-field">
+            <label class="search-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Ngày diễn ra
+            </label>
+            <div class="search-input-box">
+              <input type="date" id="search-date">
+            </div>
+          </div>
+
+          <!-- Max Price -->
+          <div class="search-field">
+            <label class="search-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              Giá tối đa (VNĐ)
+            </label>
+            <div class="search-input-box">
+              <input type="number" id="search-price" placeholder="VD: 500000" step="50000">
+            </div>
+          </div>
+
+          <!-- CTA Button -->
+          <button type="submit" class="btn btn-accent btn-lg" style="height: 48px; align-self: flex-end;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            Tìm vé
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Events Catalog Section -->
+    <div class="container">
+      <!-- Quick Category Pills -->
+      <div class="category-filter-bar" id="category-filter-bar">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Section Title & Status -->
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span>🔥 Sự Kiện Được Yêu Thích Nhất</span>
+          </h2>
+          <p class="section-subtitle">Đặt vé điện tử trực tuyến, thanh toán bảo mật, hoàn hủy linh hoạt</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span id="api-status-pill" class="badge badge-neutral">Chế độ: Độc lập</span>
+          <span class="event-count-badge" id="event-count-badge">Đang tải...</span>
+        </div>
+      </div>
+
+      <!-- Event Cards Grid -->
+      <div class="events-grid" id="events-grid">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       VIEW 2: MY BOOKINGS (VÉ CỦA TÔI)
+       ======================================================================== -->
+  <main id="view-my-bookings" class="container" style="display: none; padding-top: 40px; padding-bottom: 60px;">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">
+          <span>🎟️ Vé Điện Tử Của Tôi</span>
+        </h2>
+        <p class="section-subtitle">Quản lý các vé sự kiện đã đặt, xuất trình mã QR tại cửa soát vé để vào cổng</p>
+      </div>
+      <button class="btn btn-outline-primary" onclick="switchView('explore')">
+        + Đặt thêm vé mới
+      </button>
+    </div>
+
+    <div id="my-bookings-list">
+      <!-- Dynamically rendered -->
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       VIEW 3: ADMIN & AI PRICING DASHBOARD
+       ======================================================================== -->
+  <main id="view-admin" class="container" style="display: none; padding-top: 40px; padding-bottom: 60px;">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">
+          <span>📊 Bảng Điều Khiển Quản Trị Sự Kiện</span>
+        </h2>
+        <p class="section-subtitle">Theo dõi tài chính, tỷ lệ tham gia và áp dụng AI định giá vé thông minh</p>
+      </div>
+      <button class="btn btn-primary" onclick="openCreateEventModal()">
+        + Tạo sự kiện mới
+      </button>
+    </div>
+
+    <!-- KPI Summary Cards -->
+    <div class="dashboard-kpis">
+      <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #EBF7FF; color: var(--primary);">💰</div>
+        <div>
+          <div class="kpi-val" id="kpi-revenue">0 ₫</div>
+          <div class="kpi-title">Tổng doanh thu</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #FFF2ED; color: var(--accent);">🎪</div>
+        <div>
+          <div class="kpi-val" id="kpi-events">0</div>
+          <div class="kpi-title">Tổng sự kiện</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #E6F7ED; color: var(--success);">👥</div>
+        <div>
+          <div class="kpi-val" id="kpi-registrations">0</div>
+          <div class="kpi-title">Lượt đăng ký</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #FEF6E9; color: var(--warning);">📈</div>
+        <div>
+          <div class="kpi-val" id="kpi-attendance">0%</div>
+          <div class="kpi-title">Tỷ lệ tham gia</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Pricing Recommender Widget -->
+    <div class="ml-widget">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.5rem;">🤖</span>
+          <div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-dark);">
+              Công Cụ Định Giá Vé Thông Minh (Machine Learning Pricing Model)
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Tích hợp mô hình dự đoán XGBoost trong <code>src/ml_models.py</code> để tối ưu hóa doanh thu dựa trên quy mô và phân khúc
+            </p>
+          </div>
+        </div>
+        <span class="badge badge-primary">AI Recommender</span>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="search-field">
+          <label class="search-label">Sức chứa khán phòng (Người)</label>
+          <div class="search-input-box">
+            <input type="number" id="ml-input-capacity" value="1200" step="100">
+          </div>
+        </div>
+        <div class="search-field">
+          <label class="search-label">Phân khúc thể loại</label>
+          <div class="search-input-box">
+            <select id="ml-input-category">
+              <option value="Âm nhạc & Lễ hội">Âm nhạc & Lễ hội</option>
+              <option value="Công nghệ & AI" selected>Công nghệ & AI</option>
+              <option value="Hội thảo kỹ năng">Hội thảo kỹ năng</option>
+              <option value="Ẩm thực & Đời sống">Ẩm thực & Đời sống</option>
+            </select>
+          </div>
+        </div>
+        <div class="search-field">
+          <label class="search-label">Giá vé cơ sở đề xuất (VNĐ)</label>
+          <div class="search-input-box">
+            <input type="number" id="ml-input-price" value="300000" step="20000">
+          </div>
+        </div>
+        <button class="btn btn-primary" style="height: 48px;" onclick="calculateRecommendedPrice()">
+          ⚡ Phân tích & Gợi ý giá
+        </button>
+      </div>
+
+      <div id="ml-pricing-result" class="ml-result-box" style="display: none;">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+
+    <!-- Events Management Table -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark);">
+        Danh Sách Quản Lý Sự Kiện
+      </h3>
+    </div>
+
+    <div class="admin-table-wrapper" tabindex="0" role="region" aria-label="Danh sách sự kiện, cuộn ngang để xem thêm cột">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Mã</th>
+            <th>Tên sự kiện</th>
+            <th>Thời gian</th>
+            <th>Địa điểm</th>
+            <th>Vé bán / Sức chứa</th>
+            <th>Giá vé</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody id="admin-events-table-body">
+          <!-- Dynamically rendered -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       MODAL 1: 3-STEP BOOKING WIZARD
+       ======================================================================== -->
+  <div class="modal-backdrop" id="booking-modal">
+    <div class="modal-card modal-lg">
+      <button class="modal-close-btn" onclick="closeBookingModal()">✕</button>
+
+      <div class="detail-body">
+        <!-- Event Quick Header -->
+        <div style="margin-bottom: 20px;">
+          <span class="badge badge-accent" style="margin-bottom: 6px;">Đặt vé nhanh</span>
+          <h2 id="booking-event-title" style="font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin-bottom: 6px;">Tên sự kiện</h2>
+          <div style="display: flex; gap: 16px; font-size: 0.85rem; color: var(--text-muted); flex-wrap: wrap;">
+            <span id="booking-event-venue">Địa điểm</span>
+            <span>·</span>
+            <span id="booking-event-date">Thời gian</span>
+          </div>
+        </div>
+
+        <!-- 3-Step Wizard Progress Bar -->
+        <div class="wizard-steps">
+          <div class="wizard-step-item active" id="wizard-step-1">
+            <div class="step-number">1</div>
+            <span>Chọn số lượng</span>
+          </div>
+          <div class="wizard-step-item" id="wizard-step-2">
+            <div class="step-number">2</div>
+            <span>Thông tin người nhận</span>
+          </div>
+          <div class="wizard-step-item" id="wizard-step-3">
+            <div class="step-number">3</div>
+            <span>Xác nhận & Thanh toán</span>
+          </div>
+        </div>
+
+        <!-- STEP 1: QUANTITY SELECTION -->
+        <div id="step-pane-1">
+          <div class="ticket-quantity-row" style="background: var(--bg-page); border-radius: var(--radius-md); padding: 18px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+              <div style="font-weight: 700; font-size: 1.05rem;">Vé Tiêu Chuẩn (Standard Ticket)</div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">Bao gồm quyền vào cổng và quà tặng chào mừng</div>
+              <div id="booking-unit-price" style="font-size: 1.25rem; font-weight: 800; color: var(--accent); margin-top: 6px;">0 ₫</div>
+            </div>
+
+            <div class="stepper-box">
+              <button class="stepper-btn" onclick="changeBookingQty(-1)">-</button>
+              <div class="stepper-val" id="booking-qty-display">1</div>
+              <button class="stepper-btn" onclick="changeBookingQty(1)">+</button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end;">
+            <button class="btn btn-primary" onclick="setBookingStep(2)">
+              Tiếp tục: Điền thông tin ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: ATTENDEE INFO -->
+        <div id="step-pane-2" style="display: none;">
+          <div style="display: grid; gap: 14px; margin-bottom: 20px;">
+            <div class="search-field">
+              <label class="search-label">Họ và tên người nhận vé *</label>
+              <div class="search-input-box">
+                <input type="text" id="booking-attendee-name" placeholder="Nguyễn Văn A" required>
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Email nhận mã QR E-Ticket *</label>
+              <div class="search-input-box">
+                <input type="email" id="booking-attendee-email" placeholder="example@gmail.com" required>
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Số điện thoại liên hệ *</label>
+              <div class="search-input-box">
+                <input type="tel" id="booking-attendee-phone" placeholder="0988 123 456" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions" style="display: flex; justify-content: space-between;">
+            <button class="btn btn-ghost" onclick="setBookingStep(1)">
+              ← Quay lại chọn vé
+            </button>
+            <button class="btn btn-primary" onclick="setBookingStep(3)">
+              Tiếp tục: Thanh toán ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: VOUCHER & CONFIRMATION -->
+        <div id="step-pane-3" style="display: none;">
+          <!-- Voucher box -->
+          <div style="margin-bottom: 20px;">
+            <label class="search-label">Mã khuyến mãi / Voucher giảm giá</label>
+            <div class="voucher-bar">
+              <input type="text" id="voucher-code-input" class="voucher-input" placeholder="Nhập TRAVELOKA20 hoặc WELCOME50">
+              <button class="btn btn-outline-primary" onclick="applyVoucher()">Áp dụng</button>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+              💡 Gợi ý mã có sẵn: <strong>TRAVELOKA20</strong> (Giảm 20%), <strong>WELCOME50</strong> (Giảm 50.000 ₫)
+            </div>
+          </div>
+
+          <!-- Order Summary Breakdown -->
+          <div style="background: var(--bg-page); border-radius: var(--radius-md); padding: 18px; border: 1px solid var(--border); margin-bottom: 24px;">
+            <div style="font-weight: 700; margin-bottom: 12px; font-size: 0.95rem;">Chi tiết thanh toán</div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px;">
+              <span style="color: var(--text-muted);">Giá vé gốc</span>
+              <span id="summary-base-total" style="font-weight: 600;">0 ₫</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 10px; color: var(--success);">
+              <span>Mã giảm giá ưu đãi</span>
+              <span id="summary-discount" style="font-weight: 600;">-0 ₫</span>
+            </div>
+            <div style="border-top: 1px dashed var(--border); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 700; font-size: 1rem;">Tổng thanh toán</span>
+              <span id="summary-final-total" style="font-size: 1.45rem; font-weight: 800; color: var(--accent);">0 ₫</span>
+            </div>
+          </div>
+
+          <div class="modal-actions" style="display: flex; justify-content: space-between;">
+            <button class="btn btn-ghost" onclick="setBookingStep(2)">
+              ← Quay lại
+            </button>
+            <button class="btn btn-cta btn-lg" onclick="confirmBooking()">
+              🎉 Xác nhận đặt vé ngay
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: E-TICKET QR VIEW
+       ======================================================================== -->
+  <div class="modal-backdrop" id="eticket-modal">
+    <div class="modal-card" style="max-width: 460px;">
+      <button class="modal-close-btn" onclick="closeETicketModal()">✕</button>
+
+      <div class="detail-body" style="text-align: center;">
+        <div class="ticket-container">
+          <div class="ticket-notch-left"></div>
+          <div class="ticket-notch-right"></div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="logo" style="font-size: 1.1rem;">
+              <div class="logo-badge" style="width: 28px; height: 28px; font-size: 0.9rem;">✈️</div>
+              <span>EventHub</span>
+            </div>
+            <span id="eticket-status-badge" class="badge badge-primary">🎟️ HỢP LỆ</span>
+          </div>
+
+          <h3 id="eticket-event-name" style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px;">
+            Tên sự kiện
+          </h3>
+
+          <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">
+            <div id="eticket-date">Thời gian</div>
+            <div id="eticket-venue" style="font-weight: 600; color: var(--text-dark); margin-top: 2px;">Địa điểm</div>
+          </div>
+
+          <!-- Standalone SVG QR Code Output -->
+          <div class="qr-code-box" id="eticket-qr-box">
+            <!-- Rendered by app.js -->
+          </div>
+
+          <div style="font-family: monospace; font-size: 1rem; font-weight: 800; color: var(--primary); letter-spacing: 1.5px; margin-bottom: 4px;" id="eticket-id">
+            EVT-BK-000000
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);" id="eticket-attendee">
+            Nguyễn Văn Khang (1 vé)
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button class="btn btn-outline" style="flex: 1;" onclick="window.print()">
+            🖨️ In vé
+          </button>
+          <button class="btn btn-primary" style="flex: 1;" onclick="closeETicketModal()">
+            Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 3: AUTHENTICATION (LOGIN / REGISTER)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="auth-modal">
+    <div class="modal-card" style="max-width: 440px;">
+      <button class="modal-close-btn" onclick="closeAuthModal()">✕</button>
+
+      <div class="detail-body">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div class="logo-badge" style="margin: 0 auto 10px; width: 44px; height: 44px; font-size: 1.3rem;">✈️</div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-dark);">Tài Khoản EventHub</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Đăng nhập để nhận các ưu đãi trải nghiệm độc quyền</p>
+        </div>
+
+        <!-- Quick 1-Click Login Demo Profiles -->
+        <div style="background: var(--primary-light); border-radius: var(--radius-md); padding: 12px; margin-bottom: 18px;">
+          <div style="font-size: 0.76rem; font-weight: 700; color: var(--primary-dark); text-transform: uppercase; margin-bottom: 8px;">
+            ⚡ Đăng nhập nhanh để trải nghiệm:
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="quickLogin('Guest')" title="Nguyễn Văn Khang (Guest)">Khách</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="quickLogin('Staff')" title="Chu Đức Duy (Staff)">Staff</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="quickLogin('Organizer')" title="Trần Quang Huy (Organizer)">Tổ chức</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="quickLogin('Admin')" title="Nguyễn Bảo Khánh (Admin)">Admin</button>
+          </div>
+        </div>
+
+        <!-- Tab Bar -->
+        <div style="display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+          <button id="tab-login-btn" class="nav-item active" style="flex: 1; justify-content: center;" onclick="setAuthTab('login')">Đăng nhập</button>
+          <button id="tab-register-btn" class="nav-item" style="flex: 1; justify-content: center;" onclick="setAuthTab('register')">Đăng ký mới</button>
+        </div>
+
+        <!-- Login Pane -->
+        <div id="auth-login-pane">
+          <form onsubmit="handleLoginFormSubmit(event)">
+            <div style="display: grid; gap: 12px; margin-bottom: 18px;">
+              <div class="search-field">
+                <label class="search-label">Tên đăng nhập hoặc Email</label>
+                <div class="search-input-box">
+                  <input type="text" id="auth-username" value="admin" required placeholder="admin, staff01, organizer01, guest01...">
+                </div>
+              </div>
+              <div class="search-field">
+                <label class="search-label">Mật khẩu</label>
+                <div class="search-input-box">
+                  <input type="password" id="auth-password" value="admin123" required placeholder="••••••••">
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Đăng nhập ngay
+            </button>
+          </form>
+        </div>
+
+        <!-- Register Pane -->
+        <div id="auth-register-pane" style="display: none;">
+          <form onsubmit="handleRegisterFormSubmit(event)">
+            <div style="display: grid; gap: 12px; margin-bottom: 18px;">
+              <div class="search-field">
+                <label class="search-label">Họ và tên</label>
+                <div class="search-input-box"><input type="text" id="reg-name" placeholder="Nguyễn Văn A" required></div>
+              </div>
+              <div class="search-field">
+                <label class="search-label">Email</label>
+                <div class="search-input-box"><input type="email" id="reg-email" placeholder="email@domain.com" required></div>
+              </div>
+              <div class="search-field">
+                <label class="search-label">Tên đăng nhập</label>
+                <div class="search-input-box"><input type="text" id="reg-username" placeholder="guest_new" required></div>
+              </div>
+              <div class="search-field">
+                <label class="search-label">Mật khẩu mới</label>
+                <div class="search-input-box"><input type="password" id="reg-password" placeholder="••••••••" required></div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-cta" style="width: 100%;">
+              Tạo tài khoản mới
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 4: CREATE EVENT (ADMIN)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="create-event-modal">
+    <div class="modal-card modal-lg">
+      <button class="modal-close-btn" onclick="closeCreateEventModal()">✕</button>
+
+      <div class="detail-body">
+        <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-dark); margin-bottom: 16px;">
+          Tạo Sự Kiện Mới
+        </h3>
+
+        <form onsubmit="handleCreateEventSubmit(event)">
+          <div class="create-event-grid">
+            <div class="search-field" style="grid-column: 1 / -1;">
+              <label class="search-label">Tên sự kiện *</label>
+              <div class="search-input-box">
+                <input type="text" id="new-evt-name" placeholder="VD: Lễ Hội Ánh Sáng Countdown 2027" required>
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Thể loại</label>
+              <div class="search-input-box">
+                <select id="new-evt-category">
+                  <option value="Âm nhạc & Lễ hội">Âm nhạc & Lễ hội</option>
+                  <option value="Công nghệ & AI">Công nghệ & AI</option>
+                  <option value="Hội thảo kỹ năng">Hội thảo kỹ năng</option>
+                  <option value="Ẩm thực & Đời sống">Ẩm thực & Đời sống</option>
+                  <option value="Thể thao & Giải trí">Thể thao & Giải trí</option>
+                </select>
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Thời gian bắt đầu</label>
+              <div class="search-input-box">
+                <input type="datetime-local" id="new-evt-date" required>
+              </div>
+            </div>
+            <div class="search-field" style="grid-column: 1 / -1;">
+              <label class="search-label">Địa điểm tổ chức</label>
+              <div class="search-input-box">
+                <input type="text" id="new-evt-venue" placeholder="Sân vận động Mỹ Đình, Hà Nội" required>
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Giá vé (VNĐ)</label>
+              <div class="search-input-box">
+                <input type="number" id="new-evt-price" placeholder="300000" required>
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Sức chứa tối đa (Khách)</label>
+              <div class="search-input-box">
+                <input type="number" id="new-evt-capacity" placeholder="1000" required>
+              </div>
+            </div>
+            <div class="search-field" style="grid-column: 1 / -1;">
+              <label class="search-label">Link hình ảnh banner (URL Unsplash)</label>
+              <div class="search-input-box">
+                <input type="url" id="new-evt-image" placeholder="https://images.unsplash.com/...">
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn btn-ghost" onclick="closeCreateEventModal()">Hủy</button>
+            <button type="submit" class="btn btn-primary">+ Đăng Sự Kiện</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ========================================================================
+       FOOTER (TRAVELOKA STYLE)
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="logo" style="margin-bottom: 12px;">
+            <div class="logo-badge">✈️</div>
+            <span>EventHub</span>
+          </div>
+          <p style="line-height: 1.6; max-width: 320px;">
+            Hệ thống phân phối và quản lý vé sự kiện trực tuyến tiêu chuẩn cao. Trải nghiệm âm nhạc, công nghệ và nghệ thuật hàng đầu Việt Nam.
+          </p>
+        </div>
+
+        <div>
+          <h4 style="font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Sản phẩm & Dịch vụ</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+            <li><a href="#" onclick="switchView('explore'); return false;">Sự kiện âm nhạc</a></li>
+            <li><a href="#" onclick="switchView('explore'); return false;">Hội thảo công nghệ</a></li>
+            <li><a href="#" onclick="switchView('explore'); return false;">Vé vui chơi giải trí</a></li>
+            <li><a href="#" onclick="switchView('explore'); return false;">Voucher ưu đãi</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Dành cho đối tác</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+            <li><a href="#" onclick="quickLogin('Organizer'); return false;">Đăng ký ban tổ chức</a></li>
+            <li><a href="#" onclick="switchView('admin'); return false;">Hệ thống kiểm soát vé</a></li>
+            <li><a href="#" onclick="switchView('admin'); return false;">AI định giá XGBoost</a></li>
+            <li><a href="#" onclick="switchView('admin'); return false;">Báo cáo tài chính</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Đối tác thanh toán</h4>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+            <span class="badge badge-neutral">💳 Visa / Mastercard</span>
+            <span class="badge badge-neutral">⚡ MoMo</span>
+            <span class="badge badge-neutral">🏦 VietQR</span>
+            <span class="badge badge-neutral">📲 ZaloPay</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            Hotline hỗ trợ: <strong>1900 6868</strong> (24/7)
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 EventHub. Xây dựng bằng HTML, CSS và JavaScript thuần mang phong cách Traveloka.</div>
+        <div class="footer-legal-links" style="display: flex; gap: 16px;">
+          <a href="#">Điều khoản sử dụng</a>
+          <a href="#">Chính sách bảo mật</a>
+          <a href="#">Quy chế soát vé</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>

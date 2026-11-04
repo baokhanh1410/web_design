@@ -7,17 +7,17 @@ Hệ thống phân phối và quản lý vé sự kiện trực tuyến hiện �
 ## 👥 Thông Tin Sinh Viên Thực Hiện
 
 * **Trường:** Đại học Kinh tế Quốc dân (National Economics University - NEU)
-* **Khoa / Viện:** Viện Công nghệ Thông tin & Kinh tế số
+* **Khoa / Viện:** Khoa Khoa học dữ liệu và Trí tuệ nhân tạo
 * **Chuyên ngành:** Khoa học Dữ liệu (Data Science) - Lớp **DS66B**
-* **Giảng viên hướng dẫn:** ThS. Trần Hùng - DatCom Lab
-* **Môn học:** Thiết kế Web / Cơ sở Dữ liệu
+* **Giảng viên hướng dẫn:** Lê Duy Khánh
+* **Môn học:** Lập trình Web
 
 ### Thành viên nhóm:
-| STT | Họ và tên | Mã sinh viên (ID) | Vai trò trong dự án |
-| :---: | :--- | :---: | :--- |
-| 1 | **Nguyễn Bảo Khánh** | **11247178** |(Admin) |
-| 2 | **Chu Đức Duy** | **11247159** | (Staff) |
-| 3 | **Trần Quang Huy** | **11247176** | (Organizer) |
+| STT | Họ và tên | Mã sinh viên |
+| :---: | :--- | :---: |
+| 1 | **Nguyễn Bảo Khánh** | **11247178** |
+| 2 | **Chu Đức Duy** | **11247159** |
+| 3 | **Trần Quang Huy** | **11247176** |
 
 ---
 

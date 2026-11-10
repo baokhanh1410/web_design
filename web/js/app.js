@@ -10,14 +10,14 @@
 const INITIAL_EVENTS = [
   {
     id: 1,
-    name: "Lễ Hội Âm Nhạc Gió Mùa - Monsoon Music Festival 2026",
+    name: "Lễ Hội Âm Nhạc Gió Mùa — Monsoon Music Festival 2026",
     category: "Âm nhạc & Lễ hội",
-    start_date: "2026-10-15T18:30:00",
-    end_date: "2026-10-17T23:00:00",
+    start_date: "2026-11-20T18:30:00",
+    end_date: "2026-11-22T23:00:00",
     venue: "Hoàng Thành Thăng Long, Hà Nội",
     organizer: "Monsoon Production",
     capacity: 5000,
-    registered: 4120,
+    registered: 4350,
     price: 450000,
     original_price: 600000,
     status: "Upcoming",
@@ -29,8 +29,8 @@ const INITIAL_EVENTS = [
     id: 2,
     name: "Vietnam AI Summit 2026: Trí Tuệ Nhân Tạo & Kỷ Nguyên Số",
     category: "Công nghệ & AI",
-    start_date: "2026-10-22T08:30:00",
-    end_date: "2026-10-22T17:30:00",
+    start_date: "2026-11-22T08:30:00",
+    end_date: "2026-11-22T17:30:00",
     venue: "Trung tâm Hội nghị Quốc gia, Hà Nội",
     organizer: "TechVentures Vietnam",
     capacity: 1200,
@@ -44,10 +44,10 @@ const INITIAL_EVENTS = [
   },
   {
     id: 3,
-    name: "Workshop Quản Trị & Đầu Tư Tài Chính Cá Nhân F.I.R.E",
+    name: "Workshop Đầu Tư Tài Chính Cá Nhân F.I.R.E — Thực Chiến",
     category: "Hội thảo kỹ năng",
-    start_date: "2026-10-28T14:00:00",
-    end_date: "2026-10-28T18:00:00",
+    start_date: "2026-11-28T14:00:00",
+    end_date: "2026-11-28T18:00:00",
     venue: "SECC Quận 7, TP. Hồ Chí Minh",
     organizer: "FinEdu Hub",
     capacity: 300,
@@ -61,10 +61,10 @@ const INITIAL_EVENTS = [
   },
   {
     id: 4,
-    name: "Lễ Hội Ẩm Thực Đường Phố & Bia Thủ Công Sài Gòn",
+    name: "Lễ Hội Ẩm Thực Đường Phố & Bia Thủ Công Sài Gòn 2026",
     category: "Ẩm thực & Đời sống",
-    start_date: "2026-11-05T16:00:00",
-    end_date: "2026-11-07T22:00:00",
+    start_date: "2026-12-05T16:00:00",
+    end_date: "2026-12-07T22:00:00",
     venue: "Công viên Bến Bạch Đằng, Quận 1, TP.HCM",
     organizer: "Saigon Foodies Community",
     capacity: 3500,
@@ -80,8 +80,8 @@ const INITIAL_EVENTS = [
     id: 5,
     name: "Triển Lãm Nghệ Thuật Đa Giác Quan: Vincent van Gogh Alive",
     category: "Nghệ thuật & Triển lãm",
-    start_date: "2026-11-12T09:00:00",
-    end_date: "2026-11-20T21:00:00",
+    start_date: "2026-12-12T09:00:00",
+    end_date: "2026-12-20T21:00:00",
     venue: "Trung tâm Nghệ thuật Đương đại VCCA, Hà Nội",
     organizer: "VCCA Arts",
     capacity: 1500,
@@ -95,7 +95,7 @@ const INITIAL_EVENTS = [
   },
   {
     id: 6,
-    name: "Giải Chạy Bán Marathon Đêm Đà Lạt - Dalat Night Run 2026",
+    name: "Giải Chạy Bán Marathon Đêm Đà Lạt — Dalat Night Run 2026",
     category: "Thể thao & Giải trí",
     start_date: "2026-11-25T19:00:00",
     end_date: "2026-11-25T23:30:00",
@@ -108,6 +108,108 @@ const INITIAL_EVENTS = [
     status: "Upcoming",
     image: "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=800&q=80",
     description: "Cung đường chạy ven hồ Xuân Hương thơ mộng trong tiết trời se lạnh của Đà Lạt, trang bị dải đèn neon lung linh và trạm tiếp sức âm nhạc sôi động.",
+    is_hot: true
+  },
+  {
+    id: 7,
+    name: "Countdown New Year 2027 — Đại Nhạc Hội Chào Năm Mới",
+    category: "Âm nhạc & Lễ hội",
+    start_date: "2026-12-31T20:00:00",
+    end_date: "2027-01-01T00:30:00",
+    venue: "Phố đi bộ Nguyễn Huệ, TP.HCM",
+    organizer: "EventHub & VTV",
+    capacity: 10000,
+    registered: 8800,
+    price: 650000,
+    original_price: 850000,
+    status: "Upcoming",
+    image: "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=800&q=80",
+    description: "Đêm hội tưng bừng chào đón năm 2027 với màn trình diễn pháo hoa và dàn nghệ sĩ nổi tiếng.",
+    is_hot: true
+  },
+  {
+    id: 8,
+    name: "Google I/O Extended Việt Nam 2026 — Developer Summit",
+    category: "Công nghệ & AI",
+    start_date: "2026-12-10T09:00:00",
+    end_date: "2026-12-10T17:00:00",
+    venue: "Toà nhà UOB, Quận 1, TP.HCM",
+    organizer: "GDG Vietnam",
+    capacity: 800,
+    registered: 650,
+    price: 0,
+    original_price: 0,
+    status: "Upcoming",
+    image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&q=80",
+    description: "Cộng đồng lập trình viên Google Developer Group chia sẻ công nghệ mới về Android, Cloud, AI và Web.",
+    is_hot: false
+  },
+  {
+    id: 9,
+    name: "Lễ Hội EDM VinaFest 2026 — Đêm Nhạc Điện Tử",
+    category: "Âm nhạc & Lễ hội",
+    start_date: "2026-12-19T21:00:00",
+    end_date: "2026-12-20T03:00:00",
+    venue: "GEM Center, Quận 1, TP.HCM",
+    organizer: "VinaFest Entertainment",
+    capacity: 3000,
+    registered: 1800,
+    price: 850000,
+    original_price: 1100000,
+    status: "Upcoming",
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80",
+    description: "Đêm nhạc điện tử với sự góp mặt của DJ quốc tế hàng đầu cùng hệ thống âm thanh ánh sáng bùng nổ.",
+    is_hot: true
+  },
+  {
+    id: 10,
+    name: "Hội Thảo UX Design Thinking — Lấy Người Dùng Làm Trung Tâm",
+    category: "Hội thảo kỹ năng",
+    start_date: "2026-11-30T09:00:00",
+    end_date: "2026-11-30T16:00:00",
+    venue: "Online (Zoom Webinar)",
+    organizer: "UX Vietnam Community",
+    capacity: 500,
+    registered: 342,
+    price: 0,
+    original_price: 0,
+    status: "Upcoming",
+    image: "https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=800&q=80",
+    description: "Hội thảo trực tuyến về phương pháp thiết kế UX chuyên nghiệp, thực hành design sprint và usability testing.",
+    is_hot: false
+  },
+  {
+    id: 11,
+    name: "Lễ Hội Ánh Sáng Diwali Hà Nội 2026",
+    category: "Nghệ thuật & Triển lãm",
+    start_date: "2026-11-15T17:00:00",
+    end_date: "2026-11-15T22:00:00",
+    venue: "Vườn hoa Lý Thái Tổ, Hà Nội",
+    organizer: "India Cultural Center HN",
+    capacity: 2000,
+    registered: 950,
+    price: 80000,
+    original_price: 80000,
+    status: "Upcoming",
+    image: "https://images.unsplash.com/photo-1604153297036-a6e28e9b0d7a?w=800&q=80",
+    description: "Lễ hội ánh sáng truyền thống Ấn Độ lan toả sắc màu văn hóa và ẩm thực giữa lòng thủ đô Hà Nội.",
+    is_hot: false
+  },
+  {
+    id: 12,
+    name: "Iron Man Vietnam Triathlon 2026 — Nha Trang",
+    category: "Thể thao & Giải trí",
+    start_date: "2026-12-22T05:00:00",
+    end_date: "2026-12-22T17:00:00",
+    venue: "Bãi biển Trần Phú, Nha Trang",
+    organizer: "Vietnam Triathlon Federation",
+    capacity: 1500,
+    registered: 1100,
+    price: 2500000,
+    original_price: 3000000,
+    status: "Upcoming",
+    image: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&q=80",
+    description: "Giải thể thao 3 môn phối hợp (Bơi - Đạp xe - Chạy bộ) đẳng cấp quốc tế trên cung đường ven biển Nha Trang.",
     is_hot: true
   }
 ];
@@ -162,6 +264,10 @@ const USER_PROFILES = {
 };
 
 function getInitialUser() {
+  const currentRole = localStorage.getItem('eventhub_current_role');
+  if (currentRole && USER_PROFILES[currentRole]) {
+    return { ...USER_PROFILES[currentRole] };
+  }
   const saved = localStorage.getItem('eventhub_user');
   if (saved) {
     try {
@@ -190,39 +296,102 @@ function getInitialUser() {
   return { ...USER_PROFILES.Guest };
 }
 
+function normalizeBooking(b) {
+  if (!b || typeof b !== 'object') return null;
+  const id = b.booking_id || b.bookingId || ('EVT-BK-' + Date.now());
+  const eventId = b.event_id || b.eventId || 1;
+  const eventName = b.event_name || b.eventName || 'Sự kiện EventHub';
+  const eventDate = b.event_date || b.eventDate || new Date().toISOString();
+  const venue = b.venue || b.eventVenue || 'Việt Nam';
+  const eventImage = b.image || b.eventImage || 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80';
+  const rawItems = Array.isArray(b.items) && b.items.length > 0 ? b.items : [
+    { ticketName: 'Vé Tiêu Chuẩn', quantity: b.ticket_count || 1, price: b.total_price || b.grand || 0, lineTotal: b.total_price || b.grand || 0 }
+  ];
+  const ticketCount = b.ticket_count || b.ticketCount || rawItems.reduce((s, it) => s + (it.quantity || 0), 0);
+  const totalPrice = b.total_price !== undefined ? b.total_price : (b.grand !== undefined ? b.grand : b.subtotal || 0);
+  const attendeeName = (b.attendee && b.attendee.name) || b.attendee_name || 'Khách';
+  const attendeeEmail = (b.attendee && b.attendee.email) || b.attendee_email || 'user@eventhub.vn';
+  const attendeePhone = (b.attendee && b.attendee.phone) || b.attendee_phone || '';
+  const status = (b.status || 'Confirmed').toString();
+  const isCheckedIn = b.is_checked_in !== undefined ? b.is_checked_in : (status.toLowerCase() === 'attended');
+
+  return {
+    booking_id: id,
+    bookingId: id,
+    orderId: b.orderId || ('#EH-' + (typeof id === 'string' ? id.slice(-6) : Math.floor(100000 + Math.random() * 900000))),
+    event_id: eventId,
+    eventId: eventId,
+    event_name: eventName,
+    eventName: eventName,
+    event_date: eventDate,
+    eventDate: eventDate,
+    venue: venue,
+    eventVenue: venue,
+    image: eventImage,
+    eventImage: eventImage,
+    items: rawItems,
+    ticket_count: ticketCount,
+    ticketCount: ticketCount,
+    total_price: totalPrice,
+    grand: totalPrice,
+    subtotal: b.subtotal || totalPrice,
+    attendee: { name: attendeeName, email: attendeeEmail, phone: attendeePhone },
+    attendee_name: attendeeName,
+    attendee_email: attendeeEmail,
+    attendee_phone: attendeePhone,
+    status: status,
+    is_checked_in: isCheckedIn,
+    created_at: b.created_at || b.createdAt || new Date().toISOString(),
+    createdAt: b.createdAt || b.created_at || new Date().toISOString()
+  };
+}
+
+const DEFAULT_RAW_BOOKINGS = [
+  {
+    booking_id: "EVT-BK-20260901",
+    event_id: 1,
+    event_name: "Lễ Hội Âm Nhạc Gió Mùa — Monsoon Music Festival 2026",
+    event_date: "2026-11-20T18:30:00",
+    venue: "Hoàng Thành Thăng Long, Hà Nội",
+    ticket_count: 2,
+    total_price: 900000,
+    attendee_name: "Nguyễn Văn Khang",
+    attendee_email: "khang.nguyen@example.com",
+    status: "Confirmed",
+    is_checked_in: false,
+    created_at: "2026-11-01T14:22:00"
+  },
+  {
+    booking_id: "EVT-BK-20260814",
+    event_id: 2,
+    event_name: "Vietnam AI Summit 2026: Trí Tuệ Nhân Tạo & Kỷ Nguyên Số",
+    event_date: "2026-11-22T08:30:00",
+    venue: "Trung tâm Hội nghị Quốc gia, Hà Nội",
+    ticket_count: 1,
+    total_price: 350000,
+    attendee_name: "Nguyễn Văn Khang",
+    attendee_email: "khang.nguyen@example.com",
+    status: "Confirmed",
+    is_checked_in: true,
+    created_at: "2026-11-02T10:15:00"
+  }
+];
+
+function loadPersistedBookings() {
+  try {
+    const raw = localStorage.getItem('eventhub_bookings');
+    if (raw) {
+      const list = JSON.parse(raw);
+      if (Array.isArray(list)) return list.map(normalizeBooking).filter(Boolean);
+    }
+  } catch (e) {}
+  return DEFAULT_RAW_BOOKINGS.map(normalizeBooking);
+}
+
 const state = {
   user: getInitialUser(),
   events: JSON.parse(localStorage.getItem('eventhub_events')) || INITIAL_EVENTS,
-  bookings: JSON.parse(localStorage.getItem('eventhub_bookings')) || [
-    {
-      booking_id: "EVT-BK-20260901",
-      event_id: 1,
-      event_name: "Lễ Hội Âm Nhạc Gió Mùa - Monsoon Music Festival 2026",
-      event_date: "2026-10-15T18:30:00",
-      venue: "Hoàng Thành Thăng Long, Hà Nội",
-      ticket_count: 2,
-      total_price: 900000,
-      attendee_name: "Nguyễn Văn Khang",
-      attendee_email: "khang.nguyen@example.com",
-      status: "Confirmed",
-      is_checked_in: false,
-      created_at: "2026-09-10T14:22:00"
-    },
-    {
-      booking_id: "EVT-BK-20260814",
-      event_id: 2,
-      event_name: "Vietnam AI Summit 2026: Trí Tuệ Nhân Tạo & Kỷ Nguyên Số",
-      event_date: "2026-10-22T08:30:00",
-      venue: "Trung tâm Hội nghị Quốc gia, Hà Nội",
-      ticket_count: 1,
-      total_price: 350000,
-      attendee_name: "Nguyễn Văn Khang",
-      attendee_email: "khang.nguyen@example.com",
-      status: "Confirmed",
-      is_checked_in: true,
-      created_at: "2026-09-02T10:15:00"
-    }
-  ],
+  bookings: loadPersistedBookings(),
   activeFilter: {
     keyword: "",
     category: "Tất cả",
@@ -335,8 +504,39 @@ function generateQRCodeSVG(text, size = 180) {
 // 4. RENDERING FUNCTIONS
 // ==========================================================================
 
+function hasAdminPermission(user) {
+  if (!user || !user.role) return false;
+  const role = (user.role || '').toLowerCase();
+  return role === 'admin' || role === 'organizer';
+}
+
+function toggleUserNavDropdown(e) {
+  if (e) {
+    e.stopPropagation();
+    if (e.preventDefault) e.preventDefault();
+  }
+  const dropdown = document.getElementById('user-nav-dropdown');
+  if (dropdown) {
+    dropdown.style.display = (dropdown.style.display === 'none' || !dropdown.style.display) ? 'block' : 'none';
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('user-nav-dropdown');
+  const chip = document.getElementById('user-nav-chip');
+  if (dropdown && !dropdown.contains(e.target) && chip && !chip.contains(e.target)) {
+    dropdown.style.display = 'none';
+  }
+});
+
 function renderUserNav() {
   const userActions = document.getElementById('user-nav-actions');
+  const hasAccess = hasAdminPermission(state.user);
+  const navAdmin = document.getElementById('nav-admin');
+  const navCreate = document.getElementById('nav-create-event');
+  if (navAdmin) navAdmin.style.display = hasAccess ? 'inline-flex' : 'none';
+  if (navCreate) navCreate.style.display = hasAccess ? 'inline-flex' : 'none';
+
   if (!userActions) return;
 
   if (state.user) {
@@ -345,23 +545,46 @@ function renderUserNav() {
       : (state.user.role === 'Organizer' ? 'badge-warning' : (state.user.role === 'Staff' ? 'badge-accent' : 'badge-primary'));
 
     userActions.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <span class="badge ${roleBadgeClass}">
-          ${state.user.role}
-        </span>
-        <button id="btn-user-profile" class="btn btn-ghost btn-sm" style="display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: var(--radius-full); background: var(--bg-subtle);" title="${state.user.name} (${state.user.role})">
-          <img src="${state.user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80'}" alt="Avatar" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
-          <span style="font-weight: 600; font-size: 0.88rem; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-            ${state.user.name}
-          </span>
-        </button>
-        <button id="btn-logout" class="btn btn-ghost btn-icon" title="Đăng xuất">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+      <div class="user-chip" id="user-nav-chip" onclick="toggleUserNavDropdown(event)">
+        <img src="${state.user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80'}" alt="Avatar">
+        <span class="user-chip-name">${state.user.name}</span>
+        <span class="badge ${roleBadgeClass}" style="font-size:0.72rem; padding: 2px 6px;">${state.user.role}</span>
+        <span class="user-chip-chevron">▾</span>
+      </div>
+
+      <div class="user-dropdown" id="user-nav-dropdown" style="display: none;">
+        <div class="user-dropdown-header">
+          <div>
+            <div class="user-dropdown-name">${state.user.name}</div>
+            <div class="user-dropdown-role">${state.user.email || 'user@eventhub.vn'}</div>
+          </div>
+          <span class="badge ${roleBadgeClass}">${state.user.role}</span>
+        </div>
+
+        <div style="padding: 4px 0;">
+          <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">
+            ⚡ Đổi vai trò thử nghiệm:
+          </div>
+          <div class="role-switcher-grid">
+            <button type="button" class="btn-mini-role" onclick="quickLogin('Admin')">👑 Admin</button>
+            <button type="button" class="btn-mini-role" onclick="quickLogin('Organizer')">🎪 Tổ chức</button>
+            <button type="button" class="btn-mini-role" onclick="quickLogin('Staff')">💼 Staff</button>
+            <button type="button" class="btn-mini-role" onclick="quickLogin('Guest')">👤 Khách</button>
+          </div>
+        </div>
+
+        <div class="user-dropdown-divider"></div>
+        <a href="profile.html" class="user-dropdown-item">🎟️ Vé của tôi</a>
+        ${hasAccess ? '<a href="#create-event" class="user-dropdown-item" onclick="openCreateEventModal(); return false;">➕ Tạo sự kiện mới</a>' : ''}
+        ${hasAccess ? '<a href="#admin" class="user-dropdown-item" onclick="switchView(\'admin\'); return false;">📊 Quản trị & AI ML</a>' : ''}
+        <div class="user-dropdown-divider"></div>
+        <button type="button" class="user-dropdown-item" style="color: var(--danger);" id="btn-logout-item">
+          🚪 Đăng xuất
         </button>
       </div>
     `;
 
-    document.getElementById('btn-logout')?.addEventListener('click', () => {
+    document.getElementById('btn-logout-item')?.addEventListener('click', () => {
       localStorage.removeItem('eventhub_user');
       state.user = null;
       renderUserNav();
@@ -444,7 +667,7 @@ function renderEventsGrid() {
 
     return `
       <div class="event-card" id="event-card-${evt.id}">
-        <div class="card-media">
+        <div class="card-media" style="cursor: pointer;" onclick="window.location.href='event-detail.html?id=${evt.id}'" title="Xem chi tiết ${evt.name}">
           <img src="${evt.image}" alt="${evt.name}" loading="lazy">
           <div class="card-badges-top">
             <span class="card-category-pill">${evt.category}</span>
@@ -453,7 +676,7 @@ function renderEventsGrid() {
         </div>
 
         <div class="card-content">
-          <h3 class="card-title" title="${evt.name}">${evt.name}</h3>
+          <h3 class="card-title" title="${evt.name}" style="cursor: pointer;" onclick="window.location.href='event-detail.html?id=${evt.id}'">${evt.name}</h3>
 
           <div class="card-meta">
             <div class="meta-row">
@@ -509,6 +732,13 @@ function renderMyBookings() {
 
   container.innerHTML = state.bookings.map(b => {
     const isCheckedIn = b.is_checked_in;
+    const bookingId = b.booking_id || b.bookingId;
+    const eventName = b.event_name || b.eventName || 'Sự kiện EventHub';
+    const eventDate = b.event_date || b.eventDate;
+    const venue = b.venue || b.eventVenue || 'Việt Nam';
+    const ticketCount = b.ticket_count || b.ticketCount || (b.items && b.items.length) || 1;
+    const totalPrice = b.total_price !== undefined ? b.total_price : (b.grand !== undefined ? b.grand : b.subtotal || 0);
+
     return `
       <div class="event-card" style="margin-bottom: 20px;">
         <div class="card-content" style="padding: 24px;">
@@ -518,30 +748,30 @@ function renderMyBookings() {
                 ${isCheckedIn ? '✓ Đã điểm danh' : '🎟️ Chờ tham gia'}
               </span>
               <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px;">
-                ${b.event_name}
+                ${eventName}
               </h3>
               <div class="card-meta" style="margin-top: 8px;">
                 <div class="meta-row">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  <span>Thời gian: <strong>${formatDate(b.event_date)}</strong></span>
+                  <span>Thời gian: <strong>${formatDate(eventDate)}</strong></span>
                 </div>
                 <div class="meta-row">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                  <span>Địa điểm: <strong>${b.venue}</strong></span>
+                  <span>Địa điểm: <strong>${venue}</strong></span>
                 </div>
                 <div class="meta-row">
-                  <span>Mã đặt vé: <strong style="font-family: monospace; color: var(--primary);">${b.booking_id}</strong> (${b.ticket_count} vé · ${formatVND(b.total_price)})</span>
+                  <span>Mã đặt vé: <strong style="font-family: monospace; color: var(--primary);">${bookingId}</strong> (${ticketCount} vé · ${formatVND(totalPrice)})</span>
                 </div>
               </div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
-              <button class="btn btn-outline-primary" onclick="openETicketModal('${b.booking_id}')">
+              <button class="btn btn-outline-primary" onclick="openETicketModal('${bookingId}')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 Xem Vé Điện Tử QR
               </button>
               ${!isCheckedIn ? `
-                <button class="btn btn-ghost btn-sm" style="color: var(--success);" onclick="toggleCheckin('${b.booking_id}')">
+                <button class="btn btn-ghost btn-sm" style="color: var(--success);" onclick="toggleCheckin('${bookingId}')">
                   ⚡ Giả lập điểm danh
                 </button>
               ` : ''}
@@ -553,11 +783,38 @@ function renderMyBookings() {
   }).join('');
 }
 
+let currentAdminTab = 'events';
+let adminSearchQuery = '';
+let adminCategoryFilter = '';
+let adminStatusFilter = '';
+
+function switchAdminTab(tabName) {
+  currentAdminTab = tabName;
+  ['events', 'pricing', 'checkin'].forEach(tab => {
+    const btn = document.getElementById(`admin-tab-btn-${tab}`);
+    const pane = document.getElementById(`admin-pane-${tab}`);
+    if (btn) btn.classList.toggle('active', tab === tabName);
+    if (pane) pane.style.display = tab === tabName ? 'block' : 'none';
+  });
+  if (tabName === 'pricing') calculateRecommendedPrice();
+  if (tabName === 'checkin') renderCheckinTable();
+}
+
+function handleAdminSearch() {
+  const query = document.getElementById('admin-search-input')?.value || '';
+  const cat = document.getElementById('admin-filter-category')?.value || '';
+  const status = document.getElementById('admin-filter-status')?.value || '';
+  adminSearchQuery = query.toLowerCase().trim();
+  adminCategoryFilter = cat;
+  adminStatusFilter = status;
+  renderAdminEventsTable();
+}
+
 function renderAdminDashboard() {
   const totalEvents = state.events.length;
-  const totalRegistrations = state.events.reduce((sum, e) => sum + e.registered, 0);
-  const totalRevenue = state.events.reduce((sum, e) => sum + (e.registered * e.price), 0);
-  const totalCapacity = state.events.reduce((sum, e) => sum + e.capacity, 0);
+  const totalRegistrations = state.events.reduce((sum, e) => sum + (e.registered || 0), 0);
+  const totalRevenue = state.events.reduce((sum, e) => sum + ((e.registered || 0) * (e.price || 0)), 0);
+  const totalCapacity = state.events.reduce((sum, e) => sum + (e.capacity || 0), 0);
   const avgAttendance = Math.round((totalRegistrations / (totalCapacity || 1)) * 100);
 
   // Update KPI counters
@@ -565,44 +822,161 @@ function renderAdminDashboard() {
   const kpiEvents = document.getElementById('kpi-events');
   const kpiRegs = document.getElementById('kpi-registrations');
   const kpiAtt = document.getElementById('kpi-attendance');
+  const tabEvCount = document.getElementById('admin-tab-events-count');
 
   if (kpiRev) kpiRev.textContent = formatVND(totalRevenue);
   if (kpiEvents) kpiEvents.textContent = totalEvents;
   if (kpiRegs) kpiRegs.textContent = totalRegistrations.toLocaleString('vi-VN');
   if (kpiAtt) kpiAtt.textContent = `${avgAttendance}%`;
+  if (tabEvCount) tabEvCount.textContent = totalEvents;
 
-  // Render Admin Events Table
+  // Render role label in header card
+  const roleLabel = document.getElementById('admin-current-role-label');
+  if (roleLabel && state.user) {
+    roleLabel.textContent = state.user.role === 'Admin'
+      ? '👑 Hệ Thống Quản Trị Viên Toàn Quyền (Admin Mode)'
+      : '🎪 Bảng Điều Khiển Dành Cho Ban Tổ Chức (Organizer Mode)';
+  }
+
+  renderAdminEventsTable();
+  calculateRecommendedPrice();
+  renderCheckinTable();
+}
+
+function renderAdminEventsTable() {
   const tableBody = document.getElementById('admin-events-table-body');
-  if (tableBody) {
-    tableBody.innerHTML = state.events.map(e => `
+  if (!tableBody) return;
+
+  let filtered = state.events.filter(e => {
+    if (adminSearchQuery) {
+      const matchName = (e.name || '').toLowerCase().includes(adminSearchQuery);
+      const matchVenue = (e.venue || '').toLowerCase().includes(adminSearchQuery);
+      const matchId = (`#EVT-00${e.id}`).toLowerCase().includes(adminSearchQuery);
+      if (!matchName && !matchVenue && !matchId) return false;
+    }
+    if (adminCategoryFilter && e.category !== adminCategoryFilter) {
+      const categories = Array.isArray(e.categories) ? e.categories : [e.category];
+      if (!categories.includes(adminCategoryFilter)) return false;
+    }
+    if (adminStatusFilter) {
+      if (adminStatusFilter === 'Cancelled' && e.status !== 'Cancelled') return false;
+      if (adminStatusFilter === 'Open' && e.status === 'Cancelled') return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    tableBody.innerHTML = `
       <tr>
-        <td style="font-weight: 600; color: var(--primary);">#EVT-00${e.id}</td>
-        <td>
-          <div style="font-weight: 700;">${e.name}</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">${e.category}</div>
+        <td colspan="8" style="text-align: center; padding: 36px; color: var(--text-muted);">
+          🔍 Không tìm thấy sự kiện nào phù hợp với bộ lọc hiện tại.
         </td>
-        <td>${formatDate(e.start_date)}</td>
-        <td>${e.venue}</td>
+      </tr>
+    `;
+    return;
+  }
+
+  tableBody.innerHTML = filtered.map(e => {
+    const isCancelled = e.status === 'Cancelled';
+    const fillPercent = Math.min(100, Math.round(((e.registered || 0) / (e.capacity || 1)) * 100));
+    return `
+      <tr>
+        <td style="font-weight: 700; color: var(--primary);">#EVT-00${e.id}</td>
         <td>
-          <div style="font-weight: 600;">${e.registered} / ${e.capacity}</div>
-          <div class="progress-track" style="margin-top: 4px; width: 90px;">
-            <div class="progress-fill ${e.registered/e.capacity > 0.8 ? 'orange' : 'green'}" style="width: ${(e.registered/e.capacity)*100}%;"></div>
+          <div class="event-row-info">
+            <img class="event-thumb-mini" src="${e.image || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=200&q=80'}" alt="${e.name}">
+            <div>
+              <div class="event-name-text">${e.name}</div>
+              <div class="event-cat-tag">🏷️ ${e.category}</div>
+            </div>
           </div>
         </td>
-        <td style="font-weight: 700; color: var(--accent);">${formatVND(e.price)}</td>
+        <td style="font-size: 0.86rem; color: var(--text-dark);">${formatDate(e.start_date)}</td>
+        <td style="font-size: 0.86rem; color: var(--text-muted);">${e.venue}</td>
         <td>
-          <span class="badge ${e.status === 'Cancelled' ? 'badge-danger' : 'badge-success'}">
-            ${e.status === 'Cancelled' ? 'Đã hủy' : 'Đang mở'}
+          <div style="font-weight: 700; font-size: 0.88rem;">${e.registered || 0} / ${e.capacity} <span style="font-size: 0.75rem; color: var(--text-muted);">(${fillPercent}%)</span></div>
+          <div class="progress-track" style="margin-top: 4px; width: 100px;">
+            <div class="progress-fill ${fillPercent > 80 ? 'orange' : 'green'}" style="width: ${fillPercent}%;"></div>
+          </div>
+        </td>
+        <td style="font-weight: 800; color: var(--accent);">${formatVND(e.price)}</td>
+        <td>
+          <span class="badge ${isCancelled ? 'badge-danger' : 'badge-success'}">
+            ${isCancelled ? 'Đã hủy' : 'Đang mở'}
           </span>
         </td>
         <td>
-          <button class="btn btn-ghost btn-sm" style="color: var(--danger);" onclick="cancelEvent(${e.id})">
-            Hủy
+          <div class="table-btn-group">
+            <a href="event-detail.html?id=${e.id}" class="table-btn" title="Xem trang chi tiết sự kiện">
+              👁️ Xem
+            </a>
+            <button class="table-btn ${isCancelled ? 'success' : 'danger'}" onclick="toggleEventStatus(${e.id})" title="${isCancelled ? 'Khôi phục sự kiện' : 'Hủy sự kiện'}">
+              ${isCancelled ? '🔄 Khôi phục' : '❌ Hủy'}
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderCheckinTable() {
+  const tableBody = document.getElementById('admin-checkin-table-body');
+  if (!tableBody) return;
+
+  const searchInput = document.getElementById('checkin-search-input');
+  const q = (searchInput ? searchInput.value : '').toLowerCase().trim();
+
+  let bookings = (state.bookings || []).filter(b => {
+    if (!q) return true;
+    const bId = (b.booking_id || b.bookingId || '').toLowerCase();
+    const name = (b.attendee_name || (b.attendee && b.attendee.name) || '').toLowerCase();
+    const evName = (b.event_name || b.eventName || '').toLowerCase();
+    return bId.includes(q) || name.includes(q) || evName.includes(q);
+  });
+
+  if (bookings.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
+          🔍 Không tìm thấy lượt đặt vé nào.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tableBody.innerHTML = bookings.map(b => {
+    const bId = b.booking_id || b.bookingId || '';
+    const attName = b.attendee_name || (b.attendee && b.attendee.name) || 'Khách';
+    const evName = b.event_name || b.eventName || 'Sự kiện EventHub';
+    const tCount = b.ticket_count || (b.items && b.items.length) || 1;
+    const total = b.total_price || b.grand || 0;
+    const isChecked = !!b.is_checked_in;
+
+    return `
+      <tr>
+        <td style="font-weight: 700; color: var(--primary);">${bId}</td>
+        <td>
+          <div style="font-weight: 700;">${attName}</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">${b.attendee_email || (b.attendee && b.attendee.email) || ''}</div>
+        </td>
+        <td><div style="font-weight: 600; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${evName}</div></td>
+        <td style="text-align: center; font-weight: 700;">${tCount}</td>
+        <td style="font-weight: 700; color: var(--accent);">${formatVND(total)}</td>
+        <td style="text-align: center;">
+          <span class="badge ${isChecked ? 'badge-success' : 'badge-primary'}">
+            ${isChecked ? '✓ ĐÃ ĐIỂM DANH' : '🎟️ CHƯA ĐIỂM DANH'}
+          </span>
+        </td>
+        <td style="text-align: center;">
+          <button class="table-btn ${isChecked ? 'danger' : 'success'}" onclick="toggleCheckin('${bId}')">
+            ${isChecked ? 'Hủy Check-in' : 'Điểm danh'}
           </button>
         </td>
       </tr>
-    `).join('');
-  }
+    `;
+  }).join('');
 }
 
 // ==========================================================================
@@ -638,6 +1012,11 @@ function resetFilters() {
 }
 
 function switchView(viewName) {
+  if (viewName === 'admin' && !hasAdminPermission(state.user)) {
+    showToast("⛔ Bạn không có quyền truy cập Quản trị & AI ML. Vui lòng đăng nhập với tài khoản Admin hoặc Ban tổ chức!", "error");
+    viewName = 'explore';
+  }
+
   state.activeView = viewName;
   
   // Update Nav Active state
@@ -781,20 +1160,34 @@ function confirmBooking() {
   const finalTotal = Math.max(0, basePrice - discountAmount);
 
   // Add booking to state
-  const newBooking = {
+  const newBooking = normalizeBooking({
     booking_id: bookingId,
+    bookingId: bookingId,
     event_id: event.id,
+    eventId: event.id,
     event_name: event.name,
+    eventName: event.name,
     event_date: event.start_date,
+    eventDate: event.start_date,
     venue: event.venue,
+    eventVenue: event.venue,
+    image: event.image,
+    eventImage: event.image,
     ticket_count: state.bookingQty,
     total_price: finalTotal,
+    grand: finalTotal,
+    subtotal: basePrice,
+    items: [
+      { ticketName: 'Vé Tiêu Chuẩn', quantity: state.bookingQty, price: event.price, lineTotal: finalTotal }
+    ],
+    attendee: { name, email, phone },
     attendee_name: name,
     attendee_email: email,
+    attendee_phone: phone,
     status: "Confirmed",
     is_checked_in: false,
     created_at: new Date().toISOString()
-  };
+  });
 
   state.bookings.unshift(newBooking);
   localStorage.setItem('eventhub_bookings', JSON.stringify(state.bookings));
@@ -815,14 +1208,21 @@ function confirmBooking() {
 
 // E-Ticket Modal
 function openETicketModal(bookingId) {
-  const booking = state.bookings.find(b => b.booking_id === bookingId);
+  const booking = state.bookings.find(b => (b.booking_id === bookingId || b.bookingId === bookingId));
   if (!booking) return;
 
-  document.getElementById('eticket-id').textContent = booking.booking_id;
-  document.getElementById('eticket-event-name').textContent = booking.event_name;
-  document.getElementById('eticket-date').textContent = formatDate(booking.event_date);
-  document.getElementById('eticket-venue').textContent = booking.venue;
-  document.getElementById('eticket-attendee').textContent = `${booking.attendee_name} (${booking.ticket_count} vé)`;
+  const bId = booking.booking_id || booking.bookingId;
+  const evName = booking.event_name || booking.eventName;
+  const evDate = booking.event_date || booking.eventDate;
+  const evVenue = booking.venue || booking.eventVenue;
+  const attName = booking.attendee_name || (booking.attendee && booking.attendee.name) || 'Khách';
+  const tCount = booking.ticket_count || (booking.items && booking.items.length) || 1;
+
+  document.getElementById('eticket-id').textContent = bId;
+  document.getElementById('eticket-event-name').textContent = evName;
+  document.getElementById('eticket-date').textContent = formatDate(evDate);
+  document.getElementById('eticket-venue').textContent = evVenue;
+  document.getElementById('eticket-attendee').textContent = `${attName} (${tCount} vé)`;
   
   const statusBadge = document.getElementById('eticket-status-badge');
   if (statusBadge) {
@@ -833,7 +1233,7 @@ function openETicketModal(bookingId) {
   // Render QR Code SVG
   const qrContainer = document.getElementById('eticket-qr-box');
   if (qrContainer) {
-    qrContainer.innerHTML = generateQRCodeSVG(booking.booking_id, 170);
+    qrContainer.innerHTML = generateQRCodeSVG(bId, 170);
   }
 
   document.getElementById('eticket-modal').classList.add('open');
@@ -844,11 +1244,12 @@ function closeETicketModal() {
 }
 
 function toggleCheckin(bookingId) {
-  const booking = state.bookings.find(b => b.booking_id === bookingId);
+  const booking = state.bookings.find(b => (b.booking_id === bookingId || b.bookingId === bookingId));
   if (booking) {
     booking.is_checked_in = !booking.is_checked_in;
     localStorage.setItem('eventhub_bookings', JSON.stringify(state.bookings));
     renderMyBookings();
+    renderCheckinTable();
     showToast(booking.is_checked_in ? "Điểm danh khách thành công!" : "Đã hủy điểm danh", "info");
   }
 }
@@ -874,6 +1275,8 @@ function quickLogin(role) {
   const profile = USER_PROFILES[role] || USER_PROFILES.Guest;
   state.user = { ...profile };
   localStorage.setItem('eventhub_user', JSON.stringify(state.user));
+  localStorage.setItem('eventhub_current_role', role);
+  if (typeof renderHubHeader === 'function') renderHubHeader();
   renderUserNav();
   closeAuthModal();
   showToast(`Chào mừng trở lại, ${state.user.name} (${state.user.role})!`, "success");
@@ -882,6 +1285,9 @@ function quickLogin(role) {
     switchView('admin');
   }
 }
+
+window.quickLogin = quickLogin;
+window.switchRoleQuickly = quickLogin;
 
 async function handleLoginFormSubmit(e) {
   e.preventDefault();
@@ -1028,6 +1434,10 @@ function cancelEvent(eventId) {
 }
 
 function openCreateEventModal() {
+  if (!hasAdminPermission(state.user)) {
+    showToast("⛔ Bạn không có quyền tạo sự kiện. Yêu cầu tài khoản Admin hoặc Ban tổ chức!", "error");
+    return;
+  }
   document.getElementById('create-event-modal').classList.add('open');
 }
 
@@ -1037,6 +1447,10 @@ function closeCreateEventModal() {
 
 function handleCreateEventSubmit(e) {
   e.preventDefault();
+  if (!hasAdminPermission(state.user)) {
+    showToast("⛔ Bạn không có quyền tạo sự kiện. Yêu cầu tài khoản Admin hoặc Ban tổ chức!", "error");
+    return;
+  }
   const name = document.getElementById('new-evt-name').value;
   const category = document.getElementById('new-evt-category').value;
   const venue = document.getElementById('new-evt-venue').value;
@@ -1074,9 +1488,12 @@ function handleCreateEventSubmit(e) {
 
 // Machine Learning AI Pricing Recommender Widget
 function calculateRecommendedPrice() {
-  const cap = Number(document.getElementById('ml-input-capacity').value) || 500;
-  const cat = document.getElementById('ml-input-category').value;
-  const base = Number(document.getElementById('ml-input-price').value) || 200000;
+  if (!hasAdminPermission(state.user)) {
+    return;
+  }
+  const cap = Number(document.getElementById('ml-input-capacity')?.value) || 1200;
+  const cat = document.getElementById('ml-input-category')?.value || 'Công nghệ & AI';
+  const base = Number(document.getElementById('ml-input-price')?.value) || 300000;
 
   // Multiplier heuristic based on category demand and scale
   let multiplier = 1.0;
@@ -1084,28 +1501,29 @@ function calculateRecommendedPrice() {
   else if (cat.includes("Công nghệ")) multiplier = 1.18;
   else if (cat.includes("Kỹ năng")) multiplier = 1.10;
   else if (cat.includes("Ẩm thực")) multiplier = 0.95;
+  else if (cat.includes("Thể thao")) multiplier = 1.08;
 
   // Capacity factor
   if (cap > 2000) multiplier *= 0.90;
   else if (cap < 300) multiplier *= 1.15;
 
   const suggestedPrice = Math.round((base * multiplier) / 10000) * 10000;
+  const earlyBird = Math.round((suggestedPrice * 0.8) / 10000) * 10000;
+  const vipPrice = Math.round((suggestedPrice * 1.8) / 10000) * 10000;
   const estRevenue = suggestedPrice * Math.round(cap * 0.85);
 
-  const resultBox = document.getElementById('ml-pricing-result');
-  if (resultBox) {
-    resultBox.innerHTML = `
-      <div style="font-size: 0.85rem; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">
-        🤖 Gợi ý từ mô hình XGBoost Recommender
-      </div>
-      <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent);">
-        ${formatVND(suggestedPrice)} <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">/ vé</span>
-      </div>
-      <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">
-        Doanh thu dự kiến với tỷ lệ lấp đầy 85%: <strong>${formatVND(estRevenue)}</strong> (Hệ số tin cậy 92.4%)
-      </div>
-    `;
-    resultBox.style.display = 'block';
+  const priceEl = document.getElementById('ml-suggested-price');
+  const earlyEl = document.getElementById('ml-tier-early');
+  const stdEl = document.getElementById('ml-tier-std');
+  const vipEl = document.getElementById('ml-tier-vip');
+  const revEl = document.getElementById('ml-est-revenue-text');
+
+  if (priceEl) priceEl.textContent = formatVND(suggestedPrice);
+  if (earlyEl) earlyEl.textContent = formatVND(earlyBird);
+  if (stdEl) stdEl.textContent = formatVND(suggestedPrice);
+  if (vipEl) vipEl.textContent = formatVND(vipPrice);
+  if (revEl) {
+    revEl.innerHTML = `Ước tính doanh thu tối đa đạt <strong>${formatVND(estRevenue)}</strong> với tỷ lệ lấp đầy 85%.`;
   }
 }
 
@@ -1168,11 +1586,36 @@ async function checkApiConnection() {
 // 6. APP INITIALIZATION
 // ==========================================================================
 
+function handleInitialHash() {
+  const hash = window.location.hash;
+  if (hash === '#admin') {
+    if (hasAdminPermission(state.user)) {
+      switchView('admin');
+    } else {
+      showToast("⛔ Cần tài khoản Admin hoặc Ban tổ chức để truy cập Quản trị & ML", "warning");
+      switchView('explore');
+    }
+  } else if (hash === '#create-event') {
+    if (hasAdminPermission(state.user)) {
+      switchView('admin');
+      setTimeout(() => openCreateEventModal(), 300);
+    } else {
+      showToast("⛔ Cần tài khoản Admin hoặc Ban tổ chức để tạo sự kiện mới", "warning");
+      switchView('explore');
+    }
+  } else if (hash === '#my-bookings') {
+    switchView('my-bookings');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderUserNav();
   renderCategoryPills();
   renderEventsGrid();
   checkApiConnection();
+  handleInitialHash();
+
+  window.addEventListener('hashchange', handleInitialHash);
 
   // Search form submit
   document.getElementById('search-form')?.addEventListener('submit', (e) => {

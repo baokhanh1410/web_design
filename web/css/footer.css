@@ -1,0 +1,210 @@
+/* ==========================================================================
+   EVENTHUB — GLOBAL FOOTER STYLES (css/footer.css)
+   ========================================================================== */
+
+.lp-footer {
+  background: #0d1a2b;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 56px 0 0;
+  margin-top: 60px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.lp-footer-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 36px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+}
+
+.footer-logo-badge {
+  background: linear-gradient(135deg, #0194F3 0%, #007ecc 100%);
+  color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(1, 148, 243, 0.35);
+  flex-shrink: 0;
+}
+
+.lp-footer-brand-desc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 18px;
+  max-width: 340px;
+}
+
+.lp-social-links {
+  display: flex;
+  gap: 10px;
+}
+
+.lp-social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.75);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.lp-social-btn:hover {
+  background: #0194F3;
+  border-color: #0194F3;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.lp-footer-col-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+.lp-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lp-footer-links a {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color 0.18s ease, transform 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lp-footer-links a:hover {
+  color: #0194F3;
+  transform: translateX(3px);
+}
+
+.lp-payment-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.lp-payment-badge {
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.lp-footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.5;
+}
+
+.lp-footer-contact a {
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.lp-footer-contact a:hover {
+  text-decoration: underline;
+}
+
+.lp-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.lp-footer-copyright {
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.lp-footer-legal {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.lp-footer-legal a {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.lp-footer-legal a:hover {
+  color: #0194F3;
+}
+
+@media (max-width: 1024px) {
+  .lp-footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .lp-footer-top {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .lp-footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .lp-footer-legal {
+    justify-content: center;
+    gap: 14px;
+  }
+}
+

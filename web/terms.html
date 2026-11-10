@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Điều Khoản & Chính Sách — EventHub</title>
+  <meta name="description" content="Điều khoản sử dụng, chính sách bảo mật thông tin và quy chế hoạt động kiểm soát vé trên nền tảng EventHub.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <style>
+    .terms-header-hero {
+      background: linear-gradient(135deg, #0A192F 0%, #172A45 60%, #004D99 100%);
+      color: white;
+      padding: 60px 0 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .terms-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .terms-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .terms-tab-btn {
+      padding: 10px 22px;
+      border-radius: 9999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .terms-tab-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    .terms-tab-btn.active {
+      background: #0194F3;
+      border-color: #0194F3;
+      box-shadow: 0 4px 14px rgba(1, 148, 243, 0.4);
+    }
+    .terms-body-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      padding: 40px;
+      margin: -24px auto 60px;
+      position: relative;
+      z-index: 10;
+      line-height: 1.8;
+      color: #334155;
+    }
+    .terms-pane {
+      display: none;
+    }
+    .terms-pane.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+    .terms-body-card h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0F172A;
+      margin: 28px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #F1F5F9;
+    }
+    .terms-body-card h2:first-of-type {
+      margin-top: 0;
+    }
+    .terms-body-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1E293B;
+      margin: 18px 0 8px;
+    }
+    .terms-body-card p {
+      margin-bottom: 14px;
+    }
+    .terms-body-card ul {
+      margin: 0 0 16px 20px;
+    }
+    .terms-body-card li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: #F0F9FF;
+      border-left: 4px solid #0194F3;
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 768px) {
+      .terms-body-card { padding: 24px 18px; margin-top: 10px; }
+      .terms-header-hero { padding: 40px 0 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       GLOBAL HEADER (EVENTHUB E-COMMERCE STANDARD)
+       ======================================================================== -->
+  <header class="hub-header" id="hub-header">
+    <div class="hub-container hub-header-inner">
+
+      <!-- 1. Brand Logo -->
+      <a href="landing.html" class="hub-logo" aria-label="EventHub Trang chủ">
+        <div class="hub-logo-badge">🎪</div>
+        <span class="hub-logo-text">EventHub</span>
+      </a>
+
+      <!-- 2. Global Search Box -->
+      <div class="hub-search-wrapper">
+        <form class="hub-search-form" id="hub-search-form" onsubmit="handleHeaderSearchSubmit(event)">
+          <svg class="hub-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            class="hub-search-input"
+            id="hub-search-input"
+            placeholder="Tìm kiếm sự kiện, nghệ sĩ, địa điểm..."
+            autocomplete="off"
+          />
+          <button type="button" class="hub-search-clear" id="hub-search-clear" onclick="clearHeaderSearch()" aria-label="Xóa">✕</button>
+        </form>
+      </div>
+
+      <!-- 3. Navigation Links -->
+      <nav class="hub-nav" aria-label="Điều hướng chính">
+        <a href="landing.html" class="hub-nav-link" data-nav="home">Trang chủ</a>
+        <a href="events.html" class="hub-nav-link" data-nav="events">Khám phá</a>
+        <a href="profile.html" class="hub-nav-link" data-nav="profile">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-nav-link hub-role-admin" id="hub-nav-create" data-nav="create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-nav-link hub-role-admin" id="hub-nav-admin" data-nav="admin" style="display:none;">📊 Quản trị & ML</a>
+      </nav>
+
+      <!-- 4. User Actions & Role Switcher -->
+      <div class="hub-actions">
+        <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
+          <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
+            <div class="hub-user-info">
+              <span class="hub-user-name" id="hub-user-name">Nguyễn Bảo Khánh</span>
+              <span class="hub-role-badge" id="hub-role-badge">Admin</span>
+            </div>
+            <span class="hub-chevron">▾</span>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="hub-dropdown" id="hub-user-dropdown" style="display: none;">
+            <div class="hub-dropdown-header">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-dd-avatar" class="hub-dd-avatar" alt="Avatar">
+              <div>
+                <strong class="hub-dd-name" id="hub-dd-name">Nguyễn Bảo Khánh</strong>
+                <div class="hub-dd-email" id="hub-dd-email">khanh.admin@eventhub.vn</div>
+              </div>
+            </div>
+
+            <!-- Role Switcher -->
+            <div class="hub-dropdown-roles">
+              <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+              <div class="hub-role-buttons">
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+              </div>
+            </div>
+
+            <div class="hub-dropdown-divider"></div>
+            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
+            <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
+            <div class="hub-dropdown-divider"></div>
+            <button type="button" class="hub-dd-link hub-dd-logout" onclick="headerLogout()">🚪 Đăng xuất</button>
+          </div>
+        </div>
+
+        <!-- Mobile Burger -->
+        <button class="hub-burger" id="hub-burger" onclick="toggleHeaderMobileMenu()" aria-label="Menu di động">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="hub-mobile-drawer" id="hub-mobile-drawer">
+      <div class="hub-mobile-search">
+        <form onsubmit="handleHeaderSearchSubmit(event)">
+          <input type="text" class="hub-search-input" id="hub-mobile-search-input" placeholder="Tìm sự kiện, địa điểm...">
+        </form>
+      </div>
+      <div class="hub-mobile-links">
+        <a href="landing.html" class="hub-mobile-link">Trang chủ</a>
+        <a href="events.html" class="hub-mobile-link">Khám phá sự kiện</a>
+        <a href="profile.html" class="hub-mobile-link">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-mobile-link hub-role-admin" id="hub-mob-create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-mobile-link hub-role-admin" id="hub-mob-admin" style="display:none;">📊 Quản trị & ML</a>
+      </div>
+      <div class="hub-mobile-roles">
+        <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+        <div class="hub-role-buttons">
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       HERO & TABS
+       ====================================================================== -->
+  <div class="terms-header-hero">
+    <div class="terms-container">
+      <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: #38BDF8; letter-spacing: 1px; margin-bottom: 8px;">
+        Trung Tâm Pháp Lý & Chính Sách
+      </div>
+      <h1 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px;">Quy Định & Điều Khoản Sử Dụng</h1>
+      <p style="color: rgba(255,255,255,0.8); max-width: 600px; margin: 10px auto 0;">
+        Minh bạch, bảo mật và bảo vệ quyền lợi hợp pháp của người mua vé cùng Ban tổ chức sự kiện trên nền tảng EventHub.
+      </p>
+
+      <div class="terms-tabs" role="tablist">
+        <button class="terms-tab-btn active" onclick="switchTermsTab('terms')" id="tab-btn-terms">
+          📜 Điều Khoản Sử Dụng
+        </button>
+        <button class="terms-tab-btn" onclick="switchTermsTab('privacy')" id="tab-btn-privacy">
+          🔒 Chính Sách Bảo Mật
+        </button>
+        <button class="terms-tab-btn" onclick="switchTermsTab('rules')" id="tab-btn-rules">
+          🎟️ Quy Chế Hoạt Động & Soát Vé
+        </button>
+        <button class="terms-tab-btn" onclick="switchTermsTab('faq')" id="tab-btn-faq">
+          ❓ Câu Hỏi Thường Gặp (FAQ)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       CONTENT BODY
+       ====================================================================== -->
+  <main class="terms-container">
+    <article class="terms-body-card">
+
+      <!-- PANE 1: ĐIỀU KHOẢN SỬ DỤNG -->
+      <section id="pane-terms" class="terms-pane active">
+        <h2>1. Quy Định Chung & Điều Kiện Giao Dịch</h2>
+        <p>
+          Chào mừng bạn đến với <strong>EventHub</strong>. Khi truy cập website, xem thông tin và thực hiện giao dịch mua vé sự kiện trực tuyến, bạn xác nhận đã đọc, hiểu và đồng ý tuân thủ toàn bộ các điều khoản được quy định dưới đây.
+        </p>
+        <div class="highlight-box">
+          <strong>Lưu ý quan trọng:</strong> Mỗi mã đặt vé (Booking ID) gắn liền với mã phản hồi nhanh QR Code duy nhất được bảo vệ bởi chữ ký điện tử. Mã này chỉ có giá trị check-in 01 lần tại cổng sự kiện.
+        </div>
+
+        <h3>2. Quy Trình Đặt Vé & Thanh Toán Điện Tử</h3>
+        <ul>
+          <li>Khách hàng có trách nhiệm cung cấp chính xác thông tin cá nhân (Họ tên, Email, Số điện thoại) khi đặt chỗ để nhận vé điện tử E-Ticket.</li>
+          <li>Các hình thức thanh toán được hỗ trợ bao gồm: Thẻ tín dụng/ghi nợ quốc tế (Visa, Mastercard), Ví điện tử MoMo/ZaloPay, chuyển khoản ngân hàng qua VietQR tức thời.</li>
+          <li>Đơn hàng chỉ được coi là hoàn tất khi hệ thống EventHub ghi nhận thanh toán thành công và tự động tạo mã QR lưu trữ trong mục <strong>"Vé của tôi"</strong>.</li>
+        </ul>
+
+        <h3>3. Chính Sách Đổi Trả, Hủy Vé & Hoàn Tiền</h3>
+        <p>
+          Theo quy chế tiêu chuẩn của ngành biểu diễn và sự kiện:
+        </p>
+        <ul>
+          <li><strong>Sự kiện diễn ra bình thường:</strong> Vé đã mua thành công không được hoàn lại tiền mặt trừ trường hợp có quy định riêng được Ban tổ chức công bố cụ thể trên trang chi tiết sự kiện.</li>
+          <li><strong>Sự kiện bị hoãn hoặc đổi lịch:</strong> Khách hàng có quyền giữ vé để tham gia vào ngày diễn ra mới hoặc yêu cầu hoàn tiền 100% trong vòng 07 ngày làm việc kể từ thông báo chính thức.</li>
+          <li><strong>Sự kiện bị hủy hoàn toàn:</strong> Hệ thống EventHub sẽ tự động kích hoạt quy trình hoàn tiền về tài khoản hoặc phương thức thanh toán ban đầu của người mua.</li>
+        </ul>
+
+        <h3>4. Trách Nhiệm Của Ban Tổ Chức & EventHub</h3>
+        <p>
+          EventHub đóng vai trò là sàn giao dịch thương mại điện tử và nền tảng công nghệ phân phối vé. Ban tổ chức sự kiện chịu trách nhiệm hoàn toàn về chất lượng chương trình, an ninh địa điểm và việc thực hiện đúng cam kết nội dung đã công bố.
+        </p>
+      </section>
+
+      <!-- PANE 2: CHÍNH SÁCH BẢO MẬT -->
+      <section id="pane-privacy" class="terms-pane">
+        <h2>Chính Sách Bảo Mật Thông Tin Khách Hàng</h2>
+        <p>
+          EventHub cam kết bảo vệ dữ liệu cá nhân của người dùng phù hợp với Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân của Chính phủ Việt Nam.
+        </p>
+
+        <h3>1. Thông Tin Thu Thập</h3>
+        <ul>
+          <li>Thông tin định danh: Họ tên, địa chỉ email, số điện thoại người nhận vé.</li>
+          <li>Lịch sử giao dịch: Mã đặt chỗ, sự kiện đã mua, thời gian và phương thức thanh toán.</li>
+          <li>Thông tin kỹ thuật: Địa chỉ IP, thiết bị truy cập nhằm mục đích phòng chống gian lận thẻ và mã độc.</li>
+        </ul>
+
+        <div class="highlight-box">
+          <strong>Bảo mật thanh toán PCI-DSS:</strong> EventHub tuyệt đối không lưu trữ thông tin số thẻ tín dụng hoặc mật khẩu thanh toán của khách hàng. Toàn bộ giao dịch đều được mã hóa SSL/TLS 256-bit qua cổng thanh toán trung gian được Ngân hàng Nhà nước cấp phép.
+        </div>
+
+        <h3>2. Mục Đích Sử Dụng Dữ Liệu</h3>
+        <p>
+          Dữ liệu của bạn chỉ được sử dụng cho các mục đích:
+        </p>
+        <ul>
+          <li>Gửi mã vé điện tử E-Ticket và hóa đơn điện tử về hòm thư người dùng.</li>
+          <li>Cập nhật thông tin khẩn cấp từ Ban tổ chức (thay đổi giờ diễn, địa điểm, hướng dẫn đỗ xe).</li>
+          <li>Phục vụ công tác đối soát check-in và phòng chống vé giả tại cửa soát vé.</li>
+        </ul>
+      </section>
+
+      <!-- PANE 3: QUY CHẾ HOẠT ĐỘNG & SOÁT VÉ -->
+      <section id="pane-rules" class="terms-pane">
+        <h2>Quy Chế Hoạt Động & Kiểm Soát Vé Tại Sự Kiện</h2>
+        <p>
+          Nhằm đảm bảo an toàn tuyệt đối và trải nghiệm chuyên nghiệp cho tất cả khán giả, vui lòng lưu ý các quy chuẩn kiểm soát vé:
+        </p>
+
+        <h3>1. Quy Trình Soát Vé Bằng Mã QR</h3>
+        <ul>
+          <li>Mỗi người tham dự phải xuất trình mã QR trên ứng dụng hoặc trang <strong>"Vé của tôi"</strong> trên điện thoại thông minh (hoặc bản in rõ nét).</li>
+          <li>Nhân viên soát vé (Staff/Organizer) sẽ dùng thiết bị quét mã để kiểm tra tính hợp lệ trên hệ thống cơ sở dữ liệu thời gian thực.</li>
+          <li>Mã QR đã qua cửa một lần sẽ ngay lập tức chuyển trạng thái sang <strong>"ĐÃ ĐIỂM DANH"</strong> và không thể tái sử dụng.</li>
+        </ul>
+
+        <h3>2. Quy Định Vật Dụng Cấm Mang Vào Sự Kiện</h3>
+        <ul>
+          <li>Vũ khí, chất nổ, chất dễ cháy, pháo sáng hoặc hung khí dưới mọi hình thức.</li>
+          <li>Đồ uống có cồn, chất kích thích bị cấm theo pháp luật hiện hành.</li>
+          <li>Thiết bị flycam, máy quay phim chuyên nghiệp cỡ lớn khi chưa có thẻ tác nghiệp từ Ban tổ chức.</li>
+        </ul>
+
+        <h3>3. Xử Lý Tranh Chấp Vé</h3>
+        <p>
+          Trong trường hợp có trùng lặp mã vé do mua lại từ bên thứ ba (chợ đen/vé chuyển nhượng không chính thống), quyền vào cửa sẽ ưu tiên thuộc về người đứng tên trên giao dịch gốc lưu trong hệ thống của EventHub.
+        </p>
+      </section>
+
+      <!-- PANE 4: FAQ -->
+      <section id="pane-faq" class="terms-pane">
+        <h2>Câu Hỏi Thường Gặp (Frequently Asked Questions)</h2>
+
+        <h3>1. Tôi có thể tặng vé hoặc chuyển quyền tham gia cho bạn bè không?</h3>
+        <p>
+          Có. Vé điện tử QR của EventHub không giới hạn danh tính người cầm mã quét tại cổng, miễn là mã QR còn nguyên vẹn và chưa từng được quét qua cửa trước đó.
+        </p>
+
+        <h3>2. Sau khi chuyển khoản xong bao lâu thì tôi nhận được vé?</h3>
+        <p>
+          Ngay sau khi giao dịch thành công (thông thường từ 5 - 30 giây), hệ thống sẽ gửi Email xác nhận kèm mã QR, đồng thời vé sẽ lập tức hiển thị trong trang <a href="profile.html" style="color:#0194F3; font-weight:700;">"Vé của tôi"</a>.
+        </p>
+
+        <h3>3. Nếu tôi lỡ làm mất email hoặc xóa vé thì làm thế nào?</h3>
+        <p>
+          Bạn chỉ cần đăng nhập tài khoản vào EventHub và mở mục <a href="profile.html" style="color:#0194F3; font-weight:700;">Vé của tôi</a> để mở lại mã QR hoặc tải lại bản PDF bất kỳ lúc nào.
+        </p>
+
+        <h3>4. Ban tổ chức muốn tạo sự kiện và bán vé trên EventHub thì làm thế nào?</h3>
+        <p>
+          Bạn có thể truy cập mục <a href="index.html#create-event" style="color:#0194F3; font-weight:700;">Tạo sự kiện mới</a> hoặc đăng nhập bằng tài khoản Organizer để sử dụng hệ thống quản trị, theo dõi bán vé và công cụ AI gợi ý định giá vé thông minh.
+        </p>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- ======================================================================
+       SHARED FOOTER
+       ====================================================================== -->
+  <footer class="lp-footer" id="footer">
+    <div class="footer-container">
+      <div class="lp-footer-top">
+        <div class="lp-footer-brand">
+          <a href="landing.html" class="footer-brand-logo">
+            <div class="footer-logo-badge">🎪</div>
+            <span>EventHub</span>
+          </a>
+          <p class="lp-footer-brand-desc">
+            Nền tảng tìm kiếm, đặt vé và quản lý sự kiện giải trí hàng đầu Việt Nam. Kết nối hàng triệu khán giả với những trải nghiệm tuyệt vời.
+          </p>
+          <div class="lp-social-links">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.41 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="white"/></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="TikTok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.86a8.26 8.26 0 0 0 4.83 1.55V7.96a4.86 4.86 0 0 1-1.06-.23z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Khám Phá Sự Kiện</h4>
+          <ul class="lp-footer-links">
+            <li><a href="events.html">Tất cả sự kiện</a></li>
+            <li><a href="events.html?category=music">Âm nhạc & Concert</a></li>
+            <li><a href="events.html?category=tech">Hội thảo & Tech</a></li>
+            <li><a href="events.html?category=sport">Thể thao & Marathon</a></li>
+            <li><a href="events.html?category=art">Nghệ thuật & Triển lãm</a></li>
+            <li><a href="events.html?category=food">Ẩm thực & Đời sống</a></li>
+            <li><a href="landing.html#promo">Vé ưu đãi & Flash Sale</a></li>
+          </ul>
+        </div>
+
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Dành Cho Đối Tác</h4>
+          <ul class="lp-footer-links">
+            <li><a href="index.html#create-event">Đăng ký tạo sự kiện mới</a></li>
+            <li><a href="index.html#admin">Hệ thống quản lý & Kiểm soát vé</a></li>
+            <li><a href="index.html#admin">AI định giá XGBoost</a></li>
+            <li><a href="index.html#admin">Báo cáo tài chính & Doanh thu</a></li>
+            <li><a href="profile.html">Quản lý vé của tôi & E-Ticket</a></li>
+          </ul>
+        </div>
+
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Hỗ Trợ & Thanh Toán</h4>
+          <div class="lp-payment-badges">
+            <span class="lp-payment-badge">💳 Visa / Master</span>
+            <span class="lp-payment-badge">⚡ MoMo</span>
+            <span class="lp-payment-badge">📲 ZaloPay</span>
+            <span class="lp-payment-badge">🏦 VietQR</span>
+            <span class="lp-payment-badge">🍎 Apple Pay</span>
+          </div>
+          <div class="lp-footer-contact">
+            <div>✉️ Email: <a href="mailto:ds66b@neu.edu.vn" style="color:#fff;">ds66b@neu.edu.vn</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-footer-bottom">
+        <div class="lp-footer-copyright">
+          © 2026 EventHub. Bảo lưu mọi quyền. Nền tảng đặt vé sự kiện hàng đầu Việt Nam.
+        </div>
+        <div class="lp-footer-legal">
+          <a href="terms.html?tab=terms" onclick="switchTermsTab('terms'); window.scrollTo({top:0, behavior:'smooth'}); return false;">Điều khoản sử dụng</a>
+          <a href="terms.html?tab=privacy" onclick="switchTermsTab('privacy'); window.scrollTo({top:0, behavior:'smooth'}); return false;">Chính sách bảo mật</a>
+          <a href="terms.html?tab=rules" onclick="switchTermsTab('rules'); window.scrollTo({top:0, behavior:'smooth'}); return false;">Quy chế hoạt động</a>
+          <a href="terms.html?tab=faq" onclick="switchTermsTab('faq'); window.scrollTo({top:0, behavior:'smooth'}); return false;">Câu hỏi thường gặp (FAQ)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/header.js"></script>
+  <script>
+    function switchTermsTab(tabName) {
+      ['terms', 'privacy', 'rules', 'faq'].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const pane = document.getElementById(`pane-${t}`);
+        if (btn) btn.classList.toggle('active', t === tabName);
+        if (pane) pane.classList.toggle('active', t === tabName);
+      });
+      // Update URL hash/search without full reload
+      if (history.replaceState) {
+        history.replaceState(null, '', `terms.html?tab=${tabName}`);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const requestedTab = params.get('tab') || 'terms';
+      if (['terms', 'privacy', 'rules', 'faq'].includes(requestedTab)) {
+        switchTermsTab(requestedTab);
+      }
+    });
+  </script>
+</body>
+</html>

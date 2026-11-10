@@ -12,40 +12,123 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
 
+  <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
 
   <!-- ========================================================================
-       TOP HEADER & NAVIGATION BAR
+       GLOBAL HEADER (EVENTHUB E-COMMERCE STANDARD)
        ======================================================================== -->
-  <header class="header">
-    <div class="container header-content">
-      <!-- Brand Logo -->
-      <a href="#" class="logo" onclick="switchView('explore'); return false;">
-        <div class="logo-badge">✈️</div>
-        <span>EventHub</span>
+  <header class="hub-header" id="hub-header">
+    <div class="hub-container hub-header-inner">
+
+      <!-- 1. Brand Logo -->
+      <a href="landing.html" class="hub-logo" aria-label="EventHub Trang chủ">
+        <div class="hub-logo-badge">🎪</div>
+        <span class="hub-logo-text">EventHub</span>
       </a>
 
-      <!-- Navigation Links -->
-      <nav class="nav-links" aria-label="Điều hướng chính">
-        <a href="#explore" id="nav-explore" class="nav-item active" onclick="switchView('explore'); return false;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-          Khám phá
-        </a>
-        <a href="#my-bookings" id="nav-my-bookings" class="nav-item" onclick="switchView('my-bookings'); return false;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
-          Vé của tôi
-        </a>
-        <a href="#admin" id="nav-admin" class="nav-item" onclick="switchView('admin'); return false;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
-          Quản trị & ML
-        </a>
+      <!-- 2. Global Search Box -->
+      <div class="hub-search-wrapper">
+        <form class="hub-search-form" id="hub-search-form" onsubmit="handleHeaderSearchSubmit(event)">
+          <svg class="hub-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            class="hub-search-input"
+            id="hub-search-input"
+            placeholder="Tìm kiếm sự kiện, nghệ sĩ, địa điểm..."
+            autocomplete="off"
+          />
+          <button type="button" class="hub-search-clear" id="hub-search-clear" onclick="clearHeaderSearch()" aria-label="Xóa">✕</button>
+        </form>
+      </div>
+
+      <!-- 3. Navigation Links -->
+      <nav class="hub-nav" aria-label="Điều hướng chính">
+        <a href="landing.html" class="hub-nav-link" data-nav="home">Trang chủ</a>
+        <a href="events.html" class="hub-nav-link" data-nav="events">Khám phá</a>
+        <a href="profile.html" class="hub-nav-link" data-nav="profile">Vé của tôi</a>
+        <a href="#create-event" class="hub-nav-link hub-role-admin" id="hub-nav-create" data-nav="create" style="display:none;" onclick="openCreateEventModal(); return false;">➕ Tạo sự kiện</a>
+        <a href="#admin" class="hub-nav-link hub-role-admin" id="hub-nav-admin" data-nav="admin" style="display:none;" onclick="switchView('admin'); return false;">📊 Quản trị & ML</a>
       </nav>
 
-      <!-- User Profile & Quick Actions -->
-      <div class="nav-actions" id="user-nav-actions">
-        <!-- Dynamically rendered by app.js -->
+      <!-- 4. User Actions & Role Switcher -->
+      <div class="hub-actions">
+        <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
+          <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
+            <div class="hub-user-info">
+              <span class="hub-user-name" id="hub-user-name">Nguyễn Bảo Khánh</span>
+              <span class="hub-role-badge" id="hub-role-badge">Admin</span>
+            </div>
+            <span class="hub-chevron">▾</span>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="hub-dropdown" id="hub-user-dropdown" style="display: none;">
+            <div class="hub-dropdown-header">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-dd-avatar" class="hub-dd-avatar" alt="Avatar">
+              <div>
+                <strong class="hub-dd-name" id="hub-dd-name">Nguyễn Bảo Khánh</strong>
+                <div class="hub-dd-email" id="hub-dd-email">khanh.admin@eventhub.vn</div>
+              </div>
+            </div>
+
+            <!-- Role Switcher -->
+            <div class="hub-dropdown-roles">
+              <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+              <div class="hub-role-buttons">
+                <button type="button" class="hub-role-btn" onclick="quickLogin('Admin')">👑 Admin</button>
+                <button type="button" class="hub-role-btn" onclick="quickLogin('Organizer')">🎪 Tổ chức</button>
+                <button type="button" class="hub-role-btn" onclick="quickLogin('Staff')">💼 Staff</button>
+                <button type="button" class="hub-role-btn" onclick="quickLogin('Guest')">👤 Khách</button>
+              </div>
+            </div>
+
+            <div class="hub-dropdown-divider"></div>
+            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;" onclick="openCreateEventModal(); toggleHeaderDropdown(); return false;">➕ Đăng ký tạo sự kiện</a>
+            <a href="#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;" onclick="switchView('admin'); toggleHeaderDropdown(); return false;">📊 Quản trị hệ thống & AI (ML)</a>
+            <div class="hub-dropdown-divider"></div>
+            <button type="button" class="hub-dd-link hub-dd-logout" onclick="headerLogout()">🚪 Đăng xuất</button>
+          </div>
+        </div>
+
+        <!-- Mobile Burger -->
+        <button class="hub-burger" id="hub-burger" onclick="toggleHeaderMobileMenu()" aria-label="Menu di động">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="hub-mobile-drawer" id="hub-mobile-drawer">
+      <div class="hub-mobile-search">
+        <form onsubmit="handleHeaderSearchSubmit(event)">
+          <input type="text" class="hub-search-input" id="hub-mobile-search-input" placeholder="Tìm sự kiện, địa điểm...">
+        </form>
+      </div>
+      <div class="hub-mobile-links">
+        <a href="landing.html" class="hub-mobile-link">Trang chủ</a>
+        <a href="events.html" class="hub-mobile-link">Khám phá sự kiện</a>
+        <a href="profile.html" class="hub-mobile-link">Vé của tôi</a>
+        <a href="#create-event" class="hub-mobile-link hub-role-admin" id="hub-mob-create" style="display:none;" onclick="openCreateEventModal(); return false;">➕ Tạo sự kiện</a>
+        <a href="#admin" class="hub-mobile-link hub-role-admin" id="hub-mob-admin" style="display:none;" onclick="switchView('admin'); return false;">📊 Quản trị & ML</a>
+      </div>
+      <div class="hub-mobile-roles">
+        <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+        <div class="hub-role-buttons">
+          <button type="button" class="hub-role-btn" onclick="quickLogin('Admin')">👑 Admin</button>
+          <button type="button" class="hub-role-btn" onclick="quickLogin('Organizer')">🎪 Tổ chức</button>
+          <button type="button" class="hub-role-btn" onclick="quickLogin('Staff')">💼 Staff</button>
+          <button type="button" class="hub-role-btn" onclick="quickLogin('Guest')">👤 Khách</button>
+        </div>
       </div>
     </div>
   </header>
@@ -205,127 +288,251 @@
   <!-- ========================================================================
        VIEW 3: ADMIN & AI PRICING DASHBOARD
        ======================================================================== -->
-  <main id="view-admin" class="container" style="display: none; padding-top: 40px; padding-bottom: 60px;">
-    <div class="section-header">
-      <div>
-        <h2 class="section-title">
-          <span>📊 Bảng Điều Khiển Quản Trị Sự Kiện</span>
-        </h2>
-        <p class="section-subtitle">Theo dõi tài chính, tỷ lệ tham gia và áp dụng AI định giá vé thông minh</p>
+  <main id="view-admin" class="container" style="display: none; padding-top: 32px; padding-bottom: 60px;">
+    <!-- Dashboard Header -->
+    <div class="admin-header-card">
+      <div class="admin-header-info">
+        <div class="admin-role-tag">
+          <span class="pulse-dot"></span>
+          <span id="admin-current-role-label">Bảng Điều Khiển Quản Trị & Ban Tổ Chức</span>
+        </div>
+        <h1 class="admin-main-title">Trung Tâm Vận Hành Sự Kiện EventHub</h1>
+        <p class="admin-main-desc">Theo dõi doanh thu theo thời gian thực, quản lý suất diễn, kiểm soát vé tại cổng và tối ưu giá bán với AI.</p>
       </div>
-      <button class="btn btn-primary" onclick="openCreateEventModal()">
-        + Tạo sự kiện mới
-      </button>
+      <div class="admin-header-actions">
+        <button class="btn btn-primary" onclick="openCreateEventModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Tạo Sự Kiện Mới
+        </button>
+      </div>
     </div>
 
     <!-- KPI Summary Cards -->
     <div class="dashboard-kpis">
       <div class="kpi-card">
-        <div class="kpi-icon-box" style="background: #EBF7FF; color: var(--primary);">💰</div>
-        <div>
+        <div class="kpi-icon-box" style="background: rgba(1, 148, 243, 0.1); color: var(--primary);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        </div>
+        <div class="kpi-content">
+          <div class="kpi-title">Tổng Doanh Thu</div>
           <div class="kpi-val" id="kpi-revenue">0 ₫</div>
-          <div class="kpi-title">Tổng doanh thu</div>
+          <div class="kpi-subtext"><span class="kpi-trend positive">↑ +18.4%</span> so với kỳ trước</div>
         </div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-icon-box" style="background: #FFF2ED; color: var(--accent);">🎪</div>
-        <div>
+        <div class="kpi-icon-box" style="background: rgba(255, 94, 31, 0.1); color: var(--accent);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <div class="kpi-content">
+          <div class="kpi-title">Sự Kiện Quản Lý</div>
           <div class="kpi-val" id="kpi-events">0</div>
-          <div class="kpi-title">Tổng sự kiện</div>
+          <div class="kpi-subtext" id="kpi-events-sub">Đang mở bán trên toàn sàn</div>
         </div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-icon-box" style="background: #E6F7ED; color: var(--success);">👥</div>
-        <div>
+        <div class="kpi-icon-box" style="background: rgba(0, 166, 81, 0.1); color: var(--success);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div class="kpi-content">
+          <div class="kpi-title">Vé Đã Đặt (Lượt)</div>
           <div class="kpi-val" id="kpi-registrations">0</div>
-          <div class="kpi-title">Lượt đăng ký</div>
+          <div class="kpi-subtext"><span class="kpi-trend positive">↑ 92%</span> tỷ lệ thanh toán</div>
         </div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-icon-box" style="background: #FEF6E9; color: var(--warning);">📈</div>
-        <div>
+        <div class="kpi-icon-box" style="background: rgba(245, 166, 35, 0.1); color: var(--warning);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="kpi-content">
+          <div class="kpi-title">Tỷ Lệ Lấp Đầy Khán Phòng</div>
           <div class="kpi-val" id="kpi-attendance">0%</div>
-          <div class="kpi-title">Tỷ lệ tham gia</div>
+          <div class="kpi-subtext">Hiệu suất trung bình</div>
         </div>
       </div>
     </div>
 
-    <!-- AI Pricing Recommender Widget -->
-    <div class="ml-widget">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 1.5rem;">🤖</span>
+    <!-- Admin Sub-Navigation Tabs -->
+    <div class="admin-tabs-nav">
+      <button class="admin-tab-btn active" onclick="switchAdminTab('events')" id="admin-tab-btn-events">
+        🎪 Quản Lý Sự Kiện (<span id="admin-tab-events-count">0</span>)
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('pricing')" id="admin-tab-btn-pricing">
+        🤖 AI Định Giá Vé (ML Pricing)
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('checkin')" id="admin-tab-btn-checkin">
+        🎟️ Kiểm Soát Vé & Check-in Trực Tiếp
+      </button>
+    </div>
+
+    <!-- TAB PANE 1: Quản lý sự kiện -->
+    <div id="admin-pane-events" class="admin-pane active">
+      <!-- Search and Filters Bar -->
+      <div class="admin-filter-bar">
+        <div class="admin-search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="admin-search-input" placeholder="Tìm theo tên sự kiện, mã số hoặc địa điểm..." oninput="handleAdminSearch()">
+        </div>
+        <div class="admin-filter-selects">
+          <select id="admin-filter-category" onchange="handleAdminSearch()">
+            <option value="">Tất cả thể loại</option>
+            <option value="Âm nhạc & Lễ hội">Âm nhạc & Lễ hội</option>
+            <option value="Công nghệ & AI">Công nghệ & AI</option>
+            <option value="Hội thảo kỹ năng">Hội thảo kỹ năng</option>
+            <option value="Ẩm thực & Đời sống">Ẩm thực & Đời sống</option>
+            <option value="Thể thao & Marathon">Thể thao & Marathon</option>
+            <option value="Nghệ thuật & Triển lãm">Nghệ thuật & Triển lãm</option>
+          </select>
+          <select id="admin-filter-status" onchange="handleAdminSearch()">
+            <option value="">Tất cả trạng thái</option>
+            <option value="Open">Đang mở bán</option>
+            <option value="Cancelled">Đã hủy</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Events Management Table -->
+      <div class="admin-table-wrapper" tabindex="0" role="region" aria-label="Danh sách sự kiện, cuộn ngang để xem thêm cột">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width: 85px;">Mã</th>
+              <th style="min-width: 260px;">Sự kiện</th>
+              <th style="min-width: 140px;">Thời gian</th>
+              <th style="min-width: 170px;">Địa điểm</th>
+              <th style="min-width: 150px;">Vé bán / Sức chứa</th>
+              <th style="min-width: 120px;">Giá vé cơ sở</th>
+              <th style="min-width: 110px;">Trạng thái</th>
+              <th style="min-width: 170px; text-align: center;">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="admin-events-table-body">
+            <!-- Dynamically rendered -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB PANE 2: AI Pricing Model -->
+    <div id="admin-pane-pricing" class="admin-pane" style="display: none;">
+      <div class="ml-dashboard-grid">
+        <!-- Controls Card -->
+        <div class="ml-controls-card">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+            <span style="font-size: 1.6rem;">🤖</span>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark);">Thông Số Dự Báo Mô Hình XGBoost</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">Mô hình học máy dự báo mức độ sẵn sàng chi trả của khán giả theo quy mô & thể loại</p>
+            </div>
+          </div>
+
+          <div style="display: grid; gap: 16px;">
+            <div class="search-field">
+              <label class="search-label">Sức chứa khán phòng (Người)</label>
+              <div class="search-input-box">
+                <input type="number" id="ml-input-capacity" value="1200" step="100" oninput="calculateRecommendedPrice()">
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Phân khúc thể loại</label>
+              <div class="search-input-box">
+                <select id="ml-input-category" onchange="calculateRecommendedPrice()">
+                  <option value="Âm nhạc & Lễ hội">Âm nhạc & Lễ hội</option>
+                  <option value="Công nghệ & AI" selected>Công nghệ & AI</option>
+                  <option value="Hội thảo kỹ năng">Hội thảo kỹ năng</option>
+                  <option value="Ẩm thực & Đời sống">Ẩm thực & Đời sống</option>
+                  <option value="Thể thao & Marathon">Thể thao & Marathon</option>
+                </select>
+              </div>
+            </div>
+            <div class="search-field">
+              <label class="search-label">Giá vé cơ sở dự kiến (VNĐ)</label>
+              <div class="search-input-box">
+                <input type="number" id="ml-input-price" value="300000" step="20000" oninput="calculateRecommendedPrice()">
+              </div>
+            </div>
+            <button class="btn btn-primary" style="height: 46px; width: 100%;" onclick="calculateRecommendedPrice()">
+              ⚡ Phân Tích & Chạy Lại Mô Hình
+            </button>
+          </div>
+        </div>
+
+        <!-- Preview Card -->
+        <div class="ml-preview-card" id="ml-pricing-preview-card">
           <div>
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-dark);">
-              Công Cụ Định Giá Vé Thông Minh (Machine Learning Pricing Model)
-            </h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">
-              Tích hợp mô hình dự đoán XGBoost trong <code>src/ml_models.py</code> để tối ưu hóa doanh thu dựa trên quy mô và phân khúc
-            </p>
-          </div>
-        </div>
-        <span class="badge badge-primary">AI Recommender</span>
-      </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span class="badge badge-primary">AI Recommender</span>
+              <span style="font-size: 0.78rem; color: var(--primary-dark); font-weight: 700;">Độ chính xác R² = 0.94</span>
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+              Mức Giá Vé Đề Xuất Tối Ưu
+            </div>
+            <div id="ml-suggested-price" style="font-size: 2.1rem; font-weight: 900; color: var(--accent); margin: 6px 0;">
+              350.000 ₫
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-body);" id="ml-est-revenue-text">
+              Ước tính doanh thu tối đa đạt <strong>357.000.000 ₫</strong> với tỷ lệ lấp đầy 85%.
+            </div>
 
-      <div class="pricing-grid">
-        <div class="search-field">
-          <label class="search-label">Sức chứa khán phòng (Người)</label>
-          <div class="search-input-box">
-            <input type="number" id="ml-input-capacity" value="1200" step="100">
+            <!-- Tier Breakdown -->
+            <div style="margin-top: 20px;">
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px;">Gợi ý phân khúc hạng vé:</div>
+              <div class="ml-tier-breakdown">
+                <div class="ml-tier-box">
+                  <div class="ml-tier-label">Early Bird</div>
+                  <div class="ml-tier-price" id="ml-tier-early">280.000 ₫</div>
+                </div>
+                <div class="ml-tier-box" style="border-color: var(--primary);">
+                  <div class="ml-tier-label">Standard</div>
+                  <div class="ml-tier-price" id="ml-tier-std">350.000 ₫</div>
+                </div>
+                <div class="ml-tier-box">
+                  <div class="ml-tier-label">VIP</div>
+                  <div class="ml-tier-price" id="ml-tier-vip">600.000 ₫</div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="search-field">
-          <label class="search-label">Phân khúc thể loại</label>
-          <div class="search-input-box">
-            <select id="ml-input-category">
-              <option value="Âm nhạc & Lễ hội">Âm nhạc & Lễ hội</option>
-              <option value="Công nghệ & AI" selected>Công nghệ & AI</option>
-              <option value="Hội thảo kỹ năng">Hội thảo kỹ năng</option>
-              <option value="Ẩm thực & Đời sống">Ẩm thực & Đời sống</option>
-            </select>
-          </div>
-        </div>
-        <div class="search-field">
-          <label class="search-label">Giá vé cơ sở đề xuất (VNĐ)</label>
-          <div class="search-input-box">
-            <input type="number" id="ml-input-price" value="300000" step="20000">
-          </div>
-        </div>
-        <button class="btn btn-primary" style="height: 48px;" onclick="calculateRecommendedPrice()">
-          ⚡ Phân tích & Gợi ý giá
-        </button>
-      </div>
 
-      <div id="ml-pricing-result" class="ml-result-box" style="display: none;">
-        <!-- Dynamically rendered -->
+          <div style="margin-top: 20px; font-size: 0.76rem; color: var(--text-muted); text-align: center;">
+            💡 Đề xuất dựa trên dữ liệu lịch sử của hơn 60 sự kiện tương tự tại Việt Nam.
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Events Management Table -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-      <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-dark);">
-        Danh Sách Quản Lý Sự Kiện
-      </h3>
-    </div>
+    <!-- TAB PANE 3: Check-in Scanner -->
+    <div id="admin-pane-checkin" class="admin-pane" style="display: none;">
+      <div class="checkin-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-dark);">Hệ Thống Kiểm Soát Vé & Điểm Danh (Check-in Scanner)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Quét hoặc tìm mã vé của người tham dự để xác nhận vào cổng</p>
+          </div>
+          <div class="admin-search-box" style="max-width: 380px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="checkin-search-input" placeholder="Nhập mã vé (VD: BK-...) hoặc tên khách..." oninput="renderCheckinTable()">
+          </div>
+        </div>
 
-    <div class="admin-table-wrapper" tabindex="0" role="region" aria-label="Danh sách sự kiện, cuộn ngang để xem thêm cột">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Mã</th>
-            <th>Tên sự kiện</th>
-            <th>Thời gian</th>
-            <th>Địa điểm</th>
-            <th>Vé bán / Sức chứa</th>
-            <th>Giá vé</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody id="admin-events-table-body">
-          <!-- Dynamically rendered -->
-        </tbody>
-      </table>
+        <div class="admin-table-wrapper" style="margin-bottom: 0;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 130px;">Mã Đặt Chỗ</th>
+                <th style="min-width: 180px;">Khách Tham Dự</th>
+                <th style="min-width: 220px;">Sự Kiện</th>
+                <th style="width: 90px; text-align: center;">Số Vé</th>
+                <th style="width: 130px;">Tổng Tiền</th>
+                <th style="width: 140px; text-align: center;">Trạng Thái Check-in</th>
+                <th style="width: 120px; text-align: center;">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="admin-checkin-table-body">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -527,7 +734,7 @@
 
       <div class="detail-body">
         <div style="text-align: center; margin-bottom: 20px;">
-          <div class="logo-badge" style="margin: 0 auto 10px; width: 44px; height: 44px; font-size: 1.3rem;">✈️</div>
+          <div class="logo-badge" style="margin: 0 auto 10px; width: 44px; height: 44px; font-size: 1.3rem;">🎪</div>
           <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-dark);">Tài Khoản EventHub</h3>
           <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Đăng nhập để nhận các ưu đãi trải nghiệm độc quyền</p>
         </div>
@@ -681,67 +888,97 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- ========================================================================
-       FOOTER (TRAVELOKA STYLE)
+       FOOTER
        ======================================================================== -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div>
-          <div class="logo" style="margin-bottom: 12px;">
-            <div class="logo-badge">✈️</div>
+  <footer class="lp-footer" id="footer">
+    <div class="lp-container">
+      <div class="lp-footer-grid">
+
+        <!-- Brand Column -->
+        <div class="lp-footer-brand">
+          <a href="landing.html" class="lp-footer-logo">
+            <div class="lp-footer-badge">🎪</div>
             <span>EventHub</span>
-          </div>
-          <p style="line-height: 1.6; max-width: 320px;">
-            Hệ thống phân phối và quản lý vé sự kiện trực tuyến tiêu chuẩn cao. Trải nghiệm âm nhạc, công nghệ và nghệ thuật hàng đầu Việt Nam.
+          </a>
+          <p class="lp-footer-desc">
+            Nền tảng phân phối & quản lý vé sự kiện trực tuyến tiêu chuẩn quốc tế. Trải nghiệm âm nhạc, hội thảo, thể thao với E-Ticket QR và đề xuất giá thông minh bằng AI.
           </p>
+          <div class="lp-social-links">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#0D1B2A"/></svg>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
         </div>
 
-        <div>
-          <h4 style="font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Sản phẩm & Dịch vụ</h4>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
-            <li><a href="#" onclick="switchView('explore'); return false;">Sự kiện âm nhạc</a></li>
-            <li><a href="#" onclick="switchView('explore'); return false;">Hội thảo công nghệ</a></li>
-            <li><a href="#" onclick="switchView('explore'); return false;">Vé vui chơi giải trí</a></li>
-            <li><a href="#" onclick="switchView('explore'); return false;">Voucher ưu đãi</a></li>
+        <!-- Nav Column 1: Danh mục sự kiện -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Khám Phá Sự Kiện</h4>
+          <ul class="lp-footer-links">
+            <li><a href="events.html">Tất cả sự kiện</a></li>
+            <li><a href="events.html?category=music">Âm nhạc & Concert</a></li>
+            <li><a href="events.html?category=tech">Hội thảo & Tech</a></li>
+            <li><a href="events.html?category=sport">Thể thao & Marathon</a></li>
+            <li><a href="events.html?category=art">Nghệ thuật & Triển lãm</a></li>
+            <li><a href="events.html?category=food">Ẩm thực & Đời sống</a></li>
+            <li><a href="landing.html#promo">Vé ưu đãi & Flash Sale</a></li>
           </ul>
         </div>
 
-        <div>
-          <h4 style="font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Dành cho đối tác</h4>
-          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
-            <li><a href="#" onclick="quickLogin('Organizer'); return false;">Đăng ký ban tổ chức</a></li>
-            <li><a href="#" onclick="switchView('admin'); return false;">Hệ thống kiểm soát vé</a></li>
-            <li><a href="#" onclick="switchView('admin'); return false;">AI định giá XGBoost</a></li>
-            <li><a href="#" onclick="switchView('admin'); return false;">Báo cáo tài chính</a></li>
+        <!-- Nav Column 2: Đối tác & Quản lý -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Dành Cho Đối Tác</h4>
+          <ul class="lp-footer-links">
+            <li><a href="index.html#create-event" onclick="openCreateEventModal(); return false;">Đăng ký tạo sự kiện mới</a></li>
+            <li><a href="index.html#admin" onclick="switchView('admin'); return false;">Hệ thống quản lý & Kiểm soát vé</a></li>
+            <li><a href="index.html#admin" onclick="switchView('admin'); switchAdminTab('pricing'); return false;">AI định giá XGBoost</a></li>
+            <li><a href="index.html#admin" onclick="switchView('admin'); switchAdminTab('events'); return false;">Báo cáo tài chính & Doanh thu</a></li>
+            <li><a href="profile.html">Quản lý vé của tôi & E-Ticket</a></li>
           </ul>
         </div>
 
-        <div>
-          <h4 style="font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">Đối tác thanh toán</h4>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-            <span class="badge badge-neutral">💳 Visa / Mastercard</span>
-            <span class="badge badge-neutral">⚡ MoMo</span>
-            <span class="badge badge-neutral">🏦 VietQR</span>
-            <span class="badge badge-neutral">📲 ZaloPay</span>
+        <!-- Payment & Contact Column -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Hỗ Trợ & Thanh Toán</h4>
+          <div class="lp-payment-badges">
+            <span class="lp-payment-badge">💳 Visa / Master</span>
+            <span class="lp-payment-badge">⚡ MoMo</span>
+            <span class="lp-payment-badge">📲 ZaloPay</span>
+            <span class="lp-payment-badge">🏦 VietQR</span>
+            <span class="lp-payment-badge">🍎 Apple Pay</span>
           </div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">
-            Hotline hỗ trợ: <strong>1900 6868</strong> (24/7)
+          <div class="lp-footer-contact">
+            <div>✉️ Email: <a href="mailto:ds66b@neu.edu.vn" style="color:#fff;">ds66b@neu.edu.vn</a></div>
           </div>
         </div>
+
       </div>
 
-      <div class="footer-bottom">
-        <div>© 2026 EventHub. Xây dựng bằng HTML, CSS và JavaScript thuần mang phong cách Traveloka.</div>
-        <div class="footer-legal-links" style="display: flex; gap: 16px;">
-          <a href="#">Điều khoản sử dụng</a>
-          <a href="#">Chính sách bảo mật</a>
-          <a href="#">Quy chế soát vé</a>
+      <!-- Footer Bottom -->
+      <div class="lp-footer-bottom">
+        <div class="lp-footer-copyright">
+          © 2026 EventHub. Bảo lưu mọi quyền. Nền tảng đặt vé sự kiện hàng đầu Việt Nam.
+        </div>
+        <div class="lp-footer-legal">
+          <a href="terms.html?tab=terms">Điều khoản sử dụng</a>
+          <a href="terms.html?tab=privacy">Chính sách bảo mật</a>
+          <a href="terms.html?tab=rules">Quy chế hoạt động</a>
+          <a href="terms.html?tab=faq">Câu hỏi thường gặp (FAQ)</a>
         </div>
       </div>
     </div>
   </footer>
 
   <!-- App Script -->
+  <script src="js/header.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

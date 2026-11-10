@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khám Phá Sự Kiện - EventHub</title>
+  <meta name="description" content="Tìm kiếm và khám phá hàng trăm sự kiện âm nhạc, hội thảo, thể thao tại Việt Nam.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/events.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       GLOBAL HEADER (EVENTHUB E-COMMERCE STANDARD)
+       ======================================================================== -->
+  <header class="hub-header" id="hub-header">
+    <div class="hub-container hub-header-inner">
+
+      <!-- 1. Brand Logo -->
+      <a href="landing.html" class="hub-logo" aria-label="EventHub Trang chủ">
+        <div class="hub-logo-badge">🎪</div>
+        <span class="hub-logo-text">EventHub</span>
+      </a>
+
+      <!-- 2. Global Search Box -->
+      <div class="hub-search-wrapper">
+        <form class="hub-search-form" id="hub-search-form" onsubmit="handleHeaderSearchSubmit(event)">
+          <svg class="hub-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            class="hub-search-input"
+            id="hub-search-input"
+            placeholder="Tìm kiếm sự kiện, nghệ sĩ, địa điểm..."
+            autocomplete="off"
+          />
+          <button type="button" class="hub-search-clear" id="hub-search-clear" onclick="clearHeaderSearch()" aria-label="Xóa">✕</button>
+        </form>
+      </div>
+
+      <!-- 3. Navigation Links -->
+      <nav class="hub-nav" aria-label="Điều hướng chính">
+        <a href="landing.html" class="hub-nav-link" data-nav="home">Trang chủ</a>
+        <a href="events.html" class="hub-nav-link" data-nav="events">Khám phá</a>
+        <a href="profile.html" class="hub-nav-link" data-nav="profile">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-nav-link hub-role-admin" id="hub-nav-create" data-nav="create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-nav-link hub-role-admin" id="hub-nav-admin" data-nav="admin" style="display:none;">📊 Quản trị & ML</a>
+      </nav>
+
+      <!-- 4. User Actions & Role Switcher -->
+      <div class="hub-actions">
+        <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
+          <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
+            <div class="hub-user-info">
+              <span class="hub-user-name" id="hub-user-name">Nguyễn Bảo Khánh</span>
+              <span class="hub-role-badge" id="hub-role-badge">Admin</span>
+            </div>
+            <span class="hub-chevron">▾</span>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="hub-dropdown" id="hub-user-dropdown" style="display: none;">
+            <div class="hub-dropdown-header">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-dd-avatar" class="hub-dd-avatar" alt="Avatar">
+              <div>
+                <strong class="hub-dd-name" id="hub-dd-name">Nguyễn Bảo Khánh</strong>
+                <div class="hub-dd-email" id="hub-dd-email">khanh.admin@eventhub.vn</div>
+              </div>
+            </div>
+
+            <!-- Role Switcher -->
+            <div class="hub-dropdown-roles">
+              <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+              <div class="hub-role-buttons">
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+              </div>
+            </div>
+
+            <div class="hub-dropdown-divider"></div>
+            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
+            <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
+            <div class="hub-dropdown-divider"></div>
+            <button type="button" class="hub-dd-link hub-dd-logout" onclick="headerLogout()">🚪 Đăng xuất</button>
+          </div>
+        </div>
+
+        <!-- Mobile Filter Button (specific to events page) -->
+        <button class="ev-burger" id="ev-burger" onclick="toggleMobileFilter()" aria-label="Bộ lọc sự kiện" style="display:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+        </button>
+
+        <!-- Mobile Burger -->
+        <button class="hub-burger" id="hub-burger" onclick="toggleHeaderMobileMenu()" aria-label="Menu di động">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="hub-mobile-drawer" id="hub-mobile-drawer">
+      <div class="hub-mobile-search">
+        <form onsubmit="handleHeaderSearchSubmit(event)">
+          <input type="text" class="hub-search-input" id="hub-mobile-search-input" placeholder="Tìm sự kiện, địa điểm...">
+        </form>
+      </div>
+      <div class="hub-mobile-links">
+        <a href="landing.html" class="hub-mobile-link">Trang chủ</a>
+        <a href="events.html" class="hub-mobile-link">Khám phá sự kiện</a>
+        <a href="profile.html" class="hub-mobile-link">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-mobile-link hub-role-admin" id="hub-mob-create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-mobile-link hub-role-admin" id="hub-mob-admin" style="display:none;">📊 Quản trị & ML</a>
+      </div>
+      <div class="hub-mobile-roles">
+        <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+        <div class="hub-role-buttons">
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       BREADCRUMB + RESULTS HEADER
+       ====================================================================== -->
+  <div class="ev-subheader">
+    <div class="ev-container ev-subheader-inner">
+      <nav class="ev-breadcrumb" aria-label="Breadcrumb">
+        <a href="landing.html">Trang chủ</a>
+        <span class="ev-bc-sep">›</span>
+        <span>Khám phá sự kiện</span>
+      </nav>
+      <h1 class="ev-page-title">Khám Phá Sự Kiện</h1>
+      <p class="ev-page-desc">Tìm thấy <strong id="ev-result-headline">0</strong> sự kiện đang mở bán</p>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MAIN LAYOUT: SIDEBAR + RESULTS
+       ====================================================================== -->
+  <div class="ev-container ev-layout">
+
+    <!-- ----------------------------------------------------------------
+         SIDEBAR FILTER (desktop: left column | mobile: overlay drawer)
+         ---------------------------------------------------------------- -->
+    <aside class="ev-sidebar" id="ev-sidebar" aria-label="Bộ lọc sự kiện">
+
+      <!-- Mobile header -->
+      <div class="ev-sidebar-mobile-header">
+        <strong>Bộ lọc tìm kiếm</strong>
+        <button class="ev-sidebar-close" onclick="closeMobileFilter()" aria-label="Đóng bộ lọc">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- ---- FILTER: CATEGORIES ---- -->
+      <div class="ev-filter-section">
+        <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
+          <span>Danh mục sự kiện</span>
+          <svg class="ev-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <div class="ev-filter-body" id="filter-category-body">
+          <label class="ev-checkbox-label">
+            <input type="checkbox" name="category" value="all" class="ev-checkbox" checked onchange="onCategoryAll(this)">
+            <span class="ev-checkbox-box"></span>
+            <span class="ev-checkbox-text">Tất cả danh mục</span>
+          </label>
+          <label class="ev-checkbox-label">
+            <input type="checkbox" name="category" value="music" class="ev-checkbox" onchange="onCategoryChange()">
+            <span class="ev-checkbox-box"></span>
+            <span class="ev-checkbox-text">🎵 Âm nhạc &amp; Concert</span>
+            <span class="ev-checkbox-count" id="count-music">0</span>
+          </label>
+          <label class="ev-checkbox-label">
+            <input type="checkbox" name="category" value="tech" class="ev-checkbox" onchange="onCategoryChange()">
+            <span class="ev-checkbox-box"></span>
+            <span class="ev-checkbox-text">💻 Hội thảo &amp; Tech</span>
+            <span class="ev-checkbox-count" id="count-tech">0</span>
+          </label>
+          <label class="ev-checkbox-label">
+            <input type="checkbox" name="category" value="sport" class="ev-checkbox" onchange="onCategoryChange()">
+            <span class="ev-checkbox-box"></span>
+            <span class="ev-checkbox-text">🏃 Thể thao &amp; Marathon</span>
+            <span class="ev-checkbox-count" id="count-sport">0</span>
+          </label>
+          <label class="ev-checkbox-label">
+            <input type="checkbox" name="category" value="art" class="ev-checkbox" onchange="onCategoryChange()">
+            <span class="ev-checkbox-box"></span>
+            <span class="ev-checkbox-text">🎨 Nghệ thuật &amp; Triển lãm</span>
+            <span class="ev-checkbox-count" id="count-art">0</span>
+          </label>
+          <label class="ev-checkbox-label">
+            <input type="checkbox" name="category" value="food" class="ev-checkbox" onchange="onCategoryChange()">
+            <span class="ev-checkbox-box"></span>
+            <span class="ev-checkbox-text">🍜 Ẩm thực &amp; Đời sống</span>
+            <span class="ev-checkbox-count" id="count-food">0</span>
+          </label>
+          <label class="ev-checkbox-label">
+            <input type="checkbox" name="category" value="night" class="ev-checkbox" onchange="onCategoryChange()">
+            <span class="ev-checkbox-box"></span>
+            <span class="ev-checkbox-text">🎉 Nightlife &amp; Lễ hội</span>
+            <span class="ev-checkbox-count" id="count-night">0</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="ev-filter-divider"></div>
+
+      <!-- ---- FILTER: PRICE ---- -->
+      <div class="ev-filter-section">
+        <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
+          <span>Khoảng giá vé</span>
+          <svg class="ev-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <div class="ev-filter-body" id="filter-price-body">
+          <div class="ev-price-options">
+            <label class="ev-radio-label">
+              <input type="radio" name="price" value="all" class="ev-radio" checked onchange="onFilterChange()">
+              <span class="ev-radio-box"></span>
+              <span>Tất cả mức giá</span>
+            </label>
+            <label class="ev-radio-label">
+              <input type="radio" name="price" value="free" class="ev-radio" onchange="onFilterChange()">
+              <span class="ev-radio-box"></span>
+              <span>🎁 Miễn phí</span>
+            </label>
+            <label class="ev-radio-label">
+              <input type="radio" name="price" value="under500" class="ev-radio" onchange="onFilterChange()">
+              <span class="ev-radio-box"></span>
+              <span>Dưới 500.000 ₫</span>
+            </label>
+            <label class="ev-radio-label">
+              <input type="radio" name="price" value="500to2000" class="ev-radio" onchange="onFilterChange()">
+              <span class="ev-radio-box"></span>
+              <span>500.000 — 2.000.000 ₫</span>
+            </label>
+            <label class="ev-radio-label">
+              <input type="radio" name="price" value="above2000" class="ev-radio" onchange="onFilterChange()">
+              <span class="ev-radio-box"></span>
+              <span>Trên 2.000.000 ₫</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="ev-filter-divider"></div>
+
+      <!-- ---- FILTER: DATE ---- -->
+      <div class="ev-filter-section">
+        <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
+          <span>Thời gian diễn ra</span>
+          <svg class="ev-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <div class="ev-filter-body" id="filter-date-body">
+          <div class="ev-date-quick">
+            <button class="ev-date-chip active" data-datefilter="all"      onclick="setDateFilter(this)">Bất kỳ</button>
+            <button class="ev-date-chip"        data-datefilter="today"    onclick="setDateFilter(this)">Hôm nay</button>
+            <button class="ev-date-chip"        data-datefilter="tomorrow" onclick="setDateFilter(this)">Ngày mai</button>
+            <button class="ev-date-chip"        data-datefilter="week"     onclick="setDateFilter(this)">Tuần này</button>
+            <button class="ev-date-chip"        data-datefilter="month"    onclick="setDateFilter(this)">Tháng này</button>
+          </div>
+          <div class="ev-date-range-toggle">
+            <button class="ev-date-range-btn" onclick="toggleDateRange(this)">
+              📅 Chọn khoảng ngày cụ thể
+            </button>
+          </div>
+          <div class="ev-date-range-inputs" id="ev-date-range" style="display:none;">
+            <div class="ev-date-row">
+              <label class="ev-form-label">Từ ngày</label>
+              <input type="date" class="ev-form-input" id="ev-date-from" onchange="onFilterChange()">
+            </div>
+            <div class="ev-date-row">
+              <label class="ev-form-label">Đến ngày</label>
+              <input type="date" class="ev-form-input" id="ev-date-to" onchange="onFilterChange()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ev-filter-divider"></div>
+
+      <!-- ---- FILTER: FORMAT ---- -->
+      <div class="ev-filter-section">
+        <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
+          <span>Hình thức tổ chức</span>
+          <svg class="ev-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <div class="ev-filter-body">
+          <label class="ev-radio-label">
+            <input type="radio" name="format" value="all" class="ev-radio" checked onchange="onFilterChange()">
+            <span class="ev-radio-box"></span>
+            <span>Tất cả</span>
+          </label>
+          <label class="ev-radio-label">
+            <input type="radio" name="format" value="offline" class="ev-radio" onchange="onFilterChange()">
+            <span class="ev-radio-box"></span>
+            <span>📍 Trực tiếp (Offline)</span>
+          </label>
+          <label class="ev-radio-label">
+            <input type="radio" name="format" value="online" class="ev-radio" onchange="onFilterChange()">
+            <span class="ev-radio-box"></span>
+            <span>💻 Trực tuyến (Online)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="ev-filter-actions">
+        <button class="ev-btn ev-btn-primary ev-btn-block" onclick="applyFilters(); closeMobileFilter();">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+          Áp dụng bộ lọc
+        </button>
+        <button class="ev-btn ev-btn-ghost ev-btn-block" onclick="resetFilters()">
+          Xóa bộ lọc
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile filter overlay backdrop -->
+    <div class="ev-overlay" id="ev-overlay" onclick="closeMobileFilter()"></div>
+
+    <!-- ----------------------------------------------------------------
+         RESULTS COLUMN
+         ---------------------------------------------------------------- -->
+    <main class="ev-results" id="ev-results">
+
+      <!-- Toolbar -->
+      <div class="ev-toolbar">
+        <div class="ev-toolbar-left">
+          <span class="ev-result-count" id="ev-result-count">Đang tải...</span>
+          <!-- Active filter chips -->
+          <div class="ev-active-filters" id="ev-active-filters"></div>
+        </div>
+        <div class="ev-toolbar-right">
+          <label class="ev-sort-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Sắp xếp:
+          </label>
+          <select class="ev-sort-select" id="ev-sort" onchange="onFilterChange()">
+            <option value="hot">Phổ biến nhất</option>
+            <option value="newest">Mới nhất</option>
+            <option value="soonest">Sắp diễn ra</option>
+            <option value="price_asc">Giá: Thấp → Cao</option>
+            <option value="price_desc">Giá: Cao → Thấp</option>
+          </select>
+
+          <!-- View toggle -->
+          <div class="ev-view-toggle" role="group" aria-label="Kiểu hiển thị">
+            <button class="ev-view-btn active" id="btn-grid" onclick="setView('grid')" aria-label="Dạng lưới" title="Dạng lưới">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </button>
+            <button class="ev-view-btn" id="btn-list" onclick="setView('list')" aria-label="Dạng danh sách" title="Dạng danh sách">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Events Grid -->
+      <div class="ev-grid" id="ev-grid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Load More / Pagination -->
+      <div class="ev-pagination" id="ev-pagination">
+        <!-- Rendered by JS -->
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ======================================================================
+       FOOTER
+       ====================================================================== -->
+  <footer class="lp-footer" id="footer">
+    <div class="footer-container">
+      <div class="lp-footer-top">
+
+        <!-- Brand Column -->
+        <div class="lp-footer-brand">
+          <a href="landing.html" class="footer-brand-logo">
+            <div class="footer-logo-badge">🎪</div>
+            <span>EventHub</span>
+          </a>
+          <p class="lp-footer-brand-desc">
+            Hệ thống phân phối và quản lý vé sự kiện trực tuyến tiêu chuẩn cao. Trải nghiệm âm nhạc, công nghệ và nghệ thuật hàng đầu Việt Nam.
+          </p>
+          <div class="lp-social-links">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.41 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="white"/></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="TikTok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.86a8.26 8.26 0 0 0 4.83 1.55V7.96a4.86 4.86 0 0 1-1.06-.23z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Nav Column 1: Khám Phá -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Khám Phá Sự Kiện</h4>
+          <ul class="lp-footer-links">
+            <li><a href="events.html">Tất cả sự kiện</a></li>
+            <li><a href="events.html?category=music">Âm nhạc & Concert</a></li>
+            <li><a href="events.html?category=tech">Hội thảo & Tech</a></li>
+            <li><a href="events.html?category=sport">Thể thao & Marathon</a></li>
+            <li><a href="events.html?category=art">Nghệ thuật & Triển lãm</a></li>
+            <li><a href="events.html?category=food">Ẩm thực & Đời sống</a></li>
+            <li><a href="landing.html#promo">Vé ưu đãi & Flash Sale</a></li>
+          </ul>
+        </div>
+
+        <!-- Nav Column 2: Đối tác & Quản lý -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Dành Cho Đối Tác</h4>
+          <ul class="lp-footer-links">
+            <li><a href="index.html#create-event">Đăng ký tạo sự kiện mới</a></li>
+            <li><a href="index.html#admin">Hệ thống quản lý & Kiểm soát vé</a></li>
+            <li><a href="index.html#admin">AI định giá XGBoost</a></li>
+            <li><a href="index.html#admin">Báo cáo tài chính & Doanh thu</a></li>
+            <li><a href="profile.html">Quản lý vé của tôi & E-Ticket</a></li>
+          </ul>
+        </div>
+
+        <!-- Payment & Contact Column -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Hỗ Trợ & Thanh Toán</h4>
+          <div class="lp-payment-badges">
+            <span class="lp-payment-badge">💳 Visa / Master</span>
+            <span class="lp-payment-badge">⚡ MoMo</span>
+            <span class="lp-payment-badge">📲 ZaloPay</span>
+            <span class="lp-payment-badge">🏦 VietQR</span>
+            <span class="lp-payment-badge">🍎 Apple Pay</span>
+          </div>
+          <div class="lp-footer-contact">
+            <div>✉️ Email: <a href="mailto:ds66b@neu.edu.vn" style="color:#fff;">ds66b@neu.edu.vn</a></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="lp-footer-bottom">
+        <div class="lp-footer-copyright">
+          © 2026 EventHub. Bảo lưu mọi quyền. Nền tảng đặt vé sự kiện hàng đầu Việt Nam.
+        </div>
+        <div class="lp-footer-legal">
+          <a href="terms.html?tab=terms">Điều khoản sử dụng</a>
+          <a href="terms.html?tab=privacy">Chính sách bảo mật</a>
+          <a href="terms.html?tab=rules">Quy chế hoạt động</a>
+          <a href="terms.html?tab=faq">Câu hỏi thường gặp (FAQ)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="ev-toast-container" class="ev-toast-container"></div>
+
+  <script src="js/header.js"></script>
+  <script src="js/events.js"></script>
+</body>
+</html>
+

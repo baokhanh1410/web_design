@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán — EventHub</title>
+  <meta name="description" content="Hoàn tất đặt vé sự kiện trên EventHub — thanh toán an toàn, nhận E-Ticket QR tức thì.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/checkout.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       GLOBAL HEADER (EVENTHUB E-COMMERCE STANDARD)
+       ======================================================================== -->
+  <header class="hub-header" id="hub-header">
+    <div class="hub-container hub-header-inner">
+
+      <!-- 1. Brand Logo -->
+      <a href="landing.html" class="hub-logo" aria-label="EventHub Trang chủ">
+        <div class="hub-logo-badge">🎪</div>
+        <span class="hub-logo-text">EventHub</span>
+      </a>
+
+      <!-- 2. Global Search Box -->
+      <div class="hub-search-wrapper">
+        <form class="hub-search-form" id="hub-search-form" onsubmit="handleHeaderSearchSubmit(event)">
+          <svg class="hub-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            class="hub-search-input"
+            id="hub-search-input"
+            placeholder="Tìm kiếm sự kiện, nghệ sĩ, địa điểm..."
+            autocomplete="off"
+          />
+          <button type="button" class="hub-search-clear" id="hub-search-clear" onclick="clearHeaderSearch()" aria-label="Xóa">✕</button>
+        </form>
+      </div>
+
+      <!-- 3. Navigation Links -->
+      <nav class="hub-nav" aria-label="Điều hướng chính">
+        <a href="landing.html" class="hub-nav-link" data-nav="home">Trang chủ</a>
+        <a href="events.html" class="hub-nav-link" data-nav="events">Khám phá</a>
+        <a href="profile.html" class="hub-nav-link" data-nav="profile">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-nav-link hub-role-admin" id="hub-nav-create" data-nav="create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-nav-link hub-role-admin" id="hub-nav-admin" data-nav="admin" style="display:none;">📊 Quản trị & ML</a>
+      </nav>
+
+      <!-- 4. User Actions & Role Switcher -->
+      <div class="hub-actions">
+        <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
+          <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
+            <div class="hub-user-info">
+              <span class="hub-user-name" id="hub-user-name">Nguyễn Bảo Khánh</span>
+              <span class="hub-role-badge" id="hub-role-badge">Admin</span>
+            </div>
+            <span class="hub-chevron">▾</span>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="hub-dropdown" id="hub-user-dropdown" style="display: none;">
+            <div class="hub-dropdown-header">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-dd-avatar" class="hub-dd-avatar" alt="Avatar">
+              <div>
+                <strong class="hub-dd-name" id="hub-dd-name">Nguyễn Bảo Khánh</strong>
+                <div class="hub-dd-email" id="hub-dd-email">khanh.admin@eventhub.vn</div>
+              </div>
+            </div>
+
+            <!-- Role Switcher -->
+            <div class="hub-dropdown-roles">
+              <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+              <div class="hub-role-buttons">
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+              </div>
+            </div>
+
+            <div class="hub-dropdown-divider"></div>
+            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
+            <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
+            <div class="hub-dropdown-divider"></div>
+            <button type="button" class="hub-dd-link hub-dd-logout" onclick="headerLogout()">🚪 Đăng xuất</button>
+          </div>
+        </div>
+
+        <!-- Mobile Burger -->
+        <button class="hub-burger" id="hub-burger" onclick="toggleHeaderMobileMenu()" aria-label="Menu di động">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="hub-mobile-drawer" id="hub-mobile-drawer">
+      <div class="hub-mobile-search">
+        <form onsubmit="handleHeaderSearchSubmit(event)">
+          <input type="text" class="hub-search-input" id="hub-mobile-search-input" placeholder="Tìm sự kiện, địa điểm...">
+        </form>
+      </div>
+      <div class="hub-mobile-links">
+        <a href="landing.html" class="hub-mobile-link">Trang chủ</a>
+        <a href="events.html" class="hub-mobile-link">Khám phá sự kiện</a>
+        <a href="profile.html" class="hub-mobile-link">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-mobile-link hub-role-admin" id="hub-mob-create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-mobile-link hub-role-admin" id="hub-mob-admin" style="display:none;">📊 Quản trị & ML</a>
+      </div>
+      <div class="hub-mobile-roles">
+        <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+        <div class="hub-role-buttons">
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       SUB-HEADER: PROGRESS STEPPER & SSL BADGE
+       ====================================================================== -->
+  <div class="ck-stepper-bar">
+    <div class="ck-container ck-header-inner" style="height: auto; padding: 10px 20px;">
+      <ol class="ck-steps" aria-label="Tiến trình đặt vé">
+        <li class="ck-step done" id="step-1">
+          <div class="ck-step-circle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span class="ck-step-label">Chọn vé</span>
+        </li>
+        <li class="ck-step-connector"></li>
+        <li class="ck-step active" id="step-2">
+          <div class="ck-step-circle">2</div>
+          <span class="ck-step-label">Thanh toán</span>
+        </li>
+        <li class="ck-step-connector"></li>
+        <li class="ck-step" id="step-3">
+          <div class="ck-step-circle">3</div>
+          <span class="ck-step-label">Hoàn tất</span>
+        </li>
+      </ol>
+
+      <!-- Security badge -->
+      <div class="ck-secure-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Thanh toán bảo mật SSL
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MAIN CHECKOUT LAYOUT
+       ====================================================================== -->
+  <main class="ck-main" id="ck-main">
+    <div class="ck-container ck-layout">
+
+      <!-- ================================================================
+           LEFT COLUMN: FORM
+           ================================================================ -->
+      <div class="ck-form-col">
+
+        <!-- ---- STEP 1: ATTENDEE INFO ---- -->
+        <section class="ck-card" id="ck-sec-attendee">
+          <div class="ck-card-header">
+            <div class="ck-card-num">1</div>
+            <h2 class="ck-card-title">Thông tin người nhận vé</h2>
+          </div>
+
+          <div class="ck-form-grid">
+            <div class="ck-field ck-field-full">
+              <label class="ck-label" for="f-name">
+                Họ và tên <span class="ck-required">*</span>
+              </label>
+              <input type="text" id="f-name" class="ck-input" placeholder="Nguyễn Văn A"
+                autocomplete="name" required maxlength="80">
+              <div class="ck-error" id="err-name"></div>
+            </div>
+
+            <div class="ck-field">
+              <label class="ck-label" for="f-email">
+                Email nhận E-Ticket <span class="ck-required">*</span>
+              </label>
+              <input type="email" id="f-email" class="ck-input" placeholder="example@gmail.com"
+                autocomplete="email" required>
+              <div class="ck-error" id="err-email"></div>
+            </div>
+
+            <div class="ck-field">
+              <label class="ck-label" for="f-phone">
+                Số điện thoại <span class="ck-required">*</span>
+              </label>
+              <div class="ck-phone-wrap">
+                <div class="ck-phone-prefix">🇻🇳 +84</div>
+                <input type="tel" id="f-phone" class="ck-input ck-input-phone"
+                  placeholder="098 765 4321" autocomplete="tel" required maxlength="12">
+              </div>
+              <div class="ck-error" id="err-phone"></div>
+            </div>
+
+            <div class="ck-field ck-field-full">
+              <label class="ck-label" for="f-note">Ghi chú (không bắt buộc)</label>
+              <textarea id="f-note" class="ck-input ck-textarea"
+                placeholder="Yêu cầu đặc biệt, chỗ ngồi..." rows="3" maxlength="300"></textarea>
+              <div class="ck-char-count"><span id="note-count">0</span>/300</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- STEP 2: PAYMENT METHOD ---- -->
+        <section class="ck-card" id="ck-sec-payment">
+          <div class="ck-card-header">
+            <div class="ck-card-num">2</div>
+            <h2 class="ck-card-title">Phương thức thanh toán</h2>
+          </div>
+
+          <div class="ck-payment-methods" id="ck-payment-methods">
+
+            <!-- VIETQR -->
+            <div class="ck-pm-item" id="pm-vietqr">
+              <label class="ck-pm-label" for="pay-vietqr">
+                <input type="radio" id="pay-vietqr" name="payment" value="vietqr"
+                  class="ck-pm-radio" onchange="selectPayment('vietqr')" checked>
+                <div class="ck-pm-radio-box"></div>
+                <div class="ck-pm-info">
+                  <div class="ck-pm-name">🏦 Chuyển khoản VietQR</div>
+                  <div class="ck-pm-desc">Quét mã QR từ ứng dụng ngân hàng — xử lý tức thì</div>
+                </div>
+                <div class="ck-pm-logos">
+                  <span class="ck-bank-logo">VCB</span>
+                  <span class="ck-bank-logo">TCB</span>
+                  <span class="ck-bank-logo">MB</span>
+                </div>
+              </label>
+              <div class="ck-pm-body open" id="body-vietqr">
+                <div class="ck-vietqr-box">
+                  <div class="ck-qr-wrapper">
+                    <div class="ck-qr-art" id="ck-qr-art">
+                      <!-- QR code rendered by JS (SVG pattern) -->
+                    </div>
+                    <div class="ck-qr-brand">
+                      <span class="ck-qr-logo">🎪</span>
+                      <span style="font-size:.7rem;font-weight:700;color:#0194F3;">VietQR</span>
+                    </div>
+                  </div>
+                  <div class="ck-vietqr-info">
+                    <div class="ck-vq-row">
+                      <span class="ck-vq-label">Ngân hàng</span>
+                      <span class="ck-vq-value">Vietcombank (VCB)</span>
+                    </div>
+                    <div class="ck-vq-row">
+                      <span class="ck-vq-label">Số tài khoản</span>
+                      <div class="ck-vq-copyable">
+                        <span class="ck-vq-value" id="ck-acct-num">0012 3456 7890</span>
+                        <button class="ck-copy-btn" onclick="copyText('0012345678900','Số tài khoản')" title="Sao chép">📋</button>
+                      </div>
+                    </div>
+                    <div class="ck-vq-row">
+                      <span class="ck-vq-label">Tên tài khoản</span>
+                      <span class="ck-vq-value">EVENTHUB VIETNAM</span>
+                    </div>
+                    <div class="ck-vq-row">
+                      <span class="ck-vq-label">Nội dung CK</span>
+                      <div class="ck-vq-copyable">
+                        <span class="ck-vq-value ck-vq-highlight" id="ck-transfer-ref">EH-LOADING</span>
+                        <button class="ck-copy-btn" onclick="copyTransferRef()" title="Sao chép">📋</button>
+                      </div>
+                    </div>
+                    <div class="ck-vq-row">
+                      <span class="ck-vq-label">Số tiền</span>
+                      <span class="ck-vq-value ck-vq-amount" id="ck-transfer-amount">—</span>
+                    </div>
+                    <div class="ck-vq-note">
+                      ⚠️ Nhập <strong>đúng nội dung chuyển khoản</strong> để hệ thống tự động xác nhận vé
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- E-WALLETS -->
+            <div class="ck-pm-item" id="pm-ewallet">
+              <label class="ck-pm-label" for="pay-ewallet">
+                <input type="radio" id="pay-ewallet" name="payment" value="ewallet"
+                  class="ck-pm-radio" onchange="selectPayment('ewallet')">
+                <div class="ck-pm-radio-box"></div>
+                <div class="ck-pm-info">
+                  <div class="ck-pm-name">⚡ Ví điện tử</div>
+                  <div class="ck-pm-desc">MoMo · ZaloPay · Apple Pay — thanh toán 1 chạm</div>
+                </div>
+                <div class="ck-pm-logos">
+                  <span class="ck-bank-logo" style="background:#A50064;color:#fff">MM</span>
+                  <span class="ck-bank-logo" style="background:#0068FF;color:#fff">ZP</span>
+                  <span class="ck-bank-logo" style="background:#333;color:#fff">🍎</span>
+                </div>
+              </label>
+              <div class="ck-pm-body" id="body-ewallet">
+                <div class="ck-wallet-grid">
+                  <button class="ck-wallet-btn" onclick="selectWallet(this,'momo')"
+                    style="--wc:#A50064;">
+                    <span class="ck-wallet-icon" style="background:#A50064;color:#fff;">💜</span>
+                    <span>MoMo</span>
+                  </button>
+                  <button class="ck-wallet-btn" onclick="selectWallet(this,'zalopay')"
+                    style="--wc:#0068FF;">
+                    <span class="ck-wallet-icon" style="background:#0068FF;color:#fff;">💙</span>
+                    <span>ZaloPay</span>
+                  </button>
+                  <button class="ck-wallet-btn" onclick="selectWallet(this,'applepay')"
+                    style="--wc:#1C1C1E;">
+                    <span class="ck-wallet-icon" style="background:#1C1C1E;color:#fff;">🍎</span>
+                    <span>Apple Pay</span>
+                  </button>
+                </div>
+                <div class="ck-wallet-redirect" id="ck-wallet-redirect" style="display:none;">
+                  <div class="ck-redirect-icon" id="ck-redirect-icon"></div>
+                  <p>Nhấn <strong>Thanh toán ngay</strong> để chuyển đến ứng dụng <span id="ck-wallet-name"></span></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- CREDIT CARD -->
+            <div class="ck-pm-item" id="pm-card">
+              <label class="ck-pm-label" for="pay-card">
+                <input type="radio" id="pay-card" name="payment" value="card"
+                  class="ck-pm-radio" onchange="selectPayment('card')">
+                <div class="ck-pm-radio-box"></div>
+                <div class="ck-pm-info">
+                  <div class="ck-pm-name">💳 Thẻ tín dụng / Ghi nợ</div>
+                  <div class="ck-pm-desc">Visa · Mastercard · JCB · American Express</div>
+                </div>
+                <div class="ck-pm-logos">
+                  <span class="ck-bank-logo" style="background:#1A1F71;color:#fff">VISA</span>
+                  <span class="ck-bank-logo" style="background:#EB001B;color:#fff">MC</span>
+                </div>
+              </label>
+              <div class="ck-pm-body" id="body-card">
+                <!-- Card preview -->
+                <div class="ck-card-preview" id="ck-card-preview">
+                  <div class="ck-card-preview-chip"></div>
+                  <div class="ck-card-preview-num" id="prev-num">•••• •••• •••• ••••</div>
+                  <div class="ck-card-preview-row">
+                    <div>
+                      <div class="ck-card-preview-label">Tên chủ thẻ</div>
+                      <div class="ck-card-preview-val" id="prev-name">YOUR NAME</div>
+                    </div>
+                    <div>
+                      <div class="ck-card-preview-label">Hết hạn</div>
+                      <div class="ck-card-preview-val" id="prev-exp">MM/YY</div>
+                    </div>
+                    <div class="ck-card-preview-logo" id="prev-logo">💳</div>
+                  </div>
+                </div>
+
+                <!-- Card form -->
+                <div class="ck-card-form">
+                  <div class="ck-field ck-field-full">
+                    <label class="ck-label" for="card-num">Số thẻ</label>
+                    <input type="text" id="card-num" class="ck-input ck-input-card-num"
+                      placeholder="1234 5678 9012 3456" maxlength="19"
+                      oninput="formatCardNum(this)" autocomplete="cc-number">
+                    <div class="ck-error" id="err-card-num"></div>
+                  </div>
+                  <div class="ck-field ck-field-full">
+                    <label class="ck-label" for="card-name">Tên chủ thẻ (in hoa)</label>
+                    <input type="text" id="card-name" class="ck-input"
+                      placeholder="NGUYEN VAN A" maxlength="40"
+                      oninput="syncCardPreview()" autocomplete="cc-name"
+                      style="text-transform:uppercase">
+                    <div class="ck-error" id="err-card-name"></div>
+                  </div>
+                  <div class="ck-field">
+                    <label class="ck-label" for="card-exp">Ngày hết hạn</label>
+                    <input type="text" id="card-exp" class="ck-input"
+                      placeholder="MM/YY" maxlength="5"
+                      oninput="formatCardExp(this)" autocomplete="cc-exp">
+                    <div class="ck-error" id="err-card-exp"></div>
+                  </div>
+                  <div class="ck-field">
+                    <label class="ck-label" for="card-cvv">
+                      CVV / CVC
+                      <button type="button" class="ck-tooltip-btn" title="3 chữ số mặt sau thẻ">?</button>
+                    </label>
+                    <input type="password" id="card-cvv" class="ck-input"
+                      placeholder="•••" maxlength="4" autocomplete="cc-csc">
+                    <div class="ck-error" id="err-card-cvv"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ---- STEP 3: VOUCHER ---- -->
+        <section class="ck-card" id="ck-sec-voucher">
+          <div class="ck-card-header">
+            <div class="ck-card-num">3</div>
+            <h2 class="ck-card-title">Mã giảm giá</h2>
+          </div>
+          <div class="ck-voucher-row">
+            <div class="ck-voucher-input-wrap">
+              <input type="text" id="voucher-input" class="ck-input ck-voucher-input"
+                placeholder="Nhập mã voucher: WELCOME20, WEEKEND50K..."
+                oninput="this.value=this.value.toUpperCase()">
+            </div>
+            <button class="ck-btn ck-btn-primary" onclick="applyVoucher()">Áp dụng</button>
+          </div>
+          <div class="ck-voucher-hint">
+            💡 Mã có sẵn: <code onclick="fillVoucher('WELCOME20')">WELCOME20</code> (giảm 20%) ·
+            <code onclick="fillVoucher('WEEKEND50K')">WEEKEND50K</code> (giảm 50.000₫) ·
+            <code onclick="fillVoucher('GROUP3PLUS1')">GROUP3PLUS1</code> (giảm 10%)
+          </div>
+          <div class="ck-voucher-result" id="voucher-result"></div>
+        </section>
+
+        <!-- ---- TERMS ---- -->
+        <section class="ck-card ck-card-terms" id="ck-sec-terms">
+          <label class="ck-terms-label" for="agree-terms">
+            <input type="checkbox" id="agree-terms" class="ck-checkbox"
+              onchange="onTermsChange()">
+            <span class="ck-checkbox-box"></span>
+            <span>
+              Tôi đã đọc và đồng ý với
+              <a href="terms.html?tab=terms" target="_blank" class="ck-link">Điều khoản sử dụng</a>,
+              <a href="terms.html?tab=rules" target="_blank" class="ck-link">Chính sách hoàn vé</a>
+              và <a href="terms.html?tab=privacy" target="_blank" class="ck-link">Chính sách bảo mật</a> của EventHub.
+            </span>
+          </label>
+          <div class="ck-error" id="err-terms"></div>
+        </section>
+
+        <!-- Mobile pay button -->
+        <div class="ck-mobile-pay-btn">
+          <button class="ck-btn ck-btn-pay ck-btn-block" onclick="submitPayment()">
+            🔒 Thanh toán ngay
+            <span id="ck-mobile-grand">—</span>
+          </button>
+        </div>
+
+      </div><!-- /ck-form-col -->
+
+      <!-- ================================================================
+           RIGHT COLUMN: ORDER SUMMARY (Sticky)
+           ================================================================ -->
+      <aside class="ck-summary-col">
+        <div class="ck-summary-box" id="ck-summary-box">
+
+          <!-- Hold timer -->
+          <div class="ck-hold-timer" id="ck-hold-timer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div>
+              <div class="ck-timer-label">Vé đang được giữ trong</div>
+              <div class="ck-timer-val" id="ck-timer-val">10:00</div>
+            </div>
+            <div class="ck-timer-ring">
+              <svg width="44" height="44" viewBox="0 0 44 44">
+                <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="3"/>
+                <circle cx="22" cy="22" r="18" fill="none" stroke="white" stroke-width="3"
+                  stroke-linecap="round" id="ck-timer-ring"
+                  stroke-dasharray="113.1" stroke-dashoffset="0"
+                  transform="rotate(-90 22 22)"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Event card -->
+          <div class="ck-event-card" id="ck-event-card">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Ticket lines -->
+          <div class="ck-ticket-lines" id="ck-ticket-lines">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Price breakdown -->
+          <div class="ck-price-breakdown" id="ck-price-breakdown">
+            <div class="ck-price-row">
+              <span>Tạm tính</span>
+              <span id="sum-subtotal">—</span>
+            </div>
+            <div class="ck-price-row ck-price-discount" id="sum-discount-row" style="display:none;">
+              <span>🎁 Giảm giá voucher</span>
+              <span id="sum-discount" style="color:#00A651;">—</span>
+            </div>
+            <div class="ck-price-row">
+              <span>Phí dịch vụ (0%)</span>
+              <span>0 ₫</span>
+            </div>
+            <div class="ck-price-divider"></div>
+            <div class="ck-price-row ck-price-total">
+              <span>Tổng cộng</span>
+              <strong id="sum-grand">—</strong>
+            </div>
+            <div class="ck-price-vat">Đã bao gồm VAT (nếu có)</div>
+          </div>
+
+          <!-- Pay button -->
+          <button class="ck-btn ck-btn-pay" id="ck-pay-btn" onclick="submitPayment()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            Thanh toán ngay
+          </button>
+          <div class="ck-pay-note">
+            Bấm "Thanh toán" đồng nghĩa bạn đồng ý với Điều khoản &amp; Chính sách của EventHub
+          </div>
+
+          <!-- Trust badges -->
+          <div class="ck-trust-badges">
+            <div class="ck-trust-item">🔒 SSL 256-bit</div>
+            <div class="ck-trust-item">✅ PCI DSS</div>
+            <div class="ck-trust-item">🛡️ Bảo vệ người mua</div>
+          </div>
+
+        </div>
+      </aside>
+
+    </div><!-- /ck-layout -->
+  </main>
+
+  <!-- ======================================================================
+       SUCCESS OVERLAY — E-TICKET + ORDER CONFIRMATION
+       ====================================================================== -->
+  <div class="ck-success-overlay" id="ck-success-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="success-title">
+
+    <!-- Confetti canvas -->
+    <canvas id="ck-confetti" class="ck-confetti-canvas"></canvas>
+
+    <div class="ck-success-content">
+
+      <!-- Thank you header -->
+      <div class="ck-success-header">
+        <div class="ck-success-icon">🎉</div>
+        <h1 class="ck-success-title" id="success-title">Đặt vé thành công!</h1>
+        <p class="ck-success-subtitle">Cảm ơn bạn đã tin tưởng EventHub. E-Ticket đã được gửi tới email của bạn.</p>
+        <div class="ck-order-id-badge" id="ck-order-id">
+          Mã đơn hàng: <strong>#EH-000000</strong>
+        </div>
+      </div>
+
+      <!-- E-TICKET CARD -->
+      <div class="ck-eticket" id="ck-eticket">
+        <!-- Ticket top -->
+        <div class="ck-eticket-top">
+          <div class="ck-eticket-brand">
+            <div class="ck-eticket-logo">🎪</div>
+            <span class="ck-eticket-brand-name">EventHub</span>
+          </div>
+          <div class="ck-eticket-status">
+            <span>🎟️ HỢP LỆ</span>
+          </div>
+        </div>
+
+        <h2 class="ck-eticket-event-name" id="et-event-name">—</h2>
+
+        <div class="ck-eticket-meta">
+          <div class="ck-eticket-meta-item">
+            <div class="ck-eticket-meta-label">📅 Ngày diễn ra</div>
+            <div class="ck-eticket-meta-val" id="et-date">—</div>
+          </div>
+          <div class="ck-eticket-meta-item">
+            <div class="ck-eticket-meta-label">📍 Địa điểm</div>
+            <div class="ck-eticket-meta-val" id="et-venue">—</div>
+          </div>
+          <div class="ck-eticket-meta-item">
+            <div class="ck-eticket-meta-label">👤 Người nhận</div>
+            <div class="ck-eticket-meta-val" id="et-name">—</div>
+          </div>
+          <div class="ck-eticket-meta-item">
+            <div class="ck-eticket-meta-label">🎫 Hạng vé</div>
+            <div class="ck-eticket-meta-val" id="et-tier">—</div>
+          </div>
+        </div>
+
+        <!-- Perforation line -->
+        <div class="ck-eticket-perf">
+          <div class="ck-perf-notch left"></div>
+          <div class="ck-perf-line"></div>
+          <div class="ck-perf-notch right"></div>
+        </div>
+
+        <!-- QR section -->
+        <div class="ck-eticket-qr-section">
+          <div class="ck-eticket-qr-box" id="et-qr-box">
+            <!-- QR rendered by JS -->
+          </div>
+          <div class="ck-eticket-qr-info">
+            <div class="ck-eticket-booking-id" id="et-booking-id">EVT-BK-000000</div>
+            <div class="ck-eticket-qr-hint">Xuất trình mã này tại cổng soát vé</div>
+            <div class="ck-eticket-qty" id="et-qty">1 vé</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="ck-success-actions">
+        <button class="ck-btn ck-btn-print" onclick="window.print()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Tải / In vé
+        </button>
+        <button class="ck-btn ck-btn-mybookings" onclick="goToMyBookings()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/></svg>
+          Xem vé trong tài khoản
+        </button>
+        <a href="landing.html" class="ck-btn ck-btn-home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Quay về trang chủ
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="lp-footer" id="footer">
+    <div class="lp-container">
+      <div class="lp-footer-grid">
+
+        <!-- Brand Column -->
+        <div class="lp-footer-brand">
+          <a href="landing.html" class="lp-footer-logo">
+            <div class="lp-footer-badge">🎪</div>
+            <span>EventHub</span>
+          </a>
+          <p class="lp-footer-desc">
+            Nền tảng phân phối & quản lý vé sự kiện trực tuyến tiêu chuẩn quốc tế. Trải nghiệm âm nhạc, hội thảo, thể thao với E-Ticket QR và đề xuất giá thông minh bằng AI.
+          </p>
+          <div class="lp-social-links">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#0D1B2A"/></svg>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Nav Column 1: Danh mục sự kiện -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Khám Phá Sự Kiện</h4>
+          <ul class="lp-footer-links">
+            <li><a href="events.html">Tất cả sự kiện</a></li>
+            <li><a href="events.html?category=music">Âm nhạc & Concert</a></li>
+            <li><a href="events.html?category=tech">Hội thảo & Tech</a></li>
+            <li><a href="events.html?category=sport">Thể thao & Marathon</a></li>
+            <li><a href="events.html?category=art">Nghệ thuật & Triển lãm</a></li>
+            <li><a href="events.html?category=food">Ẩm thực & Đời sống</a></li>
+            <li><a href="landing.html#promo">Vé ưu đãi & Flash Sale</a></li>
+          </ul>
+        </div>
+
+        <!-- Nav Column 2: Đối tác & Quản lý -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Dành Cho Đối Tác</h4>
+          <ul class="lp-footer-links">
+            <li><a href="index.html#create-event">Đăng ký tạo sự kiện mới</a></li>
+            <li><a href="index.html#admin">Hệ thống quản lý & Kiểm soát vé</a></li>
+            <li><a href="index.html#admin">AI định giá XGBoost</a></li>
+            <li><a href="index.html#admin">Báo cáo tài chính & Doanh thu</a></li>
+            <li><a href="profile.html">Quản lý vé của tôi & E-Ticket</a></li>
+          </ul>
+        </div>
+
+        <!-- Payment & Contact Column -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Hỗ Trợ & Thanh Toán</h4>
+          <div class="lp-payment-badges">
+            <span class="lp-payment-badge">💳 Visa / Master</span>
+            <span class="lp-payment-badge">⚡ MoMo</span>
+            <span class="lp-payment-badge">📲 ZaloPay</span>
+            <span class="lp-payment-badge">🏦 VietQR</span>
+            <span class="lp-payment-badge">🍎 Apple Pay</span>
+          </div>
+          <div class="lp-footer-contact">
+            <div>✉️ Email: <a href="mailto:ds66b@neu.edu.vn" style="color:#fff;">ds66b@neu.edu.vn</a></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="lp-footer-bottom">
+        <div class="lp-footer-copyright">
+          © 2026 EventHub. Bảo lưu mọi quyền. Nền tảng đặt vé sự kiện hàng đầu Việt Nam.
+        </div>
+        <div class="lp-footer-legal">
+          <a href="terms.html?tab=terms">Điều khoản sử dụng</a>
+          <a href="terms.html?tab=privacy">Chính sách bảo mật</a>
+          <a href="terms.html?tab=rules">Quy chế hoạt động</a>
+          <a href="terms.html?tab=faq">Câu hỏi thường gặp (FAQ)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- EXPIRED OVERLAY -->
+  <div class="ck-expired-overlay" id="ck-expired-overlay" style="display:none;" aria-hidden="true">
+    <div class="ck-expired-card">
+      <div class="ck-expired-icon">⏰</div>
+      <h2 class="ck-expired-title">Phiên giữ vé đã hết hạn</h2>
+      <p class="ck-expired-desc">Vé bạn đã chọn không còn được giữ nữa. Vui lòng quay lại và chọn vé mới.</p>
+      <div class="ck-expired-actions">
+        <button class="ck-btn ck-btn-primary" onclick="restartSession()">🔄 Chọn lại vé</button>
+        <a href="landing.html" class="ck-btn ck-btn-ghost">Về trang chủ</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="ck-toast-container" class="ck-toast-container"></div>
+
+  <script src="js/header.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lễ Hội Âm Nhạc Gió Mùa 2026 — EventHub</title>
+  <meta name="description" content="Đại nhạc hội quốc tế quy tụ hơn 30 nghệ sĩ. Đặt vé ngay trên EventHub.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/event-detail.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       GLOBAL HEADER (EVENTHUB E-COMMERCE STANDARD)
+       ======================================================================== -->
+  <header class="hub-header" id="hub-header">
+    <div class="hub-container hub-header-inner">
+
+      <!-- 1. Brand Logo -->
+      <a href="landing.html" class="hub-logo" aria-label="EventHub Trang chủ">
+        <div class="hub-logo-badge">🎪</div>
+        <span class="hub-logo-text">EventHub</span>
+      </a>
+
+      <!-- 2. Global Search Box -->
+      <div class="hub-search-wrapper">
+        <form class="hub-search-form" id="hub-search-form" onsubmit="handleHeaderSearchSubmit(event)">
+          <svg class="hub-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            class="hub-search-input"
+            id="hub-search-input"
+            placeholder="Tìm kiếm sự kiện, nghệ sĩ, địa điểm..."
+            autocomplete="off"
+          />
+          <button type="button" class="hub-search-clear" id="hub-search-clear" onclick="clearHeaderSearch()" aria-label="Xóa">✕</button>
+        </form>
+      </div>
+
+      <!-- 3. Navigation Links -->
+      <nav class="hub-nav" aria-label="Điều hướng chính">
+        <a href="landing.html" class="hub-nav-link" data-nav="home">Trang chủ</a>
+        <a href="events.html" class="hub-nav-link" data-nav="events">Khám phá</a>
+        <a href="profile.html" class="hub-nav-link" data-nav="profile">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-nav-link hub-role-admin" id="hub-nav-create" data-nav="create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-nav-link hub-role-admin" id="hub-nav-admin" data-nav="admin" style="display:none;">📊 Quản trị & ML</a>
+      </nav>
+
+      <!-- 4. User Actions & Role Switcher -->
+      <div class="hub-actions">
+        <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
+          <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
+            <div class="hub-user-info">
+              <span class="hub-user-name" id="hub-user-name">Nguyễn Bảo Khánh</span>
+              <span class="hub-role-badge" id="hub-role-badge">Admin</span>
+            </div>
+            <span class="hub-chevron">▾</span>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="hub-dropdown" id="hub-user-dropdown" style="display: none;">
+            <div class="hub-dropdown-header">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-dd-avatar" class="hub-dd-avatar" alt="Avatar">
+              <div>
+                <strong class="hub-dd-name" id="hub-dd-name">Nguyễn Bảo Khánh</strong>
+                <div class="hub-dd-email" id="hub-dd-email">khanh.admin@eventhub.vn</div>
+              </div>
+            </div>
+
+            <!-- Role Switcher -->
+            <div class="hub-dropdown-roles">
+              <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+              <div class="hub-role-buttons">
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+              </div>
+            </div>
+
+            <div class="hub-dropdown-divider"></div>
+            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
+            <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
+            <div class="hub-dropdown-divider"></div>
+            <button type="button" class="hub-dd-link hub-dd-logout" onclick="headerLogout()">🚪 Đăng xuất</button>
+          </div>
+        </div>
+
+        <!-- Mobile Burger -->
+        <button class="hub-burger" id="hub-burger" onclick="toggleHeaderMobileMenu()" aria-label="Menu di động">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="hub-mobile-drawer" id="hub-mobile-drawer">
+      <div class="hub-mobile-search">
+        <form onsubmit="handleHeaderSearchSubmit(event)">
+          <input type="text" class="hub-search-input" id="hub-mobile-search-input" placeholder="Tìm sự kiện, địa điểm...">
+        </form>
+      </div>
+      <div class="hub-mobile-links">
+        <a href="landing.html" class="hub-mobile-link">Trang chủ</a>
+        <a href="events.html" class="hub-mobile-link">Khám phá sự kiện</a>
+        <a href="profile.html" class="hub-mobile-link">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-mobile-link hub-role-admin" id="hub-mob-create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-mobile-link hub-role-admin" id="hub-mob-admin" style="display:none;">📊 Quản trị & ML</a>
+      </div>
+      <div class="hub-mobile-roles">
+        <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+        <div class="hub-role-buttons">
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       SECTION 1: CINEMATIC COVER / BANNER
+       ====================================================================== -->
+  <section class="ed-cover" id="ed-cover">
+    <!-- Full-bleed background image -->
+    <div class="ed-cover-bg" id="ed-cover-bg"></div>
+    <div class="ed-cover-overlay"></div>
+
+    <!-- Breadcrumb -->
+    <div class="ed-container">
+      <nav class="ed-breadcrumb" aria-label="Breadcrumb">
+        <a href="landing.html">Trang chủ</a>
+        <span>›</span>
+        <a href="events.html">Khám phá</a>
+        <span>›</span>
+        <span id="ed-bc-name">Chi tiết sự kiện</span>
+      </nav>
+    </div>
+
+    <!-- Cover info card -->
+    <div class="ed-container ed-cover-content">
+      <div class="ed-cover-badges" id="ed-cover-badges">
+        <!-- Rendered by JS -->
+      </div>
+      <h1 class="ed-cover-title" id="ed-cover-title">Đang tải...</h1>
+
+      <div class="ed-cover-meta-row">
+        <!-- Date/time -->
+        <div class="ed-cover-meta-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <div>
+            <div class="ed-meta-label">Thời gian</div>
+            <div class="ed-meta-value" id="ed-cover-date">—</div>
+          </div>
+        </div>
+
+        <div class="ed-cover-meta-sep"></div>
+
+        <!-- Venue -->
+        <div class="ed-cover-meta-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          <div>
+            <div class="ed-meta-label">Địa điểm</div>
+            <div class="ed-meta-value" id="ed-cover-venue">—</div>
+          </div>
+        </div>
+
+        <div class="ed-cover-meta-sep"></div>
+
+        <!-- Organizer -->
+        <div class="ed-cover-meta-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <div>
+            <div class="ed-meta-label">Ban tổ chức</div>
+            <div class="ed-meta-value" id="ed-cover-org">—</div>
+          </div>
+        </div>
+
+        <div class="ed-cover-meta-sep"></div>
+
+        <!-- Attendance progress -->
+        <div class="ed-cover-meta-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+          </svg>
+          <div>
+            <div class="ed-meta-label">Vé đã bán</div>
+            <div class="ed-meta-value" id="ed-cover-sold">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons row -->
+      <div class="ed-cover-actions">
+        <button class="ed-btn ed-btn-share" onclick="shareEvent()" aria-label="Chia sẻ">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          Chia sẻ
+        </button>
+        <button class="ed-btn ed-btn-save" id="ed-save-btn" onclick="toggleSave()" aria-label="Lưu sự kiện">
+          🤍 Lưu
+        </button>
+        <a href="#ed-ticket-box" class="ed-btn ed-btn-cta-cover ed-mobile-only" id="ed-cover-cta">
+          🎟️ Mua vé ngay
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       MAIN LAYOUT: DETAIL + TICKET SIDEBAR
+       ====================================================================== -->
+  <div class="ed-container ed-layout" id="ed-layout">
+
+    <!-- ----------------------------------------------------------------
+         LEFT: EVENT DETAIL CONTENT
+         ---------------------------------------------------------------- -->
+    <div class="ed-main">
+
+      <!-- ---- TAB NAV ---- -->
+      <nav class="ed-tabs" aria-label="Nội dung sự kiện">
+        <button class="ed-tab active" data-target="ed-sec-about"   onclick="switchTab(this)">Giới thiệu</button>
+        <button class="ed-tab" data-target="ed-sec-agenda"         onclick="switchTab(this)">Lịch trình</button>
+        <button class="ed-tab" data-target="ed-sec-lineup"         onclick="switchTab(this)">Nghệ sĩ / Diễn giả</button>
+        <button class="ed-tab" data-target="ed-sec-policy"         onclick="switchTab(this)">Quy định & Chính sách</button>
+        <button class="ed-tab" data-target="ed-sec-location"       onclick="switchTab(this)">Địa điểm</button>
+        <button class="ed-tab" data-target="ed-sec-organizer"      onclick="switchTab(this)">Ban tổ chức</button>
+      </nav>
+
+      <!-- ---- SECTION: ABOUT ---- -->
+      <section class="ed-section" id="ed-sec-about">
+        <h2 class="ed-section-title">Về sự kiện</h2>
+        <div class="ed-rich-text" id="ed-about-content">
+          <!-- Rendered by JS -->
+        </div>
+        <!-- Highlights grid -->
+        <div class="ed-highlights-grid" id="ed-highlights">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- ---- SECTION: AGENDA ---- -->
+      <section class="ed-section ed-section-hidden" id="ed-sec-agenda">
+        <h2 class="ed-section-title">Lịch trình sự kiện</h2>
+        <div class="ed-agenda" id="ed-agenda-content">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- ---- SECTION: LINEUP ---- -->
+      <section class="ed-section ed-section-hidden" id="ed-sec-lineup">
+        <h2 class="ed-section-title">Nghệ sĩ &amp; Diễn giả</h2>
+        <div class="ed-lineup-grid" id="ed-lineup-content">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- ---- SECTION: POLICY ---- -->
+      <section class="ed-section ed-section-hidden" id="ed-sec-policy">
+        <h2 class="ed-section-title">Quy định &amp; Chính sách hoàn vé</h2>
+        <div class="ed-policy" id="ed-policy-content">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- ---- SECTION: LOCATION ---- -->
+      <section class="ed-section ed-section-hidden" id="ed-sec-location">
+        <h2 class="ed-section-title">Địa điểm tổ chức</h2>
+        <div class="ed-location-card" id="ed-location-content">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- ---- SECTION: ORGANIZER ---- -->
+      <section class="ed-section ed-section-hidden" id="ed-sec-organizer">
+        <h2 class="ed-section-title">Ban tổ chức</h2>
+        <div class="ed-organizer-card" id="ed-organizer-content">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+    </div><!-- /ed-main -->
+
+    <!-- ----------------------------------------------------------------
+         RIGHT: STICKY TICKET BOX
+         ---------------------------------------------------------------- -->
+    <aside class="ed-ticket-sidebar" id="ed-ticket-box" aria-label="Chọn vé">
+      <div class="ed-ticket-box" id="ed-ticket-widget">
+        <div class="ed-ticket-header">
+          <div class="ed-ticket-header-top">
+            <span class="ed-ticket-sale-label" id="ed-sale-status">🟢 Đang mở bán</span>
+            <div class="ed-ticket-countdown" id="ed-ticket-countdown"></div>
+          </div>
+          <div class="ed-ticket-price-hint">
+            Giá từ <strong id="ed-min-price">—</strong>
+          </div>
+        </div>
+
+        <!-- Ticket tiers -->
+        <div class="ed-ticket-tiers" id="ed-ticket-tiers">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Order summary -->
+        <div class="ed-order-summary" id="ed-order-summary" style="display:none;">
+          <div class="ed-order-title">Tóm tắt đơn hàng</div>
+          <div id="ed-order-lines"></div>
+          <div class="ed-order-divider"></div>
+          <div class="ed-order-total-row">
+            <span>Tạm tính</span>
+            <strong id="ed-order-subtotal">0 ₫</strong>
+          </div>
+          <div class="ed-order-fee-row">
+            <span>Phí dịch vụ (0%)</span>
+            <span id="ed-order-fee">0 ₫</span>
+          </div>
+          <div class="ed-order-divider"></div>
+          <div class="ed-order-grand-row">
+            <span>Tổng cộng</span>
+            <strong id="ed-order-grand">0 ₫</strong>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <button class="ed-btn ed-btn-book" id="ed-book-btn" onclick="proceedToCheckout()" disabled>
+          🎟️ Chọn vé để tiếp tục
+        </button>
+        <div class="ed-ticket-note">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Vé điện tử QR gửi qua email ngay sau khi thanh toán thành công
+        </div>
+      </div>
+    </aside>
+
+  </div><!-- /ed-layout -->
+
+  <!-- ======================================================================
+       MOBILE BOTTOM BAR (fixed)
+       ====================================================================== -->
+  <div class="ed-mobile-bar" id="ed-mobile-bar">
+    <div class="ed-mobile-bar-price">
+      <div class="ed-mobile-bar-label">Giá từ</div>
+      <strong id="ed-mobile-price">—</strong>
+    </div>
+    <button class="ed-btn ed-btn-book ed-mobile-bar-btn" onclick="toggleMobileTicket()">
+      🎟️ Chọn vé
+    </button>
+  </div>
+
+  <!-- ======================================================================
+       FOOTER
+       ====================================================================== -->
+  <footer class="lp-footer" id="footer">
+    <div class="footer-container">
+      <div class="lp-footer-top">
+
+        <!-- Brand Column -->
+        <div class="lp-footer-brand">
+          <a href="landing.html" class="footer-brand-logo">
+            <div class="footer-logo-badge">🎪</div>
+            <span>EventHub</span>
+          </a>
+          <p class="lp-footer-brand-desc">
+            Hệ thống phân phối và quản lý vé sự kiện trực tuyến tiêu chuẩn cao. Trải nghiệm âm nhạc, công nghệ và nghệ thuật hàng đầu Việt Nam.
+          </p>
+          <div class="lp-social-links">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.41 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="white"/></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="TikTok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.86a8.26 8.26 0 0 0 4.83 1.55V7.96a4.86 4.86 0 0 1-1.06-.23z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Nav Column 1: Khám Phá -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Khám Phá Sự Kiện</h4>
+          <ul class="lp-footer-links">
+            <li><a href="events.html">Tất cả sự kiện</a></li>
+            <li><a href="events.html?category=music">Âm nhạc & Concert</a></li>
+            <li><a href="events.html?category=tech">Hội thảo & Tech</a></li>
+            <li><a href="events.html?category=sport">Thể thao & Marathon</a></li>
+            <li><a href="events.html?category=art">Nghệ thuật & Triển lãm</a></li>
+            <li><a href="events.html?category=food">Ẩm thực & Đời sống</a></li>
+            <li><a href="landing.html#promo">Vé ưu đãi & Flash Sale</a></li>
+          </ul>
+        </div>
+
+        <!-- Nav Column 2: Đối tác & Quản lý -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Dành Cho Đối Tác</h4>
+          <ul class="lp-footer-links">
+            <li><a href="index.html#create-event">Đăng ký tạo sự kiện mới</a></li>
+            <li><a href="index.html#admin">Hệ thống quản lý & Kiểm soát vé</a></li>
+            <li><a href="index.html#admin">AI định giá XGBoost</a></li>
+            <li><a href="index.html#admin">Báo cáo tài chính & Doanh thu</a></li>
+            <li><a href="profile.html">Quản lý vé của tôi & E-Ticket</a></li>
+          </ul>
+        </div>
+
+        <!-- Payment & Contact Column -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Hỗ Trợ & Thanh Toán</h4>
+          <div class="lp-payment-badges">
+            <span class="lp-payment-badge">💳 Visa / Master</span>
+            <span class="lp-payment-badge">⚡ MoMo</span>
+            <span class="lp-payment-badge">📲 ZaloPay</span>
+            <span class="lp-payment-badge">🏦 VietQR</span>
+            <span class="lp-payment-badge">🍎 Apple Pay</span>
+          </div>
+          <div class="lp-footer-contact">
+            <div>✉️ Email: <a href="mailto:ds66b@neu.edu.vn" style="color:#fff;">ds66b@neu.edu.vn</a></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="lp-footer-bottom">
+        <div class="lp-footer-copyright">
+          © 2026 EventHub. Bảo lưu mọi quyền. Nền tảng đặt vé sự kiện hàng đầu Việt Nam.
+        </div>
+        <div class="lp-footer-legal">
+          <a href="terms.html?tab=terms">Điều khoản sử dụng</a>
+          <a href="terms.html?tab=privacy">Chính sách bảo mật</a>
+          <a href="terms.html?tab=rules">Quy chế hoạt động</a>
+          <a href="terms.html?tab=faq">Câu hỏi thường gặp (FAQ)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile ticket sheet -->
+  <div class="ed-mobile-sheet" id="ed-mobile-sheet">
+    <div class="ed-mobile-sheet-handle"></div>
+    <div class="ed-mobile-sheet-header">
+      <strong>Chọn vé</strong>
+      <button onclick="closeMobileSheet()" class="ed-sheet-close" aria-label="Đóng">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="ed-mobile-tiers"></div>
+    <div class="ed-mobile-sheet-footer">
+      <div>
+        <div style="font-size:0.8rem;color:#687176">Tổng cộng</div>
+        <strong id="ed-mobile-total" style="font-size:1.2rem;color:#FF5E1F">0 ₫</strong>
+      </div>
+      <button class="ed-btn ed-btn-book" id="ed-mobile-book-btn" onclick="proceedToCheckout()" disabled style="flex:1;margin-left:12px">
+        Đặt vé ngay →
+      </button>
+    </div>
+  </div>
+  <div class="ed-sheet-overlay" id="ed-sheet-overlay" onclick="closeMobileSheet()"></div>
+
+  <!-- ======================================================================
+       SHARE MODAL
+       ====================================================================== -->
+  <div class="ed-modal-backdrop" id="ed-share-modal">
+    <div class="ed-modal-card">
+      <button class="ed-modal-close" onclick="closeShareModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <h3 class="ed-modal-title">Chia sẻ sự kiện</h3>
+      <div class="ed-share-grid">
+        <button class="ed-share-btn" onclick="shareTo('facebook')" style="background:#1877F2;">
+          <span>📘</span> Facebook
+        </button>
+        <button class="ed-share-btn" onclick="shareTo('twitter')" style="background:#1DA1F2;">
+          <span>🐦</span> Twitter
+        </button>
+        <button class="ed-share-btn" onclick="shareTo('zalo')" style="background:#0068FF;">
+          <span>💬</span> Zalo
+        </button>
+        <button class="ed-share-btn" onclick="shareTo('copy')" style="background:#434B56;" id="ed-copy-btn">
+          <span>📋</span> Sao chép link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="ed-toast-container" class="ed-toast-container"></div>
+
+  <script src="js/header.js"></script>
+  <script src="js/event-detail.js"></script>
+</body>
+</html>
+

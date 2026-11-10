@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventHub - Khám Phá & Đặt Vé Sự Kiện Hàng Đầu Việt Nam</title>
+  <meta name="description" content="Nền tảng tìm kiếm, đặt vé sự kiện, hội thảo, đại nhạc hội hàng đầu Việt Nam. E-Ticket QR tức thì, thanh toán bảo mật, ưu đãi hấp dẫn.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       GLOBAL HEADER (EVENTHUB E-COMMERCE STANDARD)
+       ======================================================================== -->
+  <header class="hub-header" id="hub-header">
+    <div class="hub-container hub-header-inner">
+
+      <!-- 1. Brand Logo -->
+      <a href="landing.html" class="hub-logo" aria-label="EventHub Trang chủ">
+        <div class="hub-logo-badge">🎪</div>
+        <span class="hub-logo-text">EventHub</span>
+      </a>
+
+      <!-- 2. Global Search Box -->
+      <div class="hub-search-wrapper">
+        <form class="hub-search-form" id="hub-search-form" onsubmit="handleHeaderSearchSubmit(event)">
+          <svg class="hub-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            class="hub-search-input"
+            id="hub-search-input"
+            placeholder="Tìm kiếm sự kiện, nghệ sĩ, địa điểm..."
+            autocomplete="off"
+          />
+          <button type="button" class="hub-search-clear" id="hub-search-clear" onclick="clearHeaderSearch()" aria-label="Xóa">✕</button>
+        </form>
+      </div>
+
+      <!-- 3. Navigation Links -->
+      <nav class="hub-nav" aria-label="Điều hướng chính">
+        <a href="landing.html" class="hub-nav-link" data-nav="home">Trang chủ</a>
+        <a href="events.html" class="hub-nav-link" data-nav="events">Khám phá</a>
+        <a href="profile.html" class="hub-nav-link" data-nav="profile">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-nav-link hub-role-admin" id="hub-nav-create" data-nav="create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-nav-link hub-role-admin" id="hub-nav-admin" data-nav="admin" style="display:none;">📊 Quản trị & ML</a>
+      </nav>
+
+      <!-- 4. User Actions & Role Switcher -->
+      <div class="hub-actions">
+        <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
+          <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
+            <div class="hub-user-info">
+              <span class="hub-user-name" id="hub-user-name">Nguyễn Bảo Khánh</span>
+              <span class="hub-role-badge" id="hub-role-badge">Admin</span>
+            </div>
+            <span class="hub-chevron">▾</span>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="hub-dropdown" id="hub-user-dropdown" style="display: none;">
+            <div class="hub-dropdown-header">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-dd-avatar" class="hub-dd-avatar" alt="Avatar">
+              <div>
+                <strong class="hub-dd-name" id="hub-dd-name">Nguyễn Bảo Khánh</strong>
+                <div class="hub-dd-email" id="hub-dd-email">khanh.admin@eventhub.vn</div>
+              </div>
+            </div>
+
+            <!-- Role Switcher -->
+            <div class="hub-dropdown-roles">
+              <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+              <div class="hub-role-buttons">
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+                <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+              </div>
+            </div>
+
+            <div class="hub-dropdown-divider"></div>
+            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
+            <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
+            <div class="hub-dropdown-divider"></div>
+            <button type="button" class="hub-dd-link hub-dd-logout" onclick="headerLogout()">🚪 Đăng xuất</button>
+          </div>
+        </div>
+
+        <!-- Mobile Burger -->
+        <button class="hub-burger" id="hub-burger" onclick="toggleHeaderMobileMenu()" aria-label="Menu di động">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="hub-mobile-drawer" id="hub-mobile-drawer">
+      <div class="hub-mobile-search">
+        <form onsubmit="handleHeaderSearchSubmit(event)">
+          <input type="text" class="hub-search-input" id="hub-mobile-search-input" placeholder="Tìm sự kiện, địa điểm...">
+        </form>
+      </div>
+      <div class="hub-mobile-links">
+        <a href="landing.html" class="hub-mobile-link">Trang chủ</a>
+        <a href="events.html" class="hub-mobile-link">Khám phá sự kiện</a>
+        <a href="profile.html" class="hub-mobile-link">Vé của tôi</a>
+        <a href="index.html#create-event" class="hub-mobile-link hub-role-admin" id="hub-mob-create" style="display:none;">➕ Tạo sự kiện</a>
+        <a href="index.html#admin" class="hub-mobile-link hub-role-admin" id="hub-mob-admin" style="display:none;">📊 Quản trị & ML</a>
+      </div>
+      <div class="hub-mobile-roles">
+        <span class="hub-roles-title">⚡ Chuyển vai trò thử nghiệm:</span>
+        <div class="hub-role-buttons">
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Admin')">👑 Admin</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Organizer')">🎪 Tổ chức</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Staff')">💼 Staff</button>
+          <button type="button" class="hub-role-btn" onclick="switchHeaderRole('Guest')">👤 Khách</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       SECTION 1: HERO
+       ====================================================================== -->
+  <section class="lp-hero">
+    <!-- Background decorations -->
+    <div class="lp-hero-bg">
+      <div class="lp-hero-orb lp-hero-orb-1"></div>
+      <div class="lp-hero-orb lp-hero-orb-2"></div>
+      <div class="lp-hero-orb lp-hero-orb-3"></div>
+      <div class="lp-hero-grid"></div>
+    </div>
+
+    <div class="lp-container lp-hero-content">
+      <!-- Badge -->
+      <div class="lp-hero-badge">
+        <span class="lp-badge-dot"></span>
+        🔥 Hơn 500+ sự kiện đang mở bán vé
+      </div>
+
+      <!-- Headline -->
+      <h1 class="lp-hero-title">
+        Khám Phá & Trải Nghiệm<br>
+        <span class="lp-gradient-text">Những Khoảnh Khắc Đáng Nhớ</span>
+      </h1>
+
+      <!-- Subheading -->
+      <p class="lp-hero-subtitle">
+        Từ đại nhạc hội đến workshop sáng tạo — EventHub mang đến vé điện tử QR tức thì,
+        thanh toán bảo mật và ưu đãi hấp dẫn dành riêng cho thế hệ trẻ năng động.
+      </p>
+
+      <!-- Perks row -->
+      <div class="lp-hero-perks">
+        <div class="lp-perk-item">
+          <span class="lp-perk-icon">⚡</span>
+          <span>E-Ticket QR tức thì</span>
+        </div>
+        <div class="lp-perk-item">
+          <span class="lp-perk-icon">🔒</span>
+          <span>Thanh toán bảo mật 100%</span>
+        </div>
+        <div class="lp-perk-item">
+          <span class="lp-perk-icon">🤖</span>
+          <span>Gợi ý giá tối ưu AI</span>
+        </div>
+        <div class="lp-perk-item">
+          <span class="lp-perk-icon">🔄</span>
+          <span>Hoàn hủy linh hoạt</span>
+        </div>
+      </div>
+
+      <!-- === SEARCH WIDGET (Traveloka style) === -->
+      <div class="lp-search-widget">
+        <div class="lp-search-label-row">
+          <span class="lp-search-title">🔍 Tìm sự kiện phù hợp với bạn</span>
+        </div>
+        <form class="lp-search-form" id="lp-search-form" onsubmit="handleSearch(event)">
+          <!-- Field: Keyword -->
+          <div class="lp-search-field lp-search-field-keyword">
+            <label class="lp-sf-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              Tìm kiếm
+            </label>
+            <input
+              type="text"
+              id="lp-keyword"
+              class="lp-sf-input"
+              placeholder="Tên sự kiện, nghệ sĩ, chủ đề..."
+              autocomplete="off"
+            >
+            <!-- Autocomplete dropdown -->
+            <div class="lp-autocomplete" id="lp-autocomplete"></div>
+          </div>
+
+          <!-- Divider -->
+          <div class="lp-search-divider"></div>
+
+          <!-- Field: Location -->
+          <div class="lp-search-field">
+            <label class="lp-sf-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              Địa điểm
+            </label>
+            <select class="lp-sf-select" id="lp-location">
+              <option value="">Tất cả địa điểm</option>
+              <option value="hcm">TP. Hồ Chí Minh</option>
+              <option value="hn">Hà Nội</option>
+              <option value="dn">Đà Nẵng</option>
+              <option value="dl">Đà Lạt</option>
+              <option value="online">Online / Trực tuyến</option>
+            </select>
+          </div>
+
+          <!-- Divider -->
+          <div class="lp-search-divider"></div>
+
+          <!-- Field: Time -->
+          <div class="lp-search-field">
+            <label class="lp-sf-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Thời gian
+            </label>
+            <select class="lp-sf-select" id="lp-time">
+              <option value="">Bất kỳ lúc nào</option>
+              <option value="today">Hôm nay</option>
+              <option value="weekend">Cuối tuần này</option>
+              <option value="month">Tháng này</option>
+              <option value="next_month">Tháng sau</option>
+            </select>
+          </div>
+
+          <!-- CTA -->
+          <button type="submit" class="lp-btn lp-btn-search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Tìm vé ngay
+          </button>
+        </form>
+
+        <!-- Quick tags -->
+        <div class="lp-search-tags">
+          <span class="lp-search-tag-label">Tìm nhiều nhất:</span>
+          <button class="lp-search-tag" onclick="quickSearch('concert')">🎵 Concert</button>
+          <button class="lp-search-tag" onclick="quickSearch('workshop')">💡 Workshop</button>
+          <button class="lp-search-tag" onclick="quickSearch('marathon')">🏃 Marathon</button>
+          <button class="lp-search-tag" onclick="quickSearch('tech')">💻 Tech Summit</button>
+          <button class="lp-search-tag" onclick="quickSearch('nghệ thuật')">🎨 Nghệ thuật</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SECTION 2: FEATURED CATEGORIES
+       ====================================================================== -->
+  <section class="lp-section lp-section-categories" id="categories">
+    <div class="lp-container">
+      <div class="lp-section-header">
+        <div>
+          <h2 class="lp-section-title">Danh Mục Sự Kiện</h2>
+          <p class="lp-section-desc">Chọn thể loại yêu thích và khám phá ngay</p>
+        </div>
+      </div>
+
+      <div class="lp-categories-grid" id="lp-categories-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SECTION 3: TRENDING EVENTS
+       ====================================================================== -->
+  <section class="lp-section lp-section-events" id="events">
+    <div class="lp-container">
+      <div class="lp-section-header">
+        <div>
+          <h2 class="lp-section-title">🔥 Sự Kiện Nổi Bật</h2>
+          <p class="lp-section-desc">Đặt vé sớm để nhận giá ưu đãi Early Bird</p>
+        </div>
+        <div class="lp-events-tabs" id="lp-events-tabs">
+          <button class="lp-tab-btn active" data-tab="all">Tất cả</button>
+          <button class="lp-tab-btn" data-tab="Âm nhạc &amp; Lễ hội">🎵 Âm nhạc</button>
+          <button class="lp-tab-btn" data-tab="Công nghệ &amp; AI">💻 Tech</button>
+          <button class="lp-tab-btn" data-tab="Thể thao &amp; Giải trí">🏃 Thể thao</button>
+          <button class="lp-tab-btn" data-tab="Nghệ thuật &amp; Triển lãm">🎨 Nghệ thuật</button>
+        </div>
+      </div>
+
+      <div class="lp-events-grid" id="lp-events-grid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="lp-events-cta">
+        <a href="events.html" class="lp-btn lp-btn-outline-primary lp-btn-lg">
+          Xem tất cả sự kiện
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SECTION 4: PROMO BANNER SLIDER + STATS
+       ====================================================================== -->
+  <section class="lp-section lp-section-promo" id="promo">
+    <div class="lp-container">
+
+      <!-- Promo Slider -->
+      <div class="lp-promo-slider">
+        <div class="lp-promo-track" id="lp-promo-track">
+
+          <div class="lp-promo-slide lp-promo-slide-1">
+            <div class="lp-promo-content">
+              <div class="lp-promo-badge">🎁 ƯU ĐÃI ĐỘC QUYỀN</div>
+              <h3 class="lp-promo-title">Giảm <span>20%</span> cho thành viên mới</h3>
+              <p class="lp-promo-desc">Áp dụng cho tất cả sự kiện khi đặt vé lần đầu trên EventHub</p>
+              <div class="lp-promo-code-box">
+                <span class="lp-promo-code-label">Mã giảm giá:</span>
+                <code class="lp-promo-code" onclick="copyCode('WELCOME20')">WELCOME20 📋</code>
+              </div>
+              <button class="lp-btn lp-btn-white" onclick="openAuthModal()">Đăng ký ngay để dùng mã</button>
+            </div>
+            <div class="lp-promo-visual">🎪</div>
+          </div>
+
+          <div class="lp-promo-slide lp-promo-slide-2">
+            <div class="lp-promo-content">
+              <div class="lp-promo-badge">⚡ FLASH SALE</div>
+              <h3 class="lp-promo-title">Vé cuối tuần giảm <span>50K</span></h3>
+              <p class="lp-promo-desc">Áp dụng cho sự kiện diễn ra Thứ 7, Chủ Nhật tuần này</p>
+              <div class="lp-promo-code-box">
+                <span class="lp-promo-code-label">Mã giảm giá:</span>
+                <code class="lp-promo-code" onclick="copyCode('WEEKEND50K')">WEEKEND50K 📋</code>
+              </div>
+              <div class="lp-promo-countdown" id="lp-countdown"></div>
+            </div>
+            <div class="lp-promo-visual">🎵</div>
+          </div>
+
+          <div class="lp-promo-slide lp-promo-slide-3">
+            <div class="lp-promo-content">
+              <div class="lp-promo-badge">👥 NHÓM BẠN</div>
+              <h3 class="lp-promo-title">Mua <span>3+</span> vé, tặng thêm 1 vé</h3>
+              <p class="lp-promo-desc">Đi cùng bạn bè, hưởng ưu đãi nhóm hấp dẫn từ EventHub</p>
+              <div class="lp-promo-code-box">
+                <span class="lp-promo-code-label">Mã giảm giá:</span>
+                <code class="lp-promo-code" onclick="copyCode('GROUP3PLUS1')">GROUP3PLUS1 📋</code>
+              </div>
+              <button class="lp-btn lp-btn-white" onclick="document.getElementById('events').scrollIntoView({behavior:'smooth'})">Xem sự kiện ngay</button>
+            </div>
+            <div class="lp-promo-visual">🎉</div>
+          </div>
+
+        </div>
+
+        <!-- Slider Controls -->
+        <button class="lp-slider-btn lp-slider-prev" onclick="slidePromo(-1)" aria-label="Slide trước">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button class="lp-slider-btn lp-slider-next" onclick="slidePromo(1)" aria-label="Slide tiếp">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+
+        <!-- Dots -->
+        <div class="lp-slider-dots" id="lp-slider-dots">
+          <button class="lp-dot active" onclick="goToSlide(0)"></button>
+          <button class="lp-dot" onclick="goToSlide(1)"></button>
+          <button class="lp-dot" onclick="goToSlide(2)"></button>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="lp-stats-row">
+        <div class="lp-stat-card">
+          <div class="lp-stat-value">
+            <span class="lp-stat-number" data-target="500">0</span><span class="lp-stat-suffix">+</span>
+          </div>
+          <div class="lp-stat-label">Sự kiện đang mở bán</div>
+        </div>
+        <div class="lp-stat-divider"></div>
+        <div class="lp-stat-card">
+          <div class="lp-stat-value">
+            <span class="lp-stat-number" data-target="100">0</span><span class="lp-stat-suffix">K+</span>
+          </div>
+          <div class="lp-stat-label">Người tham gia sự kiện</div>
+        </div>
+        <div class="lp-stat-divider"></div>
+        <div class="lp-stat-card">
+          <div class="lp-stat-value">
+            <span class="lp-stat-number" data-target="99">0</span><span class="lp-stat-suffix">%</span>
+          </div>
+          <div class="lp-stat-label">Khách hàng hài lòng</div>
+        </div>
+        <div class="lp-stat-divider"></div>
+        <div class="lp-stat-card">
+          <div class="lp-stat-value">
+            <span class="lp-stat-number" data-target="50">0</span><span class="lp-stat-suffix">+</span>
+          </div>
+          <div class="lp-stat-label">Đối tác tổ chức uy tín</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       SECTION 5: HOW IT WORKS
+       ====================================================================== -->
+  <section class="lp-section lp-section-how">
+    <div class="lp-container">
+      <div class="lp-section-header lp-section-header-center">
+        <h2 class="lp-section-title">Chỉ 3 Bước Để Có Vé</h2>
+        <p class="lp-section-desc">Nhanh chóng, bảo mật, không cần in vé</p>
+      </div>
+
+      <div class="lp-how-grid">
+        <div class="lp-how-step">
+          <div class="lp-how-step-num">01</div>
+          <div class="lp-how-icon">🔍</div>
+          <h3 class="lp-how-title">Tìm & Chọn sự kiện</h3>
+          <p class="lp-how-desc">Duyệt qua hàng trăm sự kiện theo danh mục, địa điểm hoặc tìm kiếm trực tiếp</p>
+        </div>
+        <div class="lp-how-connector"></div>
+        <div class="lp-how-step">
+          <div class="lp-how-step-num">02</div>
+          <div class="lp-how-icon">💳</div>
+          <h3 class="lp-how-title">Thanh toán an toàn</h3>
+          <p class="lp-how-desc">Hỗ trợ MoMo, ZaloPay, VietQR, Visa/Mastercard — thanh toán trong dưới 60 giây</p>
+        </div>
+        <div class="lp-how-connector"></div>
+        <div class="lp-how-step">
+          <div class="lp-how-step-num">03</div>
+          <div class="lp-how-icon">🎟️</div>
+          <h3 class="lp-how-title">Nhận E-Ticket QR</h3>
+          <p class="lp-how-desc">Vé điện tử gửi qua email tức thì, quét QR để vào cổng — không cần in ra giấy</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       FOOTER
+       ====================================================================== -->
+  <footer class="lp-footer" id="footer">
+    <div class="footer-container">
+      <div class="lp-footer-top">
+
+        <!-- Brand Column -->
+        <div class="lp-footer-brand">
+          <a href="landing.html" class="footer-brand-logo">
+            <div class="footer-logo-badge">🎪</div>
+            <span>EventHub</span>
+          </a>
+          <p class="lp-footer-brand-desc">
+            Hệ thống phân phối và quản lý vé sự kiện trực tuyến tiêu chuẩn cao. Trải nghiệm âm nhạc, công nghệ và nghệ thuật hàng đầu Việt Nam.
+          </p>
+          <div class="lp-social-links">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.41 19.1C5.12 19.56 12 19.56 12 19.56s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="white"/></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="lp-social-btn" aria-label="TikTok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.86a8.26 8.26 0 0 0 4.83 1.55V7.96a4.86 4.86 0 0 1-1.06-.23z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Nav Column 1: Khám Phá -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Khám Phá Sự Kiện</h4>
+          <ul class="lp-footer-links">
+            <li><a href="events.html">Tất cả sự kiện</a></li>
+            <li><a href="events.html?category=music">Âm nhạc & Concert</a></li>
+            <li><a href="events.html?category=tech">Hội thảo & Tech</a></li>
+            <li><a href="events.html?category=sport">Thể thao & Marathon</a></li>
+            <li><a href="events.html?category=art">Nghệ thuật & Triển lãm</a></li>
+            <li><a href="events.html?category=food">Ẩm thực & Đời sống</a></li>
+            <li><a href="#promo">Vé ưu đãi & Flash Sale</a></li>
+          </ul>
+        </div>
+
+        <!-- Nav Column 2: Đối tác & Quản lý -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Dành Cho Đối Tác</h4>
+          <ul class="lp-footer-links">
+            <li><a href="index.html#create-event">Đăng ký tạo sự kiện mới</a></li>
+            <li><a href="index.html#admin">Hệ thống quản lý & Kiểm soát vé</a></li>
+            <li><a href="index.html#admin">AI định giá XGBoost</a></li>
+            <li><a href="index.html#admin">Báo cáo tài chính & Doanh thu</a></li>
+            <li><a href="profile.html">Quản lý vé của tôi & E-Ticket</a></li>
+          </ul>
+        </div>
+
+        <!-- Payment & Contact Column -->
+        <div class="lp-footer-col">
+          <h4 class="lp-footer-col-title">Hỗ Trợ & Thanh Toán</h4>
+          <div class="lp-payment-badges">
+            <span class="lp-payment-badge">💳 Visa / Master</span>
+            <span class="lp-payment-badge">⚡ MoMo</span>
+            <span class="lp-payment-badge">📲 ZaloPay</span>
+            <span class="lp-payment-badge">🏦 VietQR</span>
+            <span class="lp-payment-badge">🍎 Apple Pay</span>
+          </div>
+          <div class="lp-footer-contact">
+            <div>✉️ Email: <a href="mailto:ds66b@neu.edu.vn" style="color:#fff;">ds66b@neu.edu.vn</a></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="lp-footer-bottom">
+        <div class="lp-footer-copyright">
+          © 2026 EventHub. Bảo lưu mọi quyền. Nền tảng đặt vé sự kiện hàng đầu Việt Nam.
+        </div>
+        <div class="lp-footer-legal">
+          <a href="terms.html?tab=terms">Điều khoản sử dụng</a>
+          <a href="terms.html?tab=privacy">Chính sách bảo mật</a>
+          <a href="terms.html?tab=rules">Quy chế hoạt động</a>
+          <a href="terms.html?tab=faq">Câu hỏi thường gặp (FAQ)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================================
+       AUTH MODAL
+       ====================================================================== -->
+  <div class="lp-modal-backdrop" id="lp-auth-modal" role="dialog" aria-modal="true" aria-label="Đăng nhập / Đăng ký">
+    <div class="lp-modal-card">
+      <button class="lp-modal-close" onclick="closeAuthModal()" aria-label="Đóng">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="lp-modal-body">
+        <div class="lp-modal-brand">
+          <div class="lp-logo-badge lp-logo-badge-lg">🎪</div>
+          <h3>Chào mừng đến EventHub</h3>
+          <p>Đăng nhập để nhận ưu đãi & quản lý vé của bạn</p>
+        </div>
+
+        <!-- Quick login buttons -->
+        <div class="lp-quick-login">
+          <div class="lp-quick-login-label">⚡ Đăng nhập nhanh để trải nghiệm:</div>
+          <div class="lp-quick-login-grid">
+            <button class="lp-btn lp-btn-outline lp-btn-sm" onclick="quickLogin('Guest')">Khách</button>
+            <button class="lp-btn lp-btn-outline lp-btn-sm" onclick="quickLogin('Staff')">Staff</button>
+            <button class="lp-btn lp-btn-outline lp-btn-sm" onclick="quickLogin('Organizer')">Tổ chức</button>
+            <button class="lp-btn lp-btn-outline lp-btn-sm" onclick="quickLogin('Admin')">Admin</button>
+          </div>
+        </div>
+
+        <!-- Auth Tabs -->
+        <div class="lp-auth-tabs">
+          <button id="lp-tab-login" class="lp-auth-tab active" onclick="switchAuthTab('login')">Đăng nhập</button>
+          <button id="lp-tab-register" class="lp-auth-tab" onclick="switchAuthTab('register')">Đăng ký mới</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="lp-login-pane">
+          <form onsubmit="handleLogin(event)">
+            <div class="lp-form-group">
+              <label class="lp-form-label">Tên đăng nhập hoặc Email</label>
+              <input type="text" class="lp-form-input" id="lp-auth-username" placeholder="admin, staff01, guest01..." value="admin">
+            </div>
+            <div class="lp-form-group">
+              <label class="lp-form-label">Mật khẩu</label>
+              <input type="password" class="lp-form-input" id="lp-auth-password" placeholder="••••••••" value="admin123">
+            </div>
+            <button type="submit" class="lp-btn lp-btn-primary lp-btn-block lp-btn-lg">
+              Đăng nhập ngay →
+            </button>
+          </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="lp-register-pane" style="display:none;">
+          <form onsubmit="handleRegister(event)">
+            <div class="lp-form-group">
+              <label class="lp-form-label">Họ và tên</label>
+              <input type="text" class="lp-form-input" id="lp-reg-name" placeholder="Nguyễn Văn A" required>
+            </div>
+            <div class="lp-form-group">
+              <label class="lp-form-label">Email</label>
+              <input type="email" class="lp-form-input" id="lp-reg-email" placeholder="email@domain.com" required>
+            </div>
+            <div class="lp-form-group">
+              <label class="lp-form-label">Mật khẩu</label>
+              <input type="password" class="lp-form-input" id="lp-reg-password" placeholder="Tối thiểu 8 ký tự" required>
+            </div>
+            <button type="submit" class="lp-btn lp-btn-primary lp-btn-block lp-btn-lg">
+              Tạo tài khoản miễn phí →
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="lp-toast-container" class="lp-toast-container"></div>
+
+  <script src="js/header.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>
+

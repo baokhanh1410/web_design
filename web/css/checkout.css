@@ -1,0 +1,624 @@
+/* ==========================================================================
+   EVENTHUB — CHECKOUT PAGE  (checkout.css)
+   ========================================================================== */
+
+:root {
+  --p:         #0194F3;
+  --p-hover:   #007ecc;
+  --p-dark:    #005fa0;
+  --p-light:   #EBF7FF;
+  --p-subtle:  rgba(1,148,243,.08);
+
+  --accent:    #FF5E1F;
+  --acc-light: #FFF2ED;
+  --success:   #00A651;
+  --suc-light: #E6F7ED;
+  --warn:      #F5A623;
+  --danger:    #E53935;
+  --dan-light: #FDE8E8;
+
+  --bg:        #F7F9FA;
+  --card:      #FFFFFF;
+  --border:    #E2E5E9;
+  --border-lt: #ECEFF2;
+
+  --txt-dark:  #1C2430;
+  --txt-body:  #434B56;
+  --txt-muted: #687176;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --sh-sm: 0 2px 4px rgba(3,18,26,.04);
+  --sh-md: 0 4px 16px rgba(3,18,26,.08);
+  --sh-lg: 0 12px 32px rgba(3,18,26,.12);
+  --sh-xl: 0 24px 60px rgba(3,18,26,.2);
+
+  --r-sm:   8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+  --r-full:9999px;
+
+  --t: .18s cubic-bezier(.4,0,.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--txt-dark);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto;display:block}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+button{cursor:pointer;border:none;background:none}
+
+/* ============================================================ CONTAINER */
+.ck-container{width:100%;max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ============================================================ BUTTONS */
+.ck-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:600;font-size:.92rem;padding:11px 20px;
+  border-radius:var(--r-md);transition:all var(--t);
+  cursor:pointer;white-space:nowrap;border:1.5px solid transparent;
+}
+.ck-btn:active{transform:scale(.97)}
+
+.ck-btn-primary{background:var(--p);color:#fff;border-color:var(--p);box-shadow:0 3px 10px rgba(1,148,243,.28)}
+.ck-btn-primary:hover{background:var(--p-hover);box-shadow:0 5px 16px rgba(1,148,243,.38);transform:translateY(-1px)}
+
+.ck-btn-pay{
+  width:100%;padding:16px;font-size:1.05rem;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),#c2410c);
+  color:#fff;border-color:transparent;border-radius:var(--r-lg);
+  box-shadow:0 6px 20px rgba(255,94,31,.35);
+  transition:all var(--t);letter-spacing:.2px;
+}
+.ck-btn-pay:hover{box-shadow:0 8px 28px rgba(255,94,31,.48);transform:translateY(-2px)}
+.ck-btn-pay:disabled{background:#9EA5AD;box-shadow:none;cursor:not-allowed;transform:none}
+
+.ck-btn-ghost{color:var(--txt-body);border-color:var(--border);background:#fff}
+.ck-btn-ghost:hover{border-color:var(--p);color:var(--p);background:var(--p-light)}
+
+.ck-btn-block{width:100%}
+
+/* Success buttons */
+.ck-btn-print{
+  background:#fff;color:var(--txt-dark);border-color:var(--border);
+  padding:12px 20px;border-radius:var(--r-md);flex:1;
+}
+.ck-btn-print:hover{border-color:var(--p);color:var(--p)}
+.ck-btn-mybookings{
+  background:var(--p);color:#fff;padding:12px 20px;
+  border-radius:var(--r-md);flex:1;box-shadow:0 3px 10px rgba(1,148,243,.28);
+}
+.ck-btn-mybookings:hover{background:var(--p-hover)}
+.ck-btn-home{
+  background:var(--bg);color:var(--txt-muted);border:1.5px solid var(--border);
+  padding:12px 20px;border-radius:var(--r-md);flex:1;text-align:center;
+}
+.ck-btn-home:hover{color:var(--txt-dark);border-color:var(--txt-muted)}
+
+/* ============================================================ HEADER */
+.ck-header{
+  background:#fff;border-bottom:1px solid var(--border-lt);
+  box-shadow:var(--sh-sm);position:sticky;top:0;z-index:100;
+}
+.ck-header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;gap:20px;
+}
+
+.ck-logo{
+  display:flex;align-items:center;gap:10px;
+  font-size:1.3rem;font-weight:800;color:var(--p);flex-shrink:0;
+}
+.ck-logo-badge{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--p),#005fa0);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;box-shadow:0 4px 10px rgba(1,148,243,.3);flex-shrink:0;
+}
+
+/* Steps */
+.ck-steps{
+  display:flex;align-items:center;gap:0;list-style:none;flex:1;justify-content:center;
+}
+.ck-step{
+  display:flex;align-items:center;gap:8px;
+  font-size:.82rem;font-weight:600;color:var(--txt-muted);
+}
+.ck-step.done{color:var(--success)}
+.ck-step.active{color:var(--p)}
+.ck-step-circle{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:800;color:var(--txt-muted);flex-shrink:0;
+  transition:all var(--t);
+}
+.ck-step.done .ck-step-circle{
+  background:var(--success);border-color:var(--success);color:#fff;
+}
+.ck-step.active .ck-step-circle{
+  background:var(--p);border-color:var(--p);color:#fff;
+  box-shadow:0 0 0 4px var(--p-subtle);
+}
+.ck-step-label{white-space:nowrap}
+.ck-step-connector{
+  width:48px;height:2px;background:var(--border);flex-shrink:0;margin:0 4px;
+}
+
+.ck-secure-badge{
+  display:flex;align-items:center;gap:5px;
+  font-size:.78rem;font-weight:600;color:var(--success);flex-shrink:0;
+  background:var(--suc-light);padding:5px 12px;border-radius:var(--r-full);
+  border:1px solid rgba(0,166,81,.15);
+}
+
+/* ============================================================ MAIN */
+.ck-main{padding:28px 0 80px}
+.ck-layout{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:28px;align-items:start;
+}
+
+/* ============================================================ FORM CARDS */
+.ck-card{
+  background:var(--card);border-radius:var(--r-lg);border:1px solid var(--border-lt);
+  box-shadow:var(--sh-sm);padding:24px;margin-bottom:16px;
+}
+.ck-card-terms{margin-bottom:0}
+.ck-card-header{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.ck-card-num{
+  width:30px;height:30px;border-radius:50%;background:var(--p);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;font-weight:800;flex-shrink:0;
+}
+.ck-card-title{font-size:1.05rem;font-weight:800;color:var(--txt-dark)}
+
+/* Form grid */
+.ck-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ck-field{display:flex;flex-direction:column;gap:5px}
+.ck-field-full{grid-column:1/-1}
+.ck-label{font-size:.8rem;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.35px}
+.ck-required{color:var(--danger)}
+.ck-input{
+  padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--r-md);
+  font-size:.95rem;color:var(--txt-dark);outline:none;width:100%;
+  transition:border-color var(--t),box-shadow var(--t);background:#fff;
+}
+.ck-input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--p-subtle)}
+.ck-input::placeholder{color:var(--txt-muted);font-weight:400}
+.ck-input.error{border-color:var(--danger);box-shadow:0 0 0 3px rgba(229,57,53,.1)}
+.ck-input.valid{border-color:var(--success)}
+
+.ck-textarea{resize:vertical;min-height:80px;line-height:1.5}
+.ck-char-count{font-size:.72rem;color:var(--txt-muted);text-align:right;margin-top:2px}
+
+/* Phone */
+.ck-phone-wrap{display:flex;border:1.5px solid var(--border);border-radius:var(--r-md);overflow:hidden;transition:border-color var(--t),box-shadow var(--t)}
+.ck-phone-wrap:focus-within{border-color:var(--p);box-shadow:0 0 0 3px var(--p-subtle)}
+.ck-phone-prefix{
+  display:flex;align-items:center;padding:0 12px;
+  background:var(--bg);font-size:.88rem;font-weight:600;
+  color:var(--txt-body);border-right:1.5px solid var(--border);white-space:nowrap;
+}
+.ck-input-phone{border:none;border-radius:0;box-shadow:none!important;flex:1}
+.ck-input-phone:focus{box-shadow:none!important}
+
+.ck-error{font-size:.78rem;color:var(--danger);font-weight:600;min-height:16px;margin-top:2px}
+
+/* ============================================================ PAYMENT METHODS */
+.ck-payment-methods{display:flex;flex-direction:column;gap:0}
+.ck-pm-item{border:2px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:border-color var(--t);margin-bottom:10px}
+.ck-pm-item.selected{border-color:var(--p)}
+.ck-pm-item:last-child{margin-bottom:0}
+
+.ck-pm-label{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;
+  transition:background var(--t);
+}
+.ck-pm-label:hover{background:var(--bg)}
+.ck-pm-radio{display:none}
+.ck-pm-radio-box{
+  width:20px;height:20px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all var(--t);
+}
+.ck-pm-radio:checked ~ .ck-pm-radio-box{border-color:var(--p)}
+.ck-pm-radio:checked ~ .ck-pm-radio-box::after{
+  content:'';width:10px;height:10px;border-radius:50%;background:var(--p);
+}
+.ck-pm-info{flex:1;min-width:0}
+.ck-pm-name{font-size:.92rem;font-weight:700;color:var(--txt-dark)}
+.ck-pm-desc{font-size:.78rem;color:var(--txt-muted);margin-top:2px}
+.ck-pm-logos{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap}
+.ck-bank-logo{
+  padding:3px 7px;border-radius:4px;font-size:.65rem;font-weight:800;
+  background:var(--bg);color:var(--txt-muted);border:1px solid var(--border);letter-spacing:.3px;
+}
+
+/* Payment method body */
+.ck-pm-body{display:none;padding:0 18px 18px;border-top:1px solid var(--border-lt)}
+.ck-pm-body.open{display:block}
+
+/* VietQR */
+.ck-vietqr-box{display:flex;gap:20px;align-items:flex-start}
+.ck-qr-wrapper{
+  flex-shrink:0;position:relative;width:140px;
+  background:#fff;border:2px solid var(--border);border-radius:var(--r-md);
+  padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.ck-qr-art{width:120px;height:120px}
+.ck-qr-brand{display:flex;align-items:center;gap:4px}
+.ck-qr-logo{font-size:1rem}
+
+.ck-vietqr-info{flex:1;min-width:0}
+.ck-vq-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border-lt);font-size:.85rem}
+.ck-vq-row:last-of-type{border-bottom:none}
+.ck-vq-label{color:var(--txt-muted);font-weight:500;flex-shrink:0;margin-right:8px}
+.ck-vq-value{font-weight:600;color:var(--txt-dark);text-align:right}
+.ck-vq-highlight{
+  color:var(--p);font-family:'Courier New',monospace;
+  font-size:.88rem;font-weight:800;letter-spacing:.5px;
+}
+.ck-vq-amount{color:var(--accent);font-size:1rem;font-weight:800}
+.ck-vq-copyable{display:flex;align-items:center;gap:6px}
+.ck-copy-btn{font-size:.85rem;padding:2px 6px;border-radius:4px;transition:all var(--t)}
+.ck-copy-btn:hover{background:var(--p-light);transform:scale(1.1)}
+.ck-vq-note{
+  margin-top:12px;font-size:.78rem;color:var(--warn);
+  background:var(--warn-light,#FEF6E9);border-radius:var(--r-sm);padding:8px 10px;line-height:1.5;
+  border-left:3px solid var(--warn);
+}
+
+/* E-Wallet */
+.ck-wallet-grid{display:flex;gap:10px;margin-bottom:0;flex-wrap:wrap}
+.ck-wallet-btn{
+  flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px;border:2px solid var(--border);border-radius:var(--r-md);
+  font-size:.88rem;font-weight:600;color:var(--txt-body);
+  transition:all var(--t);background:#fff;cursor:pointer;
+}
+.ck-wallet-btn:hover{border-color:var(--wc,var(--p));color:var(--wc,var(--p))}
+.ck-wallet-btn.selected{border-color:var(--wc,var(--p));background:rgba(0,0,0,.03)}
+.ck-wallet-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ck-wallet-redirect{margin-top:14px;padding:14px;background:var(--p-light);border-radius:var(--r-md);text-align:center;font-size:.88rem;color:var(--txt-body)}
+.ck-wallet-redirect strong{color:var(--p)}
+.ck-redirect-icon{font-size:2rem;margin-bottom:6px}
+
+/* Credit Card */
+.ck-card-preview{
+  background:linear-gradient(135deg,#1a1f71 0%,#0053cc 50%,#0194F3 100%);
+  border-radius:var(--r-lg);padding:22px 24px;color:#fff;margin-bottom:20px;
+  min-height:140px;position:relative;overflow:hidden;
+  box-shadow:0 8px 24px rgba(1,84,243,.4);
+}
+.ck-card-preview::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+.ck-card-preview::after{
+  content:'';position:absolute;bottom:-30px;left:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+.ck-card-preview-chip{
+  width:36px;height:26px;border-radius:4px;
+  background:linear-gradient(135deg,#FFD700,#FFA500);
+  margin-bottom:18px;position:relative;z-index:1;
+}
+.ck-card-preview-num{
+  font-size:1.1rem;font-weight:600;letter-spacing:3px;
+  font-family:'Courier New',monospace;margin-bottom:16px;
+  position:relative;z-index:1;
+}
+.ck-card-preview-row{display:flex;align-items:flex-end;justify-content:space-between;position:relative;z-index:1}
+.ck-card-preview-label{font-size:.6rem;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.5px}
+.ck-card-preview-val{font-size:.85rem;font-weight:600;letter-spacing:.5px;margin-top:2px}
+.ck-card-preview-logo{font-size:1.6rem}
+
+.ck-card-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ck-input-card-num{font-family:'Courier New',monospace;letter-spacing:2px;font-size:.95rem}
+.ck-tooltip-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;border-radius:50%;border:1.5px solid var(--txt-muted);
+  font-size:.65rem;font-weight:800;color:var(--txt-muted);margin-left:4px;
+  vertical-align:middle;cursor:help;
+}
+
+/* ============================================================ VOUCHER */
+.ck-voucher-row{display:flex;gap:10px;margin-bottom:10px}
+.ck-voucher-input-wrap{flex:1}
+.ck-voucher-input{width:100%;font-family:'Courier New',monospace;letter-spacing:1px;font-size:.92rem}
+.ck-voucher-hint{font-size:.8rem;color:var(--txt-muted);line-height:1.6}
+.ck-voucher-hint code{
+  background:var(--p-light);color:var(--p);border-radius:4px;
+  padding:1px 6px;font-size:.8rem;font-weight:600;cursor:pointer;
+  font-family:'Courier New',monospace;border:1px solid rgba(1,148,243,.2);
+  transition:all var(--t);
+}
+.ck-voucher-hint code:hover{background:var(--p);color:#fff}
+.ck-voucher-result{margin-top:10px;font-size:.85rem;font-weight:600;min-height:20px}
+.ck-voucher-result.success{color:var(--success)}
+.ck-voucher-result.error{color:var(--danger)}
+
+/* ============================================================ TERMS */
+.ck-terms-label{display:flex;align-items:flex-start;gap:12px;cursor:pointer;line-height:1.6;font-size:.9rem;color:var(--txt-body)}
+.ck-checkbox{display:none}
+.ck-checkbox-box{
+  width:20px;height:20px;border-radius:5px;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;transition:all var(--t);
+}
+.ck-checkbox:checked ~ .ck-checkbox-box{background:var(--p);border-color:var(--p)}
+.ck-checkbox:checked ~ .ck-checkbox-box::after{content:'✓';color:#fff;font-size:.75rem;font-weight:800}
+.ck-link{color:var(--p);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.ck-link:hover{color:var(--p-hover)}
+
+/* Mobile pay button */
+.ck-mobile-pay-btn{display:none;margin-top:16px}
+
+/* ============================================================ ORDER SUMMARY */
+.ck-summary-box{
+  background:var(--card);border-radius:var(--r-xl);border:1px solid var(--border-lt);
+  box-shadow:var(--sh-lg);overflow:hidden;position:sticky;top:88px;
+}
+
+/* Hold timer */
+.ck-hold-timer{
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,#003580,#0053cc);
+  padding:16px 20px;color:#fff;
+}
+.ck-hold-timer svg{color:rgba(255,255,255,.8);flex-shrink:0}
+.ck-timer-label{font-size:.72rem;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.4px}
+.ck-timer-val{font-size:1.4rem;font-weight:900;color:#FFD56B;font-family:'Courier New',monospace;letter-spacing:2px}
+.ck-timer-ring{margin-left:auto;flex-shrink:0}
+
+/* Event mini card */
+.ck-event-card{
+  display:flex;gap:12px;padding:16px;border-bottom:1px solid var(--border-lt);
+}
+.ck-event-thumb{
+  width:72px;height:72px;border-radius:var(--r-md);overflow:hidden;flex-shrink:0;
+  background:var(--bg);
+}
+.ck-event-thumb img{width:100%;height:100%;object-fit:cover}
+.ck-event-info{flex:1;min-width:0}
+.ck-event-category{
+  display:inline-block;padding:2px 8px;border-radius:var(--r-full);
+  font-size:.68rem;font-weight:700;background:var(--p-light);color:var(--p);margin-bottom:5px;
+}
+.ck-event-name{font-size:.9rem;font-weight:700;color:var(--txt-dark);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ck-event-meta-mini{font-size:.75rem;color:var(--txt-muted);margin-top:4px;line-height:1.5}
+
+/* Ticket lines */
+.ck-ticket-lines{padding:14px 16px;border-bottom:1px solid var(--border-lt)}
+.ck-ticket-line{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 12px;border-radius:var(--r-md);background:var(--bg);margin-bottom:7px;
+  font-size:.88rem;border:1px solid var(--border-lt);
+}
+.ck-ticket-line:last-child{margin-bottom:0}
+.ck-tl-name{font-weight:600;color:var(--txt-dark)}
+.ck-tl-qty{font-size:.78rem;color:var(--txt-muted);margin-top:2px}
+.ck-tl-price{font-weight:700;color:var(--accent)}
+
+/* Price breakdown */
+.ck-price-breakdown{padding:16px}
+.ck-price-row{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;color:var(--txt-body);margin-bottom:8px}
+.ck-price-discount{color:var(--success)}
+.ck-price-divider{height:1px;background:var(--border);margin:10px 0;border-style:dashed}
+.ck-price-total{font-size:1rem;color:var(--txt-dark);margin-bottom:4px}
+.ck-price-total strong{font-size:1.3rem;font-weight:900;color:var(--accent)}
+.ck-price-vat{font-size:.72rem;color:var(--txt-muted);text-align:right}
+
+/* Pay button + notes */
+.ck-summary-box > .ck-btn-pay{margin:0 16px 10px;width:calc(100% - 32px);border-radius:var(--r-md)}
+.ck-pay-note{font-size:.72rem;color:var(--txt-muted);text-align:center;padding:0 16px 14px;line-height:1.5}
+
+/* Trust badges */
+.ck-trust-badges{
+  display:flex;justify-content:center;gap:14px;padding:12px 16px 16px;
+  border-top:1px solid var(--border-lt);flex-wrap:wrap;
+}
+.ck-trust-item{font-size:.72rem;font-weight:600;color:var(--txt-muted)}
+
+/* ============================================================ SUCCESS OVERLAY */
+.ck-success-overlay{
+  position:fixed;inset:0;z-index:900;
+  background:linear-gradient(135deg,#001f4d 0%,#003580 50%,#005fa0 100%);
+  display:flex;align-items:flex-start;justify-content:center;
+  overflow-y:auto;padding:40px 20px 60px;
+  opacity:0;pointer-events:none;transition:opacity .4s ease;
+}
+.ck-success-overlay.open{opacity:1;pointer-events:auto}
+
+.ck-confetti-canvas{
+  position:fixed;inset:0;pointer-events:none;z-index:901;
+}
+
+.ck-success-content{
+  position:relative;z-index:902;
+  width:100%;max-width:560px;
+  animation:slideUp .5s ease .2s both;
+}
+
+/* Success header */
+.ck-success-header{text-align:center;margin-bottom:28px;color:#fff}
+.ck-success-icon{font-size:4rem;margin-bottom:12px;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) .3s both}
+.ck-success-title{font-size:2rem;font-weight:900;margin-bottom:8px;letter-spacing:-.5px}
+.ck-success-subtitle{font-size:.95rem;color:rgba(255,255,255,.75);max-width:380px;margin:0 auto 16px;line-height:1.6}
+.ck-order-id-badge{
+  display:inline-block;padding:8px 20px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  border-radius:var(--r-full);font-size:.88rem;font-weight:700;color:rgba(255,255,255,.9);
+  backdrop-filter:blur(8px);
+}
+.ck-order-id-badge strong{color:#FFD56B;font-size:1rem}
+
+/* E-Ticket */
+.ck-eticket{
+  background:#fff;border-radius:var(--r-xl);overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);margin-bottom:24px;
+}
+.ck-eticket-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;background:linear-gradient(135deg,#003580,#0194F3);
+}
+.ck-eticket-brand{display:flex;align-items:center;gap:8px}
+.ck-eticket-logo{font-size:1.3rem}
+.ck-eticket-brand-name{font-size:1rem;font-weight:800;color:#fff}
+.ck-eticket-status{
+  padding:4px 12px;background:rgba(0,166,81,.2);border:1px solid rgba(0,166,81,.4);
+  border-radius:var(--r-full);font-size:.75rem;font-weight:700;color:#4ade80;
+}
+.ck-eticket-event-name{
+  font-size:1.1rem;font-weight:800;color:var(--txt-dark);line-height:1.3;
+  padding:16px 20px 10px;
+}
+.ck-eticket-meta{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0 20px 10px;
+}
+.ck-eticket-meta-item{padding:8px 0;border-bottom:1px solid var(--border-lt)}
+.ck-eticket-meta-item:last-child,.ck-eticket-meta-item:nth-last-child(2){border-bottom:none}
+.ck-eticket-meta-label{font-size:.72rem;color:var(--txt-muted);font-weight:600;margin-bottom:2px}
+.ck-eticket-meta-val{font-size:.85rem;font-weight:700;color:var(--txt-dark)}
+
+/* Perforation */
+.ck-eticket-perf{
+  display:flex;align-items:center;position:relative;margin:4px 0;
+}
+.ck-perf-notch{
+  width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#001f4d,#005fa0);
+  flex-shrink:0;
+}
+.ck-perf-notch.left{margin-left:-10px}
+.ck-perf-notch.right{margin-right:-10px}
+.ck-perf-line{
+  flex:1;border-top:2px dashed var(--border);margin:0 4px;
+}
+
+/* QR section */
+.ck-eticket-qr-section{
+  display:flex;align-items:center;gap:20px;padding:16px 20px 20px;
+}
+.ck-eticket-qr-box{
+  width:120px;height:120px;flex-shrink:0;
+  background:#fff;border:2px solid var(--border);border-radius:var(--r-md);
+  overflow:hidden;
+}
+.ck-eticket-qr-info{flex:1}
+.ck-eticket-booking-id{
+  font-size:1rem;font-weight:900;color:var(--p);
+  font-family:'Courier New',monospace;letter-spacing:1px;margin-bottom:4px;
+}
+.ck-eticket-qr-hint{font-size:.78rem;color:var(--txt-muted);margin-bottom:6px}
+.ck-eticket-qty{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;background:var(--p-light);border-radius:var(--r-full);
+  font-size:.78rem;font-weight:700;color:var(--p);
+}
+
+/* Success action buttons */
+.ck-success-actions{
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.ck-success-actions > *{flex:1;min-width:140px}
+
+/* ============================================================ EXPIRED OVERLAY */
+.ck-expired-overlay{
+  position:fixed;inset:0;z-index:800;
+  background:rgba(10,20,40,.85);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.ck-expired-card{
+  background:#fff;border-radius:var(--r-xl);padding:40px;
+  max-width:420px;width:100%;text-align:center;box-shadow:var(--sh-xl);
+}
+.ck-expired-icon{font-size:3.5rem;margin-bottom:16px}
+.ck-expired-title{font-size:1.4rem;font-weight:800;color:var(--txt-dark);margin-bottom:10px}
+.ck-expired-desc{font-size:.9rem;color:var(--txt-muted);line-height:1.7;margin-bottom:24px}
+.ck-expired-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ============================================================ TOAST */
+.ck-toast-container{
+  position:fixed;bottom:24px;right:24px;z-index:1000;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none;
+}
+.ck-toast{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;background:#1C2430;color:#fff;
+  border-radius:var(--r-lg);box-shadow:var(--sh-lg);
+  font-size:.88rem;font-weight:500;pointer-events:auto;max-width:340px;
+  animation:toastIn .3s ease;
+}
+.ck-toast-success{border-left:4px solid var(--success)}
+.ck-toast-error  {border-left:4px solid var(--danger)}
+.ck-toast-info   {border-left:4px solid var(--p)}
+
+/* Print styles */
+@media print {
+  .ck-header,.ck-form-col,.ck-success-header,.ck-success-actions,.ck-confetti-canvas{display:none!important}
+  .ck-success-overlay{position:static;background:none;padding:0}
+  .ck-eticket{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+  .ck-eticket-top{background:#003580!important;-webkit-print-color-adjust:exact}
+}
+
+/* ============================================================ KEYFRAMES */
+@keyframes slideUp  {from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes popIn    {from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes toastIn  {from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* ============================================================ RESPONSIVE */
+@media(max-width:900px){
+  .ck-layout{grid-template-columns:1fr;gap:0}
+  .ck-summary-col{order:-1;margin-bottom:16px}
+  .ck-summary-box{position:static;border-radius:var(--r-lg)}
+  .ck-mobile-pay-btn{display:block}
+  .ck-summary-box > .ck-btn-pay,.ck-pay-note{display:none}
+  .ck-step-label{display:none}
+  .ck-step-connector{width:28px}
+  .ck-secure-badge{display:none}
+  .ck-vietqr-box{flex-direction:column;align-items:center}
+  .ck-qr-wrapper{width:160px}
+}
+
+@media(max-width:600px){
+  .ck-container{padding:0 16px}
+  .ck-form-grid{grid-template-columns:1fr}
+  .ck-field-full{grid-column:auto}
+  .ck-card-form{grid-template-columns:1fr}
+  .ck-eticket-meta{grid-template-columns:1fr}
+  .ck-success-actions{flex-direction:column}
+  .ck-success-actions > *{min-width:unset}
+  .ck-vietqr-info .ck-vq-row{flex-direction:column;align-items:flex-start;gap:2px}
+  .ck-wallet-grid{flex-direction:column}
+}
+
+/* ============================================================ EVENT CARD (rendered by JS) */
+.ck-ec-row{display:flex;gap:12px;align-items:flex-start}
+.ck-ec-thumb{width:72px;height:54px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--border)}
+.ck-ec-info{flex:1;min-width:0}
+.ck-ec-name{font-weight:700;font-size:.92rem;color:var(--txt-dark);line-height:1.3;margin-bottom:4px}
+.ck-ec-meta{font-size:.78rem;color:var(--txt-muted);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ============================================================ TICKET LINE */
+.ck-ticket-line{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.ck-tl-name{font-size:.85rem;color:var(--txt-dark)}
+.ck-tl-price{font-size:.85rem;font-weight:600;color:var(--txt-dark);white-space:nowrap}
+
+/* ============================================================ VOUCHER RESULT */
+.ck-voucher-ok{color:#00A651;font-size:.85rem;font-weight:500}
+.ck-voucher-err{color:#E74C3C;font-size:.85rem;font-weight:500}
+
+/* ============================================================ TOAST .show (opacity transition) */
+.ck-toast{opacity:0;transform:translateX(120%);transition:opacity .3s ease,transform .3s ease}
+.ck-toast.show{opacity:1;transform:translateX(0)}
+
+/* ============================================================ INPUT STATES */
+.ck-input.valid{border-color:#00A651}
+.ck-input.error{border-color:#E74C3C;background:#fff8f8}

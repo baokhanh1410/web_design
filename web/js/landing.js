@@ -600,9 +600,9 @@ function renderEventCard(evt, rank) {
         >
         <div class="lp-event-badges">
           ${rankBadge}
+          ${statusBadge}
           <span class="lp-event-badge lp-event-badge-cat">${evt.category}</span>
           ${hotBadge}
-          ${statusBadge}
         </div>
         <button
           class="lp-event-wishlist ${liked ? 'liked' : ''}"

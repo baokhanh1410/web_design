@@ -526,6 +526,12 @@ function renderEvents(tab) {
     ? allLpEvents
     : allLpEvents.filter(e => normalizeCategory(e.category) === normalizeCategory(tab));
 
+  // Chỉ hiển thị 5 sự kiện có lượt đặt cao nhất
+  events = events
+    .slice()
+    .sort((a, b) => (Number(b.registered) || 0) - (Number(a.registered) || 0))
+    .slice(0, 5);
+
   if (events.length === 0) {
     grid.innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--lp-text-muted);">
@@ -536,14 +542,14 @@ function renderEvents(tab) {
     return;
   }
 
-  grid.innerHTML = events.map(evt => renderEventCard(evt)).join('');
+  grid.innerHTML = events.map((evt, idx) => renderEventCard(evt, idx + 1)).join('');
 }
 
 function normalizeCategory(cat) {
   return mapToStandardCategory(cat).toLowerCase().replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 }
 
-function renderEventCard(evt) {
+function renderEventCard(evt, rank) {
   const rawPct = evt.capacity > 0 ? Math.round((evt.registered / evt.capacity) * 100) : 0;
   const pct = isNaN(rawPct) ? 0 : rawPct;
   const isSoldOut = pct >= 100;
@@ -558,13 +564,17 @@ function renderEventCard(evt) {
       })
     : 'Chưa xác định';
 
+  const rankBadge = rank
+    ? `<span class="lp-event-badge lp-event-badge-rank" style="background:linear-gradient(135deg,#FF5E1F,#F5A623);color:#fff;font-weight:800;box-shadow:0 2px 6px rgba(255,94,31,0.4);">#${rank} HOT</span>`
+    : '';
+
   const statusBadge = isSoldOut
     ? `<span class="lp-event-badge lp-event-badge-sold-out">🔴 Hết vé</span>`
     : isAlmost
     ? `<span class="lp-event-badge lp-event-badge-almost">🔥 Sắp hết</span>`
     : '';
 
-  const hotBadge = evt.is_hot && !isSoldOut
+  const hotBadge = evt.is_hot && !isSoldOut && !rankBadge
     ? `<span class="lp-event-badge lp-event-badge-hot">⭐ HOT</span>`
     : '';
 
@@ -589,6 +599,7 @@ function renderEventCard(evt) {
           onerror="this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80'"
         >
         <div class="lp-event-badges">
+          ${rankBadge}
           <span class="lp-event-badge lp-event-badge-cat">${evt.category}</span>
           ${hotBadge}
           ${statusBadge}

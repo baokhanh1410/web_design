@@ -749,8 +749,14 @@ ul { list-style: none; }
 
 .lp-events-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
   gap: 20px;
+}
+
+@media (min-width: 1200px) {
+  .lp-events-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 .lp-event-card {

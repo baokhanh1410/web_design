@@ -166,6 +166,24 @@ const LP_EVENTS = [
   }
 ];
 
+function mapToStandardCategory(cat) {
+  if (!cat) return "Công nghệ & AI";
+  const norm = cat.toLowerCase().replace(/&amp;/g, '&').trim();
+  if (norm.includes("nhạc") || norm.includes("music") || norm.includes("night") || norm.includes("ẩm thực") || norm.includes("lễ hội")) {
+    return "Âm nhạc & Lễ hội";
+  }
+  if (norm.includes("công nghệ") || norm.includes("ai") || norm.includes("tech") || norm.includes("hội thảo") || norm.includes("workshop") || norm.includes("kỹ năng")) {
+    return "Công nghệ & AI";
+  }
+  if (norm.includes("thể thao") || norm.includes("marathon") || norm.includes("triathlon") || norm.includes("chạy")) {
+    return "Thể thao & Giải trí";
+  }
+  if (norm.includes("nghệ thuật") || norm.includes("triển lãm") || norm.includes("art")) {
+    return "Nghệ thuật & Triển lãm";
+  }
+  return cat;
+}
+
 function getLpEvents() {
   try {
     const stored = localStorage.getItem('eventhub_events');
@@ -177,12 +195,12 @@ function getLpEvents() {
         const customNorm = list.map(e => ({
           id: Number(e.id),
           name: e.name,
-          category: e.category,
+          category: mapToStandardCategory(e.category),
           date: e.start_date || e.date,
           venue: e.venue,
           price: Number(e.price) || 0,
           original_price: Number(e.original_price || e.originalPrice) || Number(e.price) || 0,
-          image: e.image,
+          image: e.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
           capacity: Number(e.capacity) || 1000,
           registered: Number(e.registered) || 0,
           is_hot: e.is_hot !== undefined ? e.is_hot : true
@@ -227,7 +245,7 @@ const lpState = {
 // 3. INIT
 // ============================================================
 
-document.addEventListener('DOMContentLoaded', () => {
+function initLanding() {
   loadUser();
   try {
     const saved = JSON.parse(localStorage.getItem('eventhub_wishlist') || '[]');
@@ -244,7 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
   startCountdown();
   setupScrollEffects();
   setupStatsObserver();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLanding);
+} else {
+  initLanding();
+}
 
 // ============================================================
 // 4. AUTH
@@ -259,7 +283,11 @@ function loadUser() {
     }
     if (saved) lpState.user = JSON.parse(saved);
   } catch (e) { /* ignore */ }
-  updateAuthUI();
+  try {
+    updateAuthUI();
+  } catch (e) {
+    console.warn('updateAuthUI non-fatal error:', e);
+  }
 }
 
 function updateAuthUI() {
@@ -278,13 +306,13 @@ function updateAuthUI() {
   const mobAdmin   = document.getElementById('lp-mobile-admin');
 
   if (lpState.user && lpState.user.name) {
-    guestEl.style.display = 'none';
-    userEl.style.display  = 'flex';
-    avatarEl.src = lpState.user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80';
+    if (guestEl) guestEl.style.display = 'none';
+    if (userEl) userEl.style.display  = 'flex';
+    if (avatarEl) avatarEl.src = lpState.user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80';
     const firstName = lpState.user.name.split(' ').pop();
-    nameEl.textContent   = firstName;
-    menuName.textContent = lpState.user.name;
-    menuRole.textContent = lpState.user.role || 'Thành viên';
+    if (nameEl) nameEl.textContent   = firstName;
+    if (menuName) menuName.textContent = lpState.user.name;
+    if (menuRole) menuRole.textContent = lpState.user.role || 'Thành viên';
 
     // Role-based permissions: Admin and Organizer have access to Create Event & ML
     const role = (lpState.user.role || '').toLowerCase();
@@ -297,8 +325,8 @@ function updateAuthUI() {
     if (mobCreate)  mobCreate.style.display  = hasAdminAccess ? 'block' : 'none';
     if (mobAdmin)   mobAdmin.style.display   = hasAdminAccess ? 'block' : 'none';
   } else {
-    guestEl.style.display = 'flex';
-    userEl.style.display  = 'none';
+    if (guestEl) guestEl.style.display = 'flex';
+    if (userEl) userEl.style.display  = 'none';
 
     if (navCreate) navCreate.style.display = 'none';
     if (navAdmin)  navAdmin.style.display  = 'none';
@@ -307,15 +335,24 @@ function updateAuthUI() {
     if (mobCreate)  mobCreate.style.display  = 'none';
     if (mobAdmin)   mobAdmin.style.display   = 'none';
   }
+
+  // Also sync with global header if present
+  if (typeof renderHubHeader === 'function') {
+    renderHubHeader();
+  }
 }
 
 function openAuthModal() {
-  document.getElementById('lp-auth-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  const modal = document.getElementById('lp-auth-modal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
 }
 
 function closeAuthModal() {
-  document.getElementById('lp-auth-modal').classList.remove('open');
+  const modal = document.getElementById('lp-auth-modal');
+  if (modal) modal.classList.remove('open');
   document.body.style.overflow = '';
 }
 
@@ -369,12 +406,14 @@ function handleLogout() {
   lpState.user = null;
   localStorage.removeItem('eventhub_user');
   updateAuthUI();
-  document.getElementById('lp-user-menu').classList.remove('open');
+  const menu = document.getElementById('lp-user-menu');
+  if (menu) menu.classList.remove('open');
   showToast('👋 Đã đăng xuất', 'info');
 }
 
 function toggleUserMenu() {
-  document.getElementById('lp-user-menu').classList.toggle('open');
+  const menu = document.getElementById('lp-user-menu');
+  if (menu) menu.classList.toggle('open');
 }
 
 // Close user menu on outside click
@@ -396,17 +435,20 @@ document.addEventListener('click', (e) => {
 function toggleMobileMenu() {
   const nav = document.getElementById('lp-mobile-nav');
   const burger = document.getElementById('lp-burger');
-  nav.classList.toggle('open');
-  burger.classList.toggle('open');
+  if (nav) nav.classList.toggle('open');
+  if (burger) burger.classList.toggle('open');
 }
 
 function closeMobileMenu() {
-  document.getElementById('lp-mobile-nav').classList.remove('open');
-  document.getElementById('lp-burger').classList.remove('open');
+  const nav = document.getElementById('lp-mobile-nav');
+  const burger = document.getElementById('lp-burger');
+  if (nav) nav.classList.remove('open');
+  if (burger) burger.classList.remove('open');
 }
 
 function setupScrollEffects() {
-  const header = document.getElementById('lp-header');
+  const header = document.getElementById('lp-header') || document.getElementById('hub-header');
+  if (!header) return;
   window.addEventListener('scroll', () => {
     if (window.scrollY > 10) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
@@ -433,7 +475,13 @@ function renderCategories() {
 
 function filterByCategory(catId, evt) {
   // Map category id to tab name
-  const map = { music:'Âm nhạc & Lễ hội', tech:'Công nghệ & AI', sport:'Thể thao & Marathon', art:'Nghệ thuật & Triển lãm', night:'Nightlife' };
+  const map = {
+    music: 'Âm nhạc & Lễ hội',
+    tech: 'Công nghệ & AI',
+    sport: 'Thể thao & Giải trí',
+    art: 'Nghệ thuật & Triển lãm',
+    night: 'Âm nhạc & Lễ hội'
+  };
   const tabVal = map[catId] || 'all';
 
   // Highlight card
@@ -444,7 +492,8 @@ function filterByCategory(catId, evt) {
   // Switch events tab
   renderEvents(tabVal);
   document.querySelectorAll('.lp-tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tab === tabVal || (tabVal === 'Âm nhạc & Lễ hội' && btn.dataset.tab === 'Âm nhạc &amp; Lễ hội'));
+    const bTab = (btn.dataset.tab || '').replace(/&amp;/g, '&');
+    btn.classList.toggle('active', bTab === tabVal);
   });
 
   // Scroll to events
@@ -491,7 +540,7 @@ function renderEvents(tab) {
 }
 
 function normalizeCategory(cat) {
-  return cat.toLowerCase().replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+  return mapToStandardCategory(cat).toLowerCase().replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 }
 
 function renderEventCard(evt) {

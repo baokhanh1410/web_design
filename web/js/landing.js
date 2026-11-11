@@ -744,7 +744,22 @@ function startCountdown() {
 // 11. STATS COUNTER ANIMATION
 // ============================================================
 
+function randomizeMarketingStats() {
+  document.querySelectorAll('.lp-stat-number').forEach(el => {
+    const min = parseInt(el.dataset.min, 10);
+    const max = parseInt(el.dataset.max, 10);
+    if (!isNaN(min) && !isNaN(max) && max >= min) {
+      const rand = Math.floor(Math.random() * (max - min + 1)) + min;
+      el.dataset.target = rand;
+      if (!lpState.statsAnimated) {
+        el.textContent = rand.toLocaleString('vi-VN');
+      }
+    }
+  });
+}
+
 function setupStatsObserver() {
+  randomizeMarketingStats();
   const statsRow = document.querySelector('.lp-stats-row');
   if (!statsRow || !window.IntersectionObserver) {
     animateStats();
@@ -755,20 +770,21 @@ function setupStatsObserver() {
       lpState.statsAnimated = true;
       animateStats();
     }
-  }, { threshold: 0.4 });
+  }, { threshold: 0.25 });
   observer.observe(statsRow);
 }
 
 function animateStats() {
   document.querySelectorAll('.lp-stat-number').forEach(el => {
     const target = parseInt(el.dataset.target, 10);
-    let current = 0;
-    const step = Math.ceil(target / 60);
+    if (isNaN(target)) return;
+    let current = Math.floor(target * 0.45);
+    const step = Math.max(1, Math.ceil((target - current) / 40));
     const timer = setInterval(() => {
       current = Math.min(current + step, target);
       el.textContent = current.toLocaleString('vi-VN');
       if (current >= target) clearInterval(timer);
-    }, 25);
+    }, 22);
   });
 }
 

@@ -384,6 +384,64 @@ ul{list-style:none}
 .ed-lineup-name{font-size:.9rem;font-weight:700;color:var(--txt-dark)}
 .ed-lineup-genre{font-size:.78rem;color:var(--txt-muted);margin-top:2px}
 
+/* ---- RULES & GUIDELINES ---- */
+.ed-rules-card {
+  background: var(--bg);
+  border: 1px solid var(--border-lt);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.ed-rules-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--txt-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ed-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (max-width: 640px) {
+  .ed-rules-grid { grid-template-columns: 1fr; }
+}
+.ed-rule-item {
+  background: #fff;
+  border: 1px solid var(--border-lt);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all var(--t);
+}
+.ed-rule-item:hover {
+  border-color: rgba(1, 148, 243, 0.35);
+  box-shadow: var(--sh-sm);
+  transform: translateY(-2px);
+}
+.ed-rule-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--txt-dark);
+}
+.ed-rule-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.ed-rule-desc {
+  font-size: 0.84rem;
+  color: var(--txt-muted);
+  line-height: 1.55;
+}
+
 /* ---- POLICY ---- */
 .ed-policy-accordion{}
 .ed-policy-item{border-bottom:1px solid var(--border-lt)}

@@ -37,7 +37,7 @@ const LP_EVENTS = [
   {
     id: 3,
     name: "Workshop Đầu Tư Tài Chính Cá Nhân F.I.R.E — Thực Chiến",
-    category: "Hội thảo & Tech",
+    category: "Công nghệ & AI",
     date: "2026-11-28T14:00:00",
     venue: "SECC Quận 7, TP. Hồ Chí Minh",
     price: 200000,
@@ -50,7 +50,7 @@ const LP_EVENTS = [
   {
     id: 4,
     name: "Lễ Hội Ẩm Thực Đường Phố & Bia Thủ Công Sài Gòn 2026",
-    category: "Nightlife",
+    category: "Âm nhạc & Lễ hội",
     date: "2026-12-05T16:00:00",
     venue: "Công viên Bến Bạch Đằng, Quận 1, TP.HCM",
     price: 150000,
@@ -76,7 +76,7 @@ const LP_EVENTS = [
   {
     id: 6,
     name: "Giải Chạy Bán Marathon Đêm Đà Lạt — Dalat Night Run 2026",
-    category: "Thể thao & Marathon",
+    category: "Thể thao & Giải trí",
     date: "2026-11-25T19:00:00",
     venue: "Quảng trường Lâm Viên & Hồ Xuân Hương, Đà Lạt",
     price: 490000,
@@ -115,7 +115,7 @@ const LP_EVENTS = [
   {
     id: 9,
     name: "Lễ Hội EDM VinaFest 2026 — Đêm Nhạc Điện Tử",
-    category: "Nightlife",
+    category: "Âm nhạc & Lễ hội",
     date: "2026-12-19T21:00:00",
     venue: "GEM Center, Quận 1, TP.HCM",
     price: 850000,
@@ -128,7 +128,7 @@ const LP_EVENTS = [
   {
     id: 10,
     name: "Hội Thảo UX Design Thinking — Lấy Người Dùng Làm Trung Tâm",
-    category: "Hội thảo & Tech",
+    category: "Công nghệ & AI",
     date: "2026-11-30T09:00:00",
     venue: "Online (Zoom Webinar)",
     price: 0,
@@ -154,7 +154,7 @@ const LP_EVENTS = [
   {
     id: 12,
     name: "Iron Man Vietnam Triathlon 2026 — Nha Trang",
-    category: "Thể thao & Marathon",
+    category: "Thể thao & Giải trí",
     date: "2026-12-22T05:00:00",
     venue: "Bãi biển Trần Phú, Nha Trang",
     price: 2500000,
@@ -495,15 +495,19 @@ function normalizeCategory(cat) {
 }
 
 function renderEventCard(evt) {
-  const pct = Math.round((evt.registered / evt.capacity) * 100);
+  const rawPct = evt.capacity > 0 ? Math.round((evt.registered / evt.capacity) * 100) : 0;
+  const pct = isNaN(rawPct) ? 0 : rawPct;
   const isSoldOut = pct >= 100;
   const isAlmost  = pct >= 85 && !isSoldOut;
   const isFree    = evt.price === 0;
   const liked     = lpState.likedEvents.has(evt.id);
 
-  const dateStr = new Date(evt.date).toLocaleDateString('vi-VN', {
-    weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-  });
+  const rawDate = evt.date ? new Date(evt.date) : null;
+  const dateStr = rawDate && !isNaN(rawDate)
+    ? rawDate.toLocaleDateString('vi-VN', {
+        weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      })
+    : 'Chưa xác định';
 
   const statusBadge = isSoldOut
     ? `<span class="lp-event-badge lp-event-badge-sold-out">🔴 Hết vé</span>`
@@ -566,7 +570,7 @@ function renderEventCard(evt) {
           <div class="lp-event-progress-fill" style="width:${Math.min(pct,100)}%;${pct>=85?'background:linear-gradient(90deg,#F5A623,#E53935)':''}"></div>
         </div>
         <div class="lp-event-progress-label">
-          <span>${evt.registered.toLocaleString('vi-VN')} đã đặt</span>
+          <span>${(evt.registered || 0).toLocaleString('vi-VN')} đã đặt</span>
           <span>${pct}%</span>
         </div>
       </div>

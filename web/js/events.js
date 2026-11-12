@@ -765,18 +765,21 @@ function renderResults() {
 }
 
 function renderCard(evt, index) {
+  const isCancelled = (evt.status || '').toLowerCase() === 'cancelled';
   const pct = Math.min(100, Math.round((evt.registered / evt.capacity) * 100));
-  const isSoldOut = pct >= 100;
+  const isSoldOut = pct >= 100 || isCancelled;
   const isAlmost  = pct >= 85 && !isSoldOut;
   const isFree    = evt.price === 0;
   const liked     = evState.liked.has(evt.id);
   const delay     = `animation-delay:${index * 50}ms`;
 
-  const statusBadge = isSoldOut
-    ? `<span class="ev-badge ev-badge-sold">🔴 Hết vé</span>`
-    : isAlmost
-    ? `<span class="ev-badge ev-badge-almost">🔥 Sắp hết</span>`
-    : `<span class="ev-badge ev-badge-open">✅ Đang mở bán</span>`;
+  const statusBadge = isCancelled
+    ? `<span class="ev-badge ev-badge-sold">❌ Đã hủy</span>`
+    : (isSoldOut
+      ? `<span class="ev-badge ev-badge-sold">🔴 Hết vé</span>`
+      : isAlmost
+      ? `<span class="ev-badge ev-badge-almost">🔥 Sắp hết</span>`
+      : `<span class="ev-badge ev-badge-open">✅ Đang mở bán</span>`);
 
   const hotBadge = evt.isHot && !isSoldOut
     ? `<span class="ev-badge ev-badge-hot">⭐ HOT</span>` : '';
@@ -862,8 +865,8 @@ function renderCard(evt, index) {
         <button
           class="ev-card-cta"
           onclick="goToEvent(${evt.id})"
-          ${isSoldOut ? 'disabled' : ''}
-        >${isSoldOut ? 'Hết vé' : 'Xem chi tiết →'}</button>
+          ${isSoldOut ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''}
+        >${isCancelled ? 'Đã hủy' : (isSoldOut ? 'Hết vé' : 'Xem chi tiết →')}</button>
       </div>
     </article>
   `;

@@ -194,12 +194,24 @@ def update_event(event_id: int, req: UpdateEventRequest, db=Depends(get_db), _=D
 
 
 @app.patch("/api/events/{event_id}/cancel")
-def cancel_event(event_id: int, db=Depends(get_db), _=Depends(require_admin)):
+def cancel_event(event_id: int, db=Depends(get_db), _=Depends(require_organizer_or_admin)):
     from sqlalchemy import text
     try:
         db.execute(text("UPDATE events SET status = 'Cancelled' WHERE event_id = :eid"), {"eid": event_id})
         db.commit()
         return {"message": "Event cancelled successfully"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.patch("/api/events/{event_id}/restore")
+def restore_event(event_id: int, db=Depends(get_db), _=Depends(require_organizer_or_admin)):
+    from sqlalchemy import text
+    try:
+        db.execute(text("UPDATE events SET status = 'Upcoming' WHERE event_id = :eid"), {"eid": event_id})
+        db.commit()
+        return {"message": "Event restored successfully"}
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=400, detail=str(e))

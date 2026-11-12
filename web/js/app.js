@@ -661,6 +661,7 @@ function renderEventsGrid() {
   }
 
   grid.innerHTML = filtered.map(evt => {
+    const isCancelled = (evt.status || '').toLowerCase() === 'cancelled';
     const fillPercent = Math.min(100, Math.round((evt.registered / evt.capacity) * 100));
     const slotsLeft = Math.max(0, evt.capacity - evt.registered);
     const colorClass = fillPercent > 85 ? 'red' : (fillPercent > 60 ? 'orange' : 'green');
@@ -671,7 +672,7 @@ function renderEventsGrid() {
           <img src="${evt.image}" alt="${evt.name}" loading="lazy">
           <div class="card-badges-top">
             <span class="card-category-pill">${evt.category}</span>
-            ${evt.is_hot ? `<span class="card-hot-badge">🔥 Bán chạy</span>` : ''}
+            ${isCancelled ? `<span class="badge badge-danger" style="font-weight:700;">❌ Đã hủy</span>` : (evt.is_hot ? `<span class="card-hot-badge">🔥 Bán chạy</span>` : '')}
           </div>
         </div>
 
@@ -704,8 +705,8 @@ function renderEventsGrid() {
               <span class="price-label">Giá vé từ</span>
               <span class="price-val">${formatVND(evt.price)}</span>
             </div>
-            <button class="btn btn-cta btn-sm" onclick="openBookingModal(${evt.id})">
-              Đặt vé ngay
+            <button class="btn btn-cta btn-sm" ${isCancelled ? 'disabled style="opacity:0.55; cursor:not-allowed;"' : ''} onclick="${isCancelled ? '' : `openBookingModal(${evt.id})`}">
+              ${isCancelled ? 'Đã hủy' : 'Đặt vé ngay'}
             </button>
           </div>
         </div>
@@ -859,8 +860,9 @@ function renderAdminEventsTable() {
       if (!categories.includes(adminCategoryFilter)) return false;
     }
     if (adminStatusFilter) {
-      if (adminStatusFilter === 'Cancelled' && e.status !== 'Cancelled') return false;
-      if (adminStatusFilter === 'Open' && e.status === 'Cancelled') return false;
+      const isEvtCancelled = (e.status || '').toLowerCase() === 'cancelled';
+      if (adminStatusFilter === 'Cancelled' && !isEvtCancelled) return false;
+      if (adminStatusFilter === 'Open' && isEvtCancelled) return false;
     }
     return true;
   });
@@ -877,7 +879,7 @@ function renderAdminEventsTable() {
   }
 
   tableBody.innerHTML = filtered.map(e => {
-    const isCancelled = e.status === 'Cancelled';
+    const isCancelled = (e.status || '').toLowerCase() === 'cancelled';
     const fillPercent = Math.min(100, Math.round(((e.registered || 0) / (e.capacity || 1)) * 100));
     return `
       <tr>
@@ -1419,19 +1421,66 @@ async function handleRegisterFormSubmit(e) {
   showToast(`Đăng ký và đăng nhập thành công: ${name}!`, "success");
 }
 
-// Admin Operations
-function cancelEvent(eventId) {
-  if (confirm("Bạn có chắc chắn muốn hủy sự kiện này? Hành động này sẽ thông báo tới toàn bộ người mua vé.")) {
-    const evt = state.events.find(e => e.id === eventId);
-    if (evt) {
-      evt.status = 'Cancelled';
-      localStorage.setItem('eventhub_events', JSON.stringify(state.events));
-      renderAdminDashboard();
-      renderEventsGrid();
-      showToast("Đã hủy sự kiện thành công", "info");
+// Admin Operations: Hủy & Khôi phục sự kiện
+async function toggleEventStatus(eventId) {
+  if (!hasAdminPermission(state.user)) {
+    showToast("⛔ Bạn không có quyền thay đổi trạng thái sự kiện. Yêu cầu tài khoản Admin hoặc Ban tổ chức!", "error");
+    return;
+  }
+
+  const evt = state.events.find(e => Number(e.id) === Number(eventId));
+  if (!evt) {
+    showToast("Không tìm thấy sự kiện!", "error");
+    return;
+  }
+
+  const isCancelled = (evt.status || '').toLowerCase() === 'cancelled';
+  const actionText = isCancelled ? "khôi phục" : "hủy";
+  const confirmMsg = isCancelled
+    ? `Bạn có chắc chắn muốn khôi phục sự kiện "${evt.name}" để tiếp tục mở bán vé?`
+    : `Bạn có chắc chắn muốn hủy sự kiện "${evt.name}"? Hành động này sẽ tạm ngưng bán vé sự kiện này.`;
+
+  if (!confirm(confirmMsg)) {
+    return;
+  }
+
+  const newStatus = isCancelled ? 'Upcoming' : 'Cancelled';
+  evt.status = newStatus;
+
+  // 1. Lưu LocalStorage để đồng bộ xuyên suốt các trang
+  localStorage.setItem('eventhub_events', JSON.stringify(state.events));
+
+  // 2. Đồng bộ với Live API backend nếu đang kết nối
+  if (state.apiConnected) {
+    try {
+      const apiHost = window.location.hostname || 'localhost';
+      const endpoint = isCancelled ? 'restore' : 'cancel';
+      const token = localStorage.getItem('eventhub_token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      await fetch(`http://${apiHost}:8000/api/events/${evt.id}/${endpoint}`, {
+        method: 'PATCH',
+        headers
+      });
+    } catch (err) {
+      console.warn("API sync status failed, fallback to local storage:", err);
     }
   }
+
+  // 3. Render lại toàn bộ bảng và grid
+  renderAdminDashboard();
+  renderEventsGrid();
+
+  showToast(`Đã ${actionText} sự kiện "${evt.name}" thành công!`, isCancelled ? "success" : "info");
 }
+
+function cancelEvent(eventId) {
+  return toggleEventStatus(eventId);
+}
+
+window.toggleEventStatus = toggleEventStatus;
+window.cancelEvent = toggleEventStatus;
 
 function openCreateEventModal() {
   if (!hasAdminPermission(state.user)) {

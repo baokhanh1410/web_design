@@ -262,6 +262,43 @@ function initLanding() {
   startCountdown();
   setupScrollEffects();
   setupStatsObserver();
+  syncLiveEvents();
+}
+
+async function syncLiveEvents() {
+  try {
+    const apiHost = window.location.hostname || 'localhost';
+    const res = await fetch(`http://${apiHost}:8000/api/events`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        const mapped = data.map(evt => {
+          const categories = Array.isArray(evt.categories) ? evt.categories : (evt.categories || '').split(', ').filter(Boolean);
+          const rawCat = categories[0] || 'Khác';
+          return {
+            id: evt.event_id,
+            name: evt.event_name,
+            category: mapToStandardCategory(rawCat),
+            categories: categories,
+            date: evt.event_date,
+            start_date: evt.event_date,
+            venue: evt.venue_name,
+            organizer: evt.organizer_name,
+            capacity: Number(evt.capacity) || 1000,
+            registered: Number(evt.current_registrations) || 0,
+            price: Number(evt.base_price) || 0,
+            original_price: Number(evt.base_price) || 0,
+            status: evt.status,
+            image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
+            is_hot: true
+          };
+        });
+        localStorage.setItem('eventhub_events', JSON.stringify(mapped));
+        const activeTab = document.querySelector('.lp-tab-btn.active');
+        renderEvents(activeTab ? activeTab.dataset.tab : 'all');
+      }
+    }
+  } catch (e) {}
 }
 
 if (document.readyState === 'loading') {

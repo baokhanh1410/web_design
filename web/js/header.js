@@ -6,20 +6,23 @@
 const HUB_ACCOUNTS = {
   Admin: {
     id: 1,
+    user_id: 1,
     name: 'Nguyễn Bảo Khánh',
     email: 'khanh.admin@eventhub.vn',
     role: 'Admin',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80'
   },
   Organizer: {
-    id: 2,
+    id: 3,
+    user_id: 3,
     name: 'Trần Quang Huy',
     email: 'huy.organizer@eventhub.vn',
     role: 'Organizer',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80'
   },
   Staff: {
-    id: 3,
+    id: 2,
+    user_id: 2,
     name: 'Chu Đức Duy',
     email: 'duy.staff@eventhub.vn',
     role: 'Staff',
@@ -27,20 +30,36 @@ const HUB_ACCOUNTS = {
   },
   Guest: {
     id: 4,
-    name: 'Khách',
-    email: 'khach@eventhub.vn',
+    user_id: 4,
+    guest_id: 1,
+    name: 'Nguyễn Văn Khang',
+    email: 'khang.guest@gmail.com',
     role: 'Guest',
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80'
   }
 };
 
 function getHubRole() {
+  try {
+    const raw = localStorage.getItem('eventhub_user');
+    if (raw) {
+      const u = JSON.parse(raw);
+      if (u && u.role) return u.role;
+    }
+  } catch (e) {}
   return localStorage.getItem('eventhub_current_role') || 'Admin';
 }
 
 function setHubRole(role) {
   if (HUB_ACCOUNTS[role]) {
     localStorage.setItem('eventhub_current_role', role);
+    try {
+      const existingStr = localStorage.getItem('eventhub_user');
+      const existing = existingStr ? JSON.parse(existingStr) : {};
+      const updated = Object.assign({}, HUB_ACCOUNTS[role], existing.token ? { token: existing.token } : {});
+      updated.role = role;
+      localStorage.setItem('eventhub_user', JSON.stringify(updated));
+    } catch (e) {}
   }
 }
 

@@ -1332,6 +1332,94 @@ function initEventData() {
   if (!EVENT.lineup) EVENT.lineup = [];
 }
 
+async function fetchLiveEventDetails() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const rawId = urlParams.get('id');
+  const eventId = rawId ? Number(rawId) : 1;
+  try {
+    const apiHost = window.location.hostname || 'localhost';
+    const res = await fetch(`http://${apiHost}:8000/api/events/${eventId}`);
+    if (res.ok) {
+      const evt = await res.json();
+      if (evt && evt.event_name) {
+        const categories = Array.isArray(evt.categories) ? evt.categories : (evt.categories || '').split(', ').filter(Boolean);
+        EVENT.id = evt.event_id;
+        EVENT.name = evt.event_name;
+        EVENT.category = categories[0] || 'Sự kiện';
+        EVENT.venue = evt.venue_name || 'Việt Nam';
+        EVENT.venueAddress = evt.venue_name || 'Việt Nam';
+        EVENT.organizer = evt.organizer_name || 'Ban tổ chức';
+        EVENT.price = Number(evt.base_price) || 0;
+        EVENT.capacity = Number(evt.capacity) || 1000;
+        EVENT.registered = Number(evt.current_registrations) || 0;
+        if (evt.event_date) {
+          EVENT.dateStart = new Date(evt.event_date);
+          EVENT.dateEnd = new Date(new Date(evt.event_date).getTime() + 4 * 3600000);
+          EVENT.saleEnds = new Date(EVENT.dateStart.getTime() - 3600000);
+        }
+        const p = EVENT.price;
+        if (p === 0) {
+          EVENT.tickets = [{
+            id: "free",
+            name: "Vé Miễn Phí (Standard Free Pass)",
+            price: 0,
+            originalPrice: 0,
+            maxPerOrder: 2,
+            remaining: Math.max(10, (EVENT.capacity || 500) - (EVENT.registered || 0)),
+            status: "open",
+            benefits: ["Vào cổng tham dự", "Tài liệu điện tử", "Teabreak giao lưu"],
+            disabledBenefits: []
+          }];
+        } else {
+          const earlyPrice = Math.round(p * 0.8 / 10000) * 10000;
+          const vipPrice = Math.round(p * 2.2 / 10000) * 10000;
+          EVENT.tickets = [
+            {
+              id: "early",
+              name: "Vé Early Bird (-20%)",
+              price: earlyPrice,
+              originalPrice: p,
+              maxPerOrder: 4,
+              remaining: 45,
+              status: "almost",
+              benefits: ["Vào cổng sự kiện", "Vị trí ngồi tiêu chuẩn", "Voucher giảm giá đồ uống"],
+              disabledBenefits: ["Khu VIP Lounge"]
+            },
+            {
+              id: "standard",
+              name: "Vé Tiêu Chuẩn (Standard Pass)",
+              price: p,
+              originalPrice: p,
+              maxPerOrder: 4,
+              remaining: Math.max(20, (EVENT.capacity || 1000) - (EVENT.registered || 0)),
+              status: "open",
+              benefits: ["Vào cổng sự kiện", "Vị trí ngồi tiêu chuẩn", "Bộ quà tặng lưu niệm"],
+              disabledBenefits: ["Khu VIP Lounge"]
+            },
+            {
+              id: "vip",
+              name: "Vé VIP — Trải Nghiệm Cao Cấp",
+              price: vipPrice,
+              originalPrice: Math.round(vipPrice * 1.25 / 10000) * 10000,
+              maxPerOrder: 2,
+              remaining: 15,
+              status: "almost",
+              benefits: ["Ghế ngồi hàng đầu VIP", "Check-in lối đi ưu tiên", "Khu VIP Lounge & Buffet cao cấp"],
+              disabledBenefits: []
+            }
+          ];
+        }
+        renderCover();
+        renderAbout();
+        renderLocation();
+        renderOrganizer();
+        renderTicketTiers();
+        renderMobileTiers();
+      }
+    }
+  } catch (e) {}
+}
+
 // ============================================================
 // 2. STATE
 // ============================================================
@@ -1362,6 +1450,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupStickyHeader();
   setupTabScroll();
   loadSavedState();
+  fetchLiveEventDetails();
 
   // Attach listener to user chip for click & keyboard accessibility
   const userChip = document.getElementById('ed-user-chip');

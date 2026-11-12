@@ -282,6 +282,50 @@ function getAllEvents() {
   return EV_EVENTS;
 }
 
+async function syncLiveEvents() {
+  try {
+    const apiHost = window.location.hostname || 'localhost';
+    const res = await fetch(`http://${apiHost}:8000/api/events`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        const mapped = data.map(evt => {
+          const categories = Array.isArray(evt.categories) ? evt.categories : (evt.categories || '').split(', ').filter(Boolean);
+          let cat = 'music';
+          const catStr = categories.join(' ').toLowerCase();
+          if (catStr.includes('âm nhạc') || catStr.includes('concert') || catStr.includes('music')) cat = 'music';
+          else if (catStr.includes('công nghệ') || catStr.includes('hội thảo') || catStr.includes('tech') || catStr.includes('conference')) cat = 'tech';
+          else if (catStr.includes('ẩm thực') || catStr.includes('food')) cat = 'food';
+          else if (catStr.includes('nghệ thuật') || catStr.includes('art')) cat = 'art';
+          else if (catStr.includes('thể thao') || catStr.includes('sport') || catStr.includes('run')) cat = 'sport';
+          else if (catStr.includes('night') || catStr.includes('lễ hội')) cat = 'night';
+          return {
+            id: evt.event_id,
+            name: evt.event_name,
+            category: cat,
+            categoryLabel: categories[0] || 'Sự kiện',
+            date: new Date(evt.event_date),
+            start_date: evt.event_date,
+            venue: evt.venue_name,
+            organizer: evt.organizer_name,
+            capacity: Number(evt.capacity) || 1000,
+            registered: Number(evt.current_registrations) || 0,
+            price: Number(evt.base_price) || 0,
+            originalPrice: Number(evt.base_price) || 0,
+            status: evt.status,
+            format: 'offline',
+            image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
+            isHot: true
+          };
+        });
+        localStorage.setItem('eventhub_events', JSON.stringify(mapped));
+        updateCategoryCounts();
+        applyFilters();
+      }
+    }
+  } catch (err) {}
+}
+
 function initFiltersFromUrl() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -337,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCategoryCounts();
   setupHeaderSearch();
   applyFilters();
+  syncLiveEvents();
 
   // Attach listener to user chip for click & keyboard accessibility
   const userChip = document.getElementById('ev-user-chip');

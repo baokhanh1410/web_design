@@ -1605,6 +1605,9 @@ async function checkApiConnection() {
           };
         });
         state.apiConnected = true;
+        try {
+          localStorage.setItem('eventhub_events', JSON.stringify(state.events));
+        } catch (e) {}
         const categories = [...new Set(state.events.flatMap(evt => evt.categories))];
         const categorySelect = document.getElementById('search-category');
         categorySelect.replaceChildren(

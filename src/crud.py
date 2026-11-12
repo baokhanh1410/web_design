@@ -79,11 +79,22 @@ def create_event(session, name, start_datetime, end_datetime, venue_id, org_id, 
         return False, f"Error: {str(e)}"
 
 def get_event_by_id(session, event_id):
-    """Fetch detailed information of a specific event by ID."""
+    """Fetch detailed information of a specific event by ID with venue, organizer, and categories."""
     query = text("""
-        SELECT event_id, event_name, event_date, end_time, venue_id, organizer_id, status, base_price
-        FROM events
-        WHERE event_id = :eid
+        SELECT e.event_id, e.event_name, e.event_date, e.end_time,
+               e.venue_id, v.venue_name, v.venue_address, v.capacity,
+               e.organizer_id, o.organizer_name,
+               e.status, e.base_price,
+               STRING_AGG(c.category_name, ', ') as categories
+        FROM events e
+        LEFT JOIN venues v ON e.venue_id = v.venue_id
+        LEFT JOIN organizers o ON e.organizer_id = o.organizer_id
+        LEFT JOIN event_categories ec ON e.event_id = ec.event_id
+        LEFT JOIN categories c ON ec.category_id = c.category_id
+        WHERE e.event_id = :eid
+        GROUP BY e.event_id, e.event_name, e.event_date, e.end_time,
+                 e.venue_id, v.venue_name, v.venue_address, v.capacity,
+                 e.organizer_id, o.organizer_name, e.status, e.base_price
     """)
     cat_query = text("SELECT category_id FROM event_categories WHERE event_id = :eid")
 

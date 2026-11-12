@@ -12,7 +12,8 @@ CREATE TABLE events (
     status     VARCHAR(20) NOT NULL DEFAULT 'Upcoming'
                    CHECK (status IN ('Upcoming', 'Ongoing', 'Completed', 'Cancelled')),
     base_price NUMERIC(8, 2) NOT NULL,
-    organizer_id BIGINT NOT NULL
+    organizer_id BIGINT NOT NULL,
+    image_url  VARCHAR(500)
 );
 CREATE INDEX events_event_name_index ON events (event_name);
 CREATE INDEX events_event_date_index ON events (event_date);

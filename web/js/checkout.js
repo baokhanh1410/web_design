@@ -118,11 +118,30 @@ function loadCheckoutData() {
 function loadUser() {
   try {
     var raw = localStorage.getItem('eventhub_user');
-    if (!raw) return;
+    if (!raw) {
+      // Hiển thị banner cảnh báo nếu chưa đăng nhập
+      var alertBox = document.getElementById('ck-guest-banner');
+      if (!alertBox) {
+        var formCol = document.querySelector('.ck-form-col');
+        if (formCol) {
+          alertBox = document.createElement('div');
+          alertBox.id = 'ck-guest-banner';
+          alertBox.style.cssText = 'background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px;';
+          alertBox.innerHTML = '<div style="font-size: 13.5px; color: #92400E; display: flex; align-items: center; gap: 8px;"><span>⚠️</span><span><strong>Bạn đang ở chế độ khách:</strong> Vui lòng đăng nhập để lưu trữ vé và nhận mã QR check-in vào tài khoản.</span></div>' +
+            '<button type="button" class="hub-btn-login" onclick="openGlobalAuthModal()" style="padding: 6px 14px; font-size: 13px;">🔑 Đăng nhập</button>';
+          formCol.insertBefore(alertBox, formCol.firstChild);
+        }
+      }
+      return;
+    }
     var user = JSON.parse(raw);
     if (user.name) document.getElementById('f-name').value = user.name;
     if (user.email) document.getElementById('f-email').value = user.email;
     if (user.phone) document.getElementById('f-phone').value = user.phone;
+
+    // Xóa alertBox nếu đã đăng nhập
+    var alertBox = document.getElementById('ck-guest-banner');
+    if (alertBox) alertBox.remove();
   } catch (e) { /* ignore */ }
 }
 
@@ -534,6 +553,18 @@ function onTermsChange() {
 // ─── Submit Payment ───────────────────────────────────────────
 
 function submitPayment() {
+  // BẮT BUỘC ĐĂNG NHẬP TRƯỚC KHI THANH TOÁN
+  var userStr = localStorage.getItem('eventhub_user');
+  var user = null;
+  try { user = userStr ? JSON.parse(userStr) : null; } catch(e){}
+  if (!user) {
+    showToast('⚠️ Vui lòng đăng nhập tài khoản để thanh toán và nhận vé!', 'warning');
+    if (typeof openGlobalAuthModal === 'function') {
+      openGlobalAuthModal();
+    }
+    return;
+  }
+
   if (!validateForm()) {
     showToast('⚠️ Vui lòng kiểm tra lại thông tin', 'error');
     // scroll to first error

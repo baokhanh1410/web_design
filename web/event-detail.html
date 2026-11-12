@@ -52,6 +52,13 @@
 
       <!-- 4. User Actions & Role Switcher -->
       <div class="hub-actions">
+        <!-- Guest Auth Button (when logged out) -->
+        <div class="hub-auth-guest" id="hub-auth-guest" style="display: none;">
+          <button type="button" class="hub-btn-login" onclick="openGlobalAuthModal()">
+            🔑 Đăng nhập / Đăng ký
+          </button>
+        </div>
+
         <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
           <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
@@ -84,8 +91,8 @@
             </div>
 
             <div class="hub-dropdown-divider"></div>
-            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
-            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="profile.html?tab=profile" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html?tab=tickets" class="hub-dd-link">🎟️ Vé của tôi</a>
             <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
             <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
             <div class="hub-dropdown-divider"></div>
@@ -127,9 +134,7 @@
     </div>
   </header>
 
-  <!-- ======================================================================
-       SECTION 1: CINEMATIC COVER / BANNER
-       ====================================================================== -->
+  <!-- Section 1: Cinematic Cover / Banner -->
   <section class="ed-cover" id="ed-cover">
     <!-- Full-bleed background image -->
     <div class="ed-cover-bg" id="ed-cover-bg"></div>
@@ -227,9 +232,7 @@
     </div>
   </section>
 
-  <!-- ======================================================================
-       MAIN LAYOUT: DETAIL + TICKET SIDEBAR
-       ====================================================================== -->
+  <!-- Main Layout: Detail & Ticket Sidebar -->
   <div class="ed-container ed-layout" id="ed-layout">
 
     <!-- ----------------------------------------------------------------
@@ -354,9 +357,7 @@
 
   </div><!-- /ed-layout -->
 
-  <!-- ======================================================================
-       MOBILE BOTTOM BAR (fixed)
-       ====================================================================== -->
+  <!-- Mobile Bottom Bar (Fixed) -->
   <div class="ed-mobile-bar" id="ed-mobile-bar">
     <div class="ed-mobile-bar-price">
       <div class="ed-mobile-bar-label">Giá từ</div>
@@ -367,9 +368,7 @@
     </button>
   </div>
 
-  <!-- ======================================================================
-       FOOTER
-       ====================================================================== -->
+  <!-- Footer -->
   <footer class="lp-footer" id="footer">
     <div class="footer-container">
       <div class="lp-footer-top">
@@ -479,9 +478,7 @@
   </div>
   <div class="ed-sheet-overlay" id="ed-sheet-overlay" onclick="closeMobileSheet()"></div>
 
-  <!-- ======================================================================
-       SHARE MODAL
-       ====================================================================== -->
+  <!-- Share Modal -->
   <div class="ed-modal-backdrop" id="ed-share-modal">
     <div class="ed-modal-card">
       <button class="ed-modal-close" onclick="closeShareModal()">

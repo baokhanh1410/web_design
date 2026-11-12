@@ -9,6 +9,7 @@ def get_all_events(session):
     """Fetch list of events including venue, organizer, categories, capacity, and current registrations."""
     query = text("""
         SELECT e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price,
+               COALESCE(e.image_url, '') as image_url,
                STRING_AGG(c.category_name, ', ') as categories,
                v.capacity,
                COALESCE(r_count.cnt, 0) as current_registrations
@@ -18,7 +19,7 @@ def get_all_events(session):
         LEFT JOIN (SELECT event_id, COUNT(*) as cnt FROM registrations GROUP BY event_id) r_count ON e.event_id = r_count.event_id
         LEFT JOIN event_categories ec ON e.event_id = ec.event_id
         LEFT JOIN categories c ON ec.category_id = c.category_id
-        GROUP BY e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price, v.capacity, r_count.cnt
+        GROUP BY e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price, e.image_url, v.capacity, r_count.cnt
         ORDER BY e.event_date DESC
     """)
     with session.get_bind().connect() as conn:
@@ -30,6 +31,7 @@ def get_guest_registered_events(session, guest_id):
     query = text("""
         SELECT r.registration_id, r.registration_date, r.attendance_status,
                e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price,
+               COALESCE(e.image_url, '') as image_url,
                STRING_AGG(c.category_name, ', ') as categories
         FROM registrations r
         JOIN events e ON r.event_id = e.event_id
@@ -39,7 +41,7 @@ def get_guest_registered_events(session, guest_id):
         LEFT JOIN categories c ON ec.category_id = c.category_id
         WHERE r.guest_id = :gid
         GROUP BY r.registration_id, r.registration_date, r.attendance_status,
-                 e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price
+                 e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price, e.image_url
         ORDER BY r.registration_date DESC
     """)
     with session.get_bind().connect() as conn:
@@ -85,6 +87,7 @@ def get_event_by_id(session, event_id):
                e.venue_id, v.venue_name, v.venue_address, v.capacity,
                e.organizer_id, o.organizer_name,
                e.status, e.base_price,
+               COALESCE(e.image_url, '') as image_url,
                STRING_AGG(c.category_name, ', ') as categories
         FROM events e
         LEFT JOIN venues v ON e.venue_id = v.venue_id
@@ -94,7 +97,7 @@ def get_event_by_id(session, event_id):
         WHERE e.event_id = :eid
         GROUP BY e.event_id, e.event_name, e.event_date, e.end_time,
                  e.venue_id, v.venue_name, v.venue_address, v.capacity,
-                 e.organizer_id, o.organizer_name, e.status, e.base_price
+                 e.organizer_id, o.organizer_name, e.status, e.base_price, e.image_url
     """)
     cat_query = text("SELECT category_id FROM event_categories WHERE event_id = :eid")
 
@@ -361,6 +364,7 @@ def get_user_wishlist(session, user_id):
     query = text("""
         SELECT e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name,
                e.status, e.base_price,
+               COALESCE(e.image_url, '') as image_url,
                STRING_AGG(c.category_name, ', ') as categories,
                w.created_at as added_at
         FROM wishlists w
@@ -371,7 +375,7 @@ def get_user_wishlist(session, user_id):
         LEFT JOIN categories c ON ec.category_id = c.category_id
         WHERE w.user_id = :uid
         GROUP BY e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name,
-                 e.status, e.base_price, w.created_at
+                 e.status, e.base_price, e.image_url, w.created_at
         ORDER BY w.created_at DESC
     """)
     with session.get_bind().connect() as conn:

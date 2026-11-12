@@ -52,6 +52,13 @@
 
       <!-- 4. User Actions & Role Switcher -->
       <div class="hub-actions">
+        <!-- Guest Auth Button (when logged out) -->
+        <div class="hub-auth-guest" id="hub-auth-guest" style="display: none;">
+          <button type="button" class="hub-btn-login" onclick="openGlobalAuthModal()">
+            🔑 Đăng nhập / Đăng ký
+          </button>
+        </div>
+
         <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
           <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
@@ -84,8 +91,8 @@
             </div>
 
             <div class="hub-dropdown-divider"></div>
-            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
-            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="profile.html?tab=profile" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html?tab=tickets" class="hub-dd-link">🎟️ Vé của tôi</a>
             <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
             <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
             <div class="hub-dropdown-divider"></div>
@@ -127,9 +134,7 @@
     </div>
   </header>
 
-  <!-- ======================================================================
-       SECTION 1: HERO
-       ====================================================================== -->
+  <!-- Section 1: Hero -->
   <section class="lp-hero">
     <!-- Background decorations -->
     <div class="lp-hero-bg">
@@ -258,9 +263,7 @@
     </div>
   </section>
 
-  <!-- ======================================================================
-       SECTION 2: FEATURED CATEGORIES
-       ====================================================================== -->
+  <!-- Section 2: Featured Categories -->
   <section class="lp-section lp-section-categories" id="categories">
     <div class="lp-container">
       <div class="lp-section-header">
@@ -276,9 +279,7 @@
     </div>
   </section>
 
-  <!-- ======================================================================
-       SECTION 3: TRENDING EVENTS
-       ====================================================================== -->
+  <!-- Section 3: Trending Events -->
   <section class="lp-section lp-section-events" id="events">
     <div class="lp-container">
       <div class="lp-section-header">
@@ -288,10 +289,11 @@
         </div>
         <div class="lp-events-tabs" id="lp-events-tabs">
           <button class="lp-tab-btn active" data-tab="all">Tất cả</button>
-          <button class="lp-tab-btn" data-tab="Âm nhạc &amp; Lễ hội">🎵 Âm nhạc</button>
+          <button class="lp-tab-btn" data-tab="Âm nhạc &amp; Concert">🎵 Âm nhạc</button>
           <button class="lp-tab-btn" data-tab="Công nghệ &amp; AI">💻 Tech</button>
           <button class="lp-tab-btn" data-tab="Thể thao &amp; Giải trí">🏃 Thể thao</button>
           <button class="lp-tab-btn" data-tab="Nghệ thuật &amp; Triển lãm">🎨 Nghệ thuật</button>
+          <button class="lp-tab-btn" data-tab="Nightlife &amp; Lễ hội">🎉 Nightlife &amp; Lễ hội</button>
         </div>
       </div>
 
@@ -308,9 +310,7 @@
     </div>
   </section>
 
-  <!-- ======================================================================
-       SECTION 4: PROMO BANNER SLIDER + STATS
-       ====================================================================== -->
+  <!-- Section 4: Promo Banner Slider & Stats -->
   <section class="lp-section lp-section-promo" id="promo">
     <div class="lp-container">
 
@@ -412,9 +412,7 @@
     </div>
   </section>
 
-  <!-- ======================================================================
-       SECTION 5: HOW IT WORKS
-       ====================================================================== -->
+  <!-- Section 5: How It Works -->
   <section class="lp-section lp-section-how">
     <div class="lp-container">
       <div class="lp-section-header lp-section-header-center">
@@ -447,9 +445,7 @@
     </div>
   </section>
 
-  <!-- ======================================================================
-       FOOTER
-       ====================================================================== -->
+  <!-- Footer -->
   <footer class="lp-footer" id="footer">
     <div class="footer-container">
       <div class="lp-footer-top">
@@ -537,9 +533,7 @@
     </div>
   </footer>
 
-  <!-- ======================================================================
-       AUTH MODAL
-       ====================================================================== -->
+  <!-- Auth Modal -->
   <div class="lp-modal-backdrop" id="lp-auth-modal" role="dialog" aria-modal="true" aria-label="Đăng nhập / Đăng ký">
     <div class="lp-modal-card">
       <button class="lp-modal-close" onclick="closeAuthModal()" aria-label="Đóng">

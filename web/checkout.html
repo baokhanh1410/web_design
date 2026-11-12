@@ -52,6 +52,13 @@
 
       <!-- 4. User Actions & Role Switcher -->
       <div class="hub-actions">
+        <!-- Guest Auth Button (when logged out) -->
+        <div class="hub-auth-guest" id="hub-auth-guest" style="display: none;">
+          <button type="button" class="hub-btn-login" onclick="openGlobalAuthModal()">
+            🔑 Đăng nhập / Đăng ký
+          </button>
+        </div>
+
         <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
           <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
@@ -84,8 +91,8 @@
             </div>
 
             <div class="hub-dropdown-divider"></div>
-            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
-            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="profile.html?tab=profile" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html?tab=tickets" class="hub-dd-link">🎟️ Vé của tôi</a>
             <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
             <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
             <div class="hub-dropdown-divider"></div>
@@ -127,9 +134,7 @@
     </div>
   </header>
 
-  <!-- ======================================================================
-       SUB-HEADER: PROGRESS STEPPER & SSL BADGE
-       ====================================================================== -->
+  <!-- Sub-header: Progress Stepper & SSL Badge -->
   <div class="ck-stepper-bar">
     <div class="ck-container ck-header-inner" style="height: auto; padding: 10px 20px;">
       <ol class="ck-steps" aria-label="Tiến trình đặt vé">
@@ -161,15 +166,11 @@
     </div>
   </div>
 
-  <!-- ======================================================================
-       MAIN CHECKOUT LAYOUT
-       ====================================================================== -->
+  <!-- Main Checkout Layout -->
   <main class="ck-main" id="ck-main">
     <div class="ck-container ck-layout">
 
-      <!-- ================================================================
-           LEFT COLUMN: FORM
-           ================================================================ -->
+      <!-- Left Column: Form -->
       <div class="ck-form-col">
 
         <!-- ---- STEP 1: ATTENDEE INFO ---- -->
@@ -452,9 +453,7 @@
 
       </div><!-- /ck-form-col -->
 
-      <!-- ================================================================
-           RIGHT COLUMN: ORDER SUMMARY (Sticky)
-           ================================================================ -->
+      <!-- Right Column: Order Summary (Sticky) -->
       <aside class="ck-summary-col">
         <div class="ck-summary-box" id="ck-summary-box">
 
@@ -534,9 +533,7 @@
     </div><!-- /ck-layout -->
   </main>
 
-  <!-- ======================================================================
-       SUCCESS OVERLAY — E-TICKET + ORDER CONFIRMATION
-       ====================================================================== -->
+  <!-- Success Overlay: E-Ticket & Order Confirmation -->
   <div class="ck-success-overlay" id="ck-success-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="success-title">
 
     <!-- Confetti canvas -->
@@ -610,10 +607,6 @@
 
       <!-- Action buttons -->
       <div class="ck-success-actions">
-        <button class="ck-btn ck-btn-print" onclick="window.print()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-          Tải / In vé
-        </button>
         <button class="ck-btn ck-btn-mybookings" onclick="goToMyBookings()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/></svg>
           Xem vé trong tài khoản
@@ -627,9 +620,7 @@
     </div>
   </div>
 
-  <!-- ========================================================================
-       FOOTER
-       ======================================================================== -->
+  <!-- Footer -->
   <footer class="lp-footer" id="footer">
     <div class="footer-container">
       <div class="lp-footer-top">

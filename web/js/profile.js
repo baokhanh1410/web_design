@@ -463,7 +463,26 @@ function init() {
   }
 
   renderHero();
-  switchToTab('tickets');   // khởi tạo tab mặc định + xóa inline style
+
+  // Xác định tab ban đầu dựa trên query parameter (?tab=profile) hoặc hash (#profile)
+  var initialTab = 'tickets';
+  try {
+    var urlParams = new URLSearchParams(window.location.search);
+    var qTab = urlParams.get('tab');
+    var hashTab = window.location.hash ? window.location.hash.replace('#', '').replace('tab-', '') : null;
+    var candidate = qTab || hashTab;
+    if (candidate) {
+      candidate = candidate.toLowerCase();
+      if (candidate === 'info' || candidate === 'profile' || candidate === 'thongtin') candidate = 'profile';
+      if (['tickets', 'profile', 'wishlist', 'security'].indexOf(candidate) !== -1) {
+        initialTab = candidate;
+      }
+    }
+  } catch (err) {
+    initialTab = 'tickets';
+  }
+
+  switchToTab(initialTab);   // khởi tạo tab được chọn + xóa inline style
   renderTickets(activeTicketFilter);
   renderWishlist();
   prefillProfileForm();
@@ -514,7 +533,7 @@ async function syncProfileDataWithDB() {
             eventName: r.event_name,
             eventDate: evtDate,
             eventVenue: r.venue_name || 'Việt Nam',
-            eventImage: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+            eventImage: r.image_url || 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
             status: bookingStatus,
             is_checked_in: !!r.attendance_status,
             grand: Number(r.base_price) || 0,
@@ -574,7 +593,7 @@ async function syncProfileDataWithDB() {
             date: item.event_date,
             venue: item.venue_name || 'Toàn quốc',
             price: Number(item.base_price) || 0,
-            image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80'
+            image: item.image_url || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80'
           };
         });
       }
@@ -595,7 +614,7 @@ async function syncProfileDataWithDB() {
             date: ev.event_date,
             venue: ev.venue_name || 'Toàn quốc',
             price: Number(ev.base_price) || 0,
-            image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80'
+            image: ev.image_url || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80'
           };
         });
       }
@@ -805,6 +824,7 @@ function initTabNav() {
 }
 
 function switchToTab(tabName) {
+  if (tabName === 'info' || tabName === 'thongtin') tabName = 'profile';
   var tabBtns = document.querySelectorAll('.pr-tab-btn');
   var panels = document.querySelectorAll('.pr-tab-panel');
 
@@ -834,6 +854,15 @@ function switchToTab(tabName) {
     panel.classList.add('active');
   }
 }
+
+// Lắng nghe sự kiện hashchange nếu người dùng nhấp anchor hash
+window.addEventListener('hashchange', function () {
+  var h = (window.location.hash || '').replace('#', '').replace('tab-', '').toLowerCase();
+  if (h === 'info') h = 'profile';
+  if (['tickets', 'profile', 'wishlist', 'security'].indexOf(h) !== -1) {
+    switchToTab(h);
+  }
+});
 
 /* ============================================================
    TICKET RENDERING
@@ -983,7 +1012,6 @@ function createTicketCard(booking, filter) {
         '<div class="pr-ticket-actions">' +
           '<button class="pr-btn pr-btn-ghost pr-btn-sm" onclick="openQRModal(\'' + booking.bookingId + '\')">📱 Xem QR E-Ticket</button>' +
           '<a href="event-detail.html?id=' + (booking.eventId || 1) + '" class="pr-btn pr-btn-ghost pr-btn-sm" style="text-decoration:none;">📄 Chi tiết</a>' +
-          '<button class="pr-btn pr-btn-ghost pr-btn-sm" onclick="window.print()">📥 Tải vé</button>' +
           '<button class="pr-btn pr-btn-ghost pr-btn-sm" onclick="addToCalendar(\'' + booking.bookingId + '\')">📅 Calendar</button>' +
         '</div>' +
       '</div>' +

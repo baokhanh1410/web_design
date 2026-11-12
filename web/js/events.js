@@ -296,9 +296,9 @@ async function syncLiveEvents() {
           if (catStr.includes('âm nhạc') || catStr.includes('concert') || catStr.includes('music')) cat = 'music';
           else if (catStr.includes('công nghệ') || catStr.includes('hội thảo') || catStr.includes('tech') || catStr.includes('conference')) cat = 'tech';
           else if (catStr.includes('ẩm thực') || catStr.includes('food')) cat = 'food';
-          else if (catStr.includes('nghệ thuật') || catStr.includes('art')) cat = 'art';
-          else if (catStr.includes('thể thao') || catStr.includes('sport') || catStr.includes('run')) cat = 'sport';
-          else if (catStr.includes('night') || catStr.includes('lễ hội')) cat = 'night';
+          else if (catStr.includes('nghệ thuật') || catStr.includes('triển lãm') || catStr.includes('art')) cat = 'art';
+          else if (catStr.includes('thể thao') || catStr.includes('marathon') || catStr.includes('sport') || catStr.includes('run')) cat = 'sport';
+          else if (catStr.includes('night') || catStr.includes('lễ hội') || catStr.includes('party')) cat = 'night';
           return {
             id: evt.event_id,
             name: evt.event_name,
@@ -314,7 +314,7 @@ async function syncLiveEvents() {
             originalPrice: Number(evt.base_price) || 0,
             status: evt.status,
             format: 'offline',
-            image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
+            image: evt.image_url || evt.image || "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
             isHot: true
           };
         });

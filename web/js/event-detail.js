@@ -1352,6 +1352,9 @@ async function fetchLiveEventDetails() {
         EVENT.price = Number(evt.base_price) || 0;
         EVENT.capacity = Number(evt.capacity) || 1000;
         EVENT.registered = Number(evt.current_registrations) || 0;
+        if (evt.image_url) {
+          EVENT.image = evt.image_url;
+        }
         if (evt.event_date) {
           EVENT.dateStart = new Date(evt.event_date);
           EVENT.dateEnd = new Date(new Date(evt.event_date).getTime() + 4 * 3600000);
@@ -2081,6 +2084,23 @@ function proceedToCheckout() {
   sessionStorage.setItem('eventhub_checkout', JSON.stringify(checkoutData));
   // Also persist to localStorage as a backup cart
   localStorage.setItem('eventhub_cart', JSON.stringify(checkoutData));
+
+  // KIỂM TRA ĐĂNG NHẬP: BẮT BUỘC ĐĂNG NHẬP ĐỂ ĐẶT VÉ
+  const currentUser = typeof getHubCurrentUser === 'function' ? getHubCurrentUser() : (function() {
+    try {
+      const raw = localStorage.getItem('eventhub_user');
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  })();
+
+  if (!currentUser) {
+    sessionStorage.setItem('eventhub_pending_booking', 'true');
+    showToast('⚠️ Vui lòng đăng nhập tài khoản để tiếp tục đặt vé!', 'warning');
+    if (typeof openGlobalAuthModal === 'function') {
+      openGlobalAuthModal();
+    }
+    return;
+  }
 
   showToast(`✅ Đang chuyển đến trang thanh toán... (${totalQty} vé)`, 'success');
 

@@ -491,3 +491,236 @@
   .hub-user-chip { padding: 4px; }
 }
 
+/* ============================================================
+   GLOBAL AUTH & MODAL STYLES
+   ============================================================ */
+.hub-auth-guest {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hub-btn-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  background: #0194F3;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 13.5px;
+  border-radius: 999px;
+  border: 1px solid #0194F3;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(1, 148, 243, 0.25);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.hub-btn-login:hover {
+  background: #007CE8;
+  border-color: #007CE8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(1, 148, 243, 0.35);
+}
+
+/* Global Modal Backdrop */
+.hub-modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.hub-modal-backdrop.open {
+  display: flex;
+}
+
+.hub-modal-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  max-width: 460px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  animation: hubModalSlideUp 0.25s ease-out;
+}
+
+@keyframes hubModalSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hub-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #F1F5F9;
+  color: #64748B;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.hub-modal-close:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.hub-modal-body {
+  padding: 28px 24px 24px;
+}
+
+.hub-modal-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 6px 0;
+}
+
+.hub-modal-desc {
+  font-size: 0.85rem;
+  color: #64748B;
+  margin: 0 0 20px 0;
+}
+
+.hub-auth-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid #F1F5F9;
+  margin-bottom: 20px;
+}
+
+.hub-auth-tab {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #64748B;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.hub-auth-tab.active {
+  color: #0194F3;
+}
+
+.hub-auth-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #0194F3;
+  border-radius: 2px;
+}
+
+.hub-form-group {
+  margin-bottom: 14px;
+}
+
+.hub-form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+.hub-form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.hub-form-input:focus {
+  border-color: #0194F3;
+  box-shadow: 0 0 0 3px rgba(1, 148, 243, 0.15);
+}
+
+.hub-btn-submit {
+  width: 100%;
+  padding: 12px;
+  background: #0194F3;
+  color: #FFF;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.hub-btn-submit:hover {
+  background: #007CE8;
+}
+
+.hub-quick-roles {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed #E2E8F0;
+}
+
+.hub-quick-roles-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.hub-quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.hub-quick-btn {
+  padding: 8px 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1E293B;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.hub-quick-btn:hover {
+  background: #F1F5F9;
+  border-color: #0194F3;
+  color: #0194F3;
+}
+
+

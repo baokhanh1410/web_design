@@ -89,7 +89,7 @@ const LP_EVENTS = [
   {
     id: 7,
     name: "Countdown New Year 2027 — Đại Nhạc Hội Chào Năm Mới",
-    category: "Âm nhạc & Lễ hội",
+    category: "Nightlife & Lễ hội",
     date: "2026-12-31T20:00:00",
     venue: "Phố đi bộ Nguyễn Huệ, TP.HCM",
     price: 650000,
@@ -115,7 +115,7 @@ const LP_EVENTS = [
   {
     id: 9,
     name: "Lễ Hội EDM VinaFest 2026 — Đêm Nhạc Điện Tử",
-    category: "Âm nhạc & Lễ hội",
+    category: "Nightlife & Lễ hội",
     date: "2026-12-19T21:00:00",
     venue: "GEM Center, Quận 1, TP.HCM",
     price: 850000,
@@ -169,17 +169,23 @@ const LP_EVENTS = [
 function mapToStandardCategory(cat) {
   if (!cat) return "Công nghệ & AI";
   const norm = cat.toLowerCase().replace(/&amp;/g, '&').trim();
-  if (norm.includes("nhạc") || norm.includes("music") || norm.includes("night") || norm.includes("ẩm thực") || norm.includes("lễ hội")) {
-    return "Âm nhạc & Lễ hội";
+  if (norm.includes("night") || norm.includes("party") || norm.includes("club") || norm.includes("bar") || norm.includes("pub") || norm.includes("countdown") || (norm.includes("lễ hội") && !norm.includes("nhạc") && !norm.includes("music"))) {
+    return "Nightlife & Lễ hội";
   }
-  if (norm.includes("công nghệ") || norm.includes("ai") || norm.includes("tech") || norm.includes("hội thảo") || norm.includes("workshop") || norm.includes("kỹ năng")) {
+  if (norm.includes("nhạc") || norm.includes("music") || norm.includes("concert") || norm.includes("acoustic") || norm.includes("symphony") || norm.includes("band")) {
+    return "Âm nhạc & Concert";
+  }
+  if (norm.includes("công nghệ") || norm.includes("ai") || norm.includes("tech") || norm.includes("hội thảo") || norm.includes("workshop") || norm.includes("kỹ năng") || norm.includes("developer")) {
     return "Công nghệ & AI";
   }
-  if (norm.includes("thể thao") || norm.includes("marathon") || norm.includes("triathlon") || norm.includes("chạy")) {
+  if (norm.includes("thể thao") || norm.includes("marathon") || norm.includes("triathlon") || norm.includes("chạy") || norm.includes("sport") || norm.includes("bóng") || norm.includes("yoga")) {
     return "Thể thao & Giải trí";
   }
-  if (norm.includes("nghệ thuật") || norm.includes("triển lãm") || norm.includes("art")) {
+  if (norm.includes("nghệ thuật") || norm.includes("triển lãm") || norm.includes("art") || norm.includes("painting") || norm.includes("sculpture")) {
     return "Nghệ thuật & Triển lãm";
+  }
+  if (norm.includes("ẩm thực") || norm.includes("food") || norm.includes("nấu ăn") || norm.includes("culinary")) {
+    return "Ẩm thực & Đời sống";
   }
   return cat;
 }
@@ -289,7 +295,7 @@ async function syncLiveEvents() {
             price: Number(evt.base_price) || 0,
             original_price: Number(evt.base_price) || 0,
             status: evt.status,
-            image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
+            image: evt.image_url || evt.image || "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
             is_hot: true
           };
         });
@@ -513,11 +519,11 @@ function renderCategories() {
 function filterByCategory(catId, evt) {
   // Map category id to tab name
   const map = {
-    music: 'Âm nhạc & Lễ hội',
+    music: 'Âm nhạc & Concert',
     tech: 'Công nghệ & AI',
     sport: 'Thể thao & Giải trí',
     art: 'Nghệ thuật & Triển lãm',
-    night: 'Âm nhạc & Lễ hội'
+    night: 'Nightlife & Lễ hội'
   };
   const tabVal = map[catId] || 'all';
 

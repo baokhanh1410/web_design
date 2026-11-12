@@ -52,6 +52,13 @@
 
       <!-- 4. User Actions & Role Switcher -->
       <div class="hub-actions">
+        <!-- Guest Auth Button (when logged out) -->
+        <div class="hub-auth-guest" id="hub-auth-guest" style="display: none;">
+          <button type="button" class="hub-btn-login" onclick="openGlobalAuthModal()">
+            🔑 Đăng nhập / Đăng ký
+          </button>
+        </div>
+
         <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
           <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
@@ -84,8 +91,8 @@
             </div>
 
             <div class="hub-dropdown-divider"></div>
-            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
-            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="profile.html?tab=profile" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html?tab=tickets" class="hub-dd-link">🎟️ Vé của tôi</a>
             <a href="index.html#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;">➕ Đăng ký tạo sự kiện</a>
             <a href="index.html#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;">📊 Quản trị hệ thống & AI (ML)</a>
             <div class="hub-dropdown-divider"></div>
@@ -132,9 +139,7 @@
     </div>
   </header>
 
-  <!-- ======================================================================
-       BREADCRUMB + RESULTS HEADER
-       ====================================================================== -->
+  <!-- Breadcrumb & Results Header -->
   <div class="ev-subheader">
     <div class="ev-container ev-subheader-inner">
       <nav class="ev-breadcrumb" aria-label="Breadcrumb">
@@ -147,9 +152,7 @@
     </div>
   </div>
 
-  <!-- ======================================================================
-       MAIN LAYOUT: SIDEBAR + RESULTS
-       ====================================================================== -->
+  <!-- Main Layout: Sidebar & Results -->
   <div class="ev-container ev-layout">
 
     <!-- ----------------------------------------------------------------
@@ -381,9 +384,7 @@
     </main>
   </div>
 
-  <!-- ======================================================================
-       FOOTER
-       ====================================================================== -->
+  <!-- Footer -->
   <footer class="lp-footer" id="footer">
     <div class="footer-container">
       <div class="lp-footer-top">

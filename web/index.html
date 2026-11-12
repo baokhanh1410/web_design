@@ -56,6 +56,13 @@
 
       <!-- 4. User Actions & Role Switcher -->
       <div class="hub-actions">
+        <!-- Guest Auth Button (when logged out) -->
+        <div class="hub-auth-guest" id="hub-auth-guest" style="display: none;">
+          <button type="button" class="hub-btn-login" onclick="openGlobalAuthModal()">
+            🔑 Đăng nhập / Đăng ký
+          </button>
+        </div>
+
         <div class="hub-auth-user" id="hub-auth-user" style="position: relative;">
           <div class="hub-user-chip" id="hub-user-chip" onclick="toggleHeaderDropdown(event)" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Menu tài khoản & vai trò">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" id="hub-user-avatar" class="hub-user-avatar" alt="Avatar">
@@ -88,8 +95,8 @@
             </div>
 
             <div class="hub-dropdown-divider"></div>
-            <a href="profile.html" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
-            <a href="profile.html" class="hub-dd-link">🎟️ Vé của tôi</a>
+            <a href="profile.html?tab=profile" class="hub-dd-link">👤 Hồ sơ cá nhân</a>
+            <a href="profile.html?tab=tickets" class="hub-dd-link">🎟️ Vé của tôi</a>
             <a href="#create-event" class="hub-dd-link hub-role-admin" id="hub-dd-create" style="display:none;" onclick="openCreateEventModal(); toggleHeaderDropdown(); return false;">➕ Đăng ký tạo sự kiện</a>
             <a href="#admin" class="hub-dd-link hub-role-admin" id="hub-dd-admin" style="display:none;" onclick="switchView('admin'); toggleHeaderDropdown(); return false;">📊 Quản trị hệ thống & AI (ML)</a>
             <div class="hub-dropdown-divider"></div>
@@ -131,9 +138,7 @@
     </div>
   </header>
 
-  <!-- ========================================================================
-       VIEW 1: EXPLORE & EVENTS CATALOG (HOME)
-       ======================================================================== -->
+  <!-- View 1: Explore & Events Catalog (Home) -->
   <main id="view-explore">
     <!-- Hero Banner -->
     <section class="hero-section">
@@ -262,9 +267,7 @@
     </div>
   </main>
 
-  <!-- ========================================================================
-       VIEW 2: MY BOOKINGS (VÉ CỦA TÔI)
-       ======================================================================== -->
+  <!-- View 2: My Bookings (Vé của tôi) -->
   <main id="view-my-bookings" class="container" style="display: none; padding-top: 40px; padding-bottom: 60px;">
     <div class="section-header">
       <div>
@@ -283,9 +286,7 @@
     </div>
   </main>
 
-  <!-- ========================================================================
-       VIEW 3: ADMIN & AI PRICING DASHBOARD
-       ======================================================================== -->
+  <!-- View 3: Admin & AI Pricing Dashboard -->
   <main id="view-admin" class="container" style="display: none; padding-top: 32px; padding-bottom: 60px;">
     <!-- Dashboard Header -->
     <div class="admin-header-card">
@@ -534,9 +535,7 @@
     </div>
   </main>
 
-  <!-- ========================================================================
-       MODAL 1: 3-STEP BOOKING WIZARD
-       ======================================================================== -->
+  <!-- Modal 1: 3-Step Booking Wizard -->
   <div class="modal-backdrop" id="booking-modal">
     <div class="modal-card modal-lg">
       <button class="modal-close-btn" onclick="closeBookingModal()">✕</button>
@@ -669,9 +668,7 @@
     </div>
   </div>
 
-  <!-- ========================================================================
-       MODAL 2: E-TICKET QR VIEW
-       ======================================================================== -->
+  <!-- Modal 2: E-Ticket QR View -->
   <div class="modal-backdrop" id="eticket-modal">
     <div class="modal-card" style="max-width: 460px;">
       <button class="modal-close-btn" onclick="closeETicketModal()">✕</button>
@@ -712,9 +709,6 @@
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button class="btn btn-outline" style="flex: 1;" onclick="window.print()">
-            🖨️ In vé
-          </button>
           <button class="btn btn-primary" style="flex: 1;" onclick="closeETicketModal()">
             Đóng
           </button>
@@ -723,9 +717,7 @@
     </div>
   </div>
 
-  <!-- ========================================================================
-       MODAL 3: AUTHENTICATION (LOGIN / REGISTER)
-       ======================================================================== -->
+  <!-- Modal 3: Authentication (Login / Register) -->
   <div class="modal-backdrop" id="auth-modal">
     <div class="modal-card" style="max-width: 440px;">
       <button class="modal-close-btn" onclick="closeAuthModal()">✕</button>
@@ -809,9 +801,7 @@
     </div>
   </div>
 
-  <!-- ========================================================================
-       MODAL 4: CREATE EVENT (ADMIN)
-       ======================================================================== -->
+  <!-- Modal 4: Create Event (Admin) -->
   <div class="modal-backdrop" id="create-event-modal">
     <div class="modal-card modal-lg">
       <button class="modal-close-btn" onclick="closeCreateEventModal()">✕</button>
@@ -885,9 +875,7 @@
   <!-- Toast Container -->
   <div id="toast-container" class="toast-container"></div>
 
-  <!-- ========================================================================
-       FOOTER
-       ======================================================================== -->
+  <!-- Footer -->
   <footer class="lp-footer" id="footer">
     <div class="footer-container">
       <div class="lp-footer-top">

@@ -2034,6 +2034,26 @@ function toggleSave() {
       showToast('💔 Đã bỏ khỏi danh sách yêu thích', 'info');
     }
     localStorage.setItem('eventhub_wishlist', JSON.stringify(list));
+
+    // Sync to backend DB if user is logged in
+    const userStr = localStorage.getItem('eventhub_user');
+    const u = userStr ? JSON.parse(userStr) : null;
+    const userId = u ? (u.user_id || u.id) : null;
+    const apiHost = window.location.hostname || 'localhost';
+    const headers = { 'Content-Type': 'application/json' };
+    if (u && u.token) headers['Authorization'] = 'Bearer ' + u.token;
+    if (edState.saved) {
+      fetch(`http://${apiHost}:8000/api/wishlist` + (userId ? `?user_id=${userId}` : ''), {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ event_id: EVENT.id })
+      }).catch(() => {});
+    } else {
+      fetch(`http://${apiHost}:8000/api/wishlist/${EVENT.id}` + (userId ? `?user_id=${userId}` : ''), {
+        method: 'DELETE',
+        headers: headers
+      }).catch(() => {});
+    }
   } catch (e) { /* ignore */ }
 }
 

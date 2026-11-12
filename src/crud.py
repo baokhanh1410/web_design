@@ -28,17 +28,19 @@ def get_all_events(session):
 def get_guest_registered_events(session, guest_id):
     """Fetch list of events that a specific guest HAS REGISTERED for."""
     query = text("""
-        SELECT e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price,
+        SELECT r.registration_id, r.registration_date, r.attendance_status,
+               e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price,
                STRING_AGG(c.category_name, ', ') as categories
-        FROM events e
-        JOIN registrations r ON e.event_id = r.event_id
+        FROM registrations r
+        JOIN events e ON r.event_id = e.event_id
         JOIN venues v ON e.venue_id = v.venue_id
         LEFT JOIN organizers o ON e.organizer_id = o.organizer_id
         LEFT JOIN event_categories ec ON e.event_id = ec.event_id
         LEFT JOIN categories c ON ec.category_id = c.category_id
         WHERE r.guest_id = :gid
-        GROUP BY e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price
-        ORDER BY e.event_date DESC
+        GROUP BY r.registration_id, r.registration_date, r.attendance_status,
+                 e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price
+        ORDER BY r.registration_date DESC
     """)
     with session.get_bind().connect() as conn:
         df = pd.read_sql(query, conn, params={"gid": guest_id})
@@ -318,6 +320,77 @@ def update_finance(session, finance_id, planned_budget, actual_cost):
         })
         session.commit()
         return True, "Financial records updated successfully!"
+    except Exception as e:
+        session.rollback()
+        return False, f"Error: {str(e)}"
+
+# ============================================================
+# SECTION 5: REGISTRATIONS & WISHLIST SYNCHRONIZATION
+# ============================================================
+
+def cancel_guest_registration(session, registration_id, guest_id=None):
+    """Cancel (delete) a guest registration record."""
+    try:
+        if guest_id:
+            query = text("DELETE FROM registrations WHERE registration_id = :rid AND guest_id = :gid")
+            res = session.execute(query, {"rid": registration_id, "gid": guest_id})
+        else:
+            query = text("DELETE FROM registrations WHERE registration_id = :rid")
+            res = session.execute(query, {"rid": registration_id})
+        session.commit()
+        if res.rowcount > 0:
+            return True, "Registration cancelled successfully!"
+        return False, "Registration not found."
+    except Exception as e:
+        session.rollback()
+        return False, f"Error: {str(e)}"
+
+def get_user_wishlist(session, user_id):
+    """Fetch all events in a user's wishlist joined with venue and categories."""
+    query = text("""
+        SELECT e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name,
+               e.status, e.base_price,
+               STRING_AGG(c.category_name, ', ') as categories,
+               w.created_at as added_at
+        FROM wishlists w
+        JOIN events e ON w.event_id = e.event_id
+        JOIN venues v ON e.venue_id = v.venue_id
+        LEFT JOIN organizers o ON e.organizer_id = o.organizer_id
+        LEFT JOIN event_categories ec ON e.event_id = ec.event_id
+        LEFT JOIN categories c ON ec.category_id = c.category_id
+        WHERE w.user_id = :uid
+        GROUP BY e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name,
+                 e.status, e.base_price, w.created_at
+        ORDER BY w.created_at DESC
+    """)
+    with session.get_bind().connect() as conn:
+        df = pd.read_sql(query, conn, params={"uid": user_id})
+    return df
+
+def add_to_wishlist(session, user_id, event_id):
+    """Add an event to user's wishlist."""
+    try:
+        query = text("""
+            INSERT INTO wishlists (user_id, event_id)
+            VALUES (:uid, :eid)
+            ON CONFLICT (user_id, event_id) DO NOTHING
+        """)
+        session.execute(query, {"uid": user_id, "eid": event_id})
+        session.commit()
+        return True, "Added to wishlist successfully!"
+    except Exception as e:
+        session.rollback()
+        return False, f"Error: {str(e)}"
+
+def remove_from_wishlist(session, user_id, event_id):
+    """Remove an event from user's wishlist."""
+    try:
+        query = text("DELETE FROM wishlists WHERE user_id = :uid AND event_id = :eid")
+        res = session.execute(query, {"uid": user_id, "eid": event_id})
+        session.commit()
+        if res.rowcount > 0:
+            return True, "Removed from wishlist successfully!"
+        return False, "Item not found in wishlist."
     except Exception as e:
         session.rollback()
         return False, f"Error: {str(e)}"

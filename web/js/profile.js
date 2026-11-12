@@ -77,10 +77,10 @@ var MOCK_BOOKINGS = [
 ];
 
 var PR_USERS = {
-  Admin: { id: 1, name: 'Nguyễn Bảo Khánh', email: 'khanh.admin@eventhub.vn', role: 'Admin', memberType: 'vip', joinDate: '2023-01-10', phone: '0901234567', dob: '1992-05-18', gender: 'male', address: 'Quận 1, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80' },
-  Organizer: { id: 2, name: 'Trần Quang Huy', email: 'huy.organizer@eventhub.vn', role: 'Organizer', memberType: 'vip', joinDate: '2023-08-15', phone: '0912345678', dob: '1989-11-22', gender: 'male', address: 'Quận 3, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80' },
-  Staff: { id: 3, name: 'Chu Đức Duy', email: 'duy.staff@eventhub.vn', role: 'Staff', memberType: 'member', joinDate: '2024-02-01', phone: '0923456789', dob: '1996-03-12', gender: 'male', address: 'Bình Thạnh, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&q=80' },
-  Guest: { id: 4, name: 'Nguyễn Văn Khang', email: 'khang.guest@gmail.com', role: 'Guest', memberType: 'member', joinDate: '2024-06-10', phone: '0934567890', dob: '1998-09-05', gender: 'male', address: 'Quận 7, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80' }
+  Admin: { id: 1, user_id: 1, name: 'Nguyễn Bảo Khánh', email: 'khanh.admin@eventhub.vn', role: 'Admin', memberType: 'vip', joinDate: '2023-01-10', phone: '0901234567', dob: '1992-05-18', gender: 'male', address: 'Quận 1, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80' },
+  Organizer: { id: 3, user_id: 3, name: 'Trần Quang Huy', email: 'huy.organizer@eventhub.vn', role: 'Organizer', memberType: 'vip', joinDate: '2023-08-15', phone: '0912345678', dob: '1989-11-22', gender: 'male', address: 'Quận 3, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80' },
+  Staff: { id: 2, user_id: 2, name: 'Chu Đức Duy', email: 'duy.staff@eventhub.vn', role: 'Staff', memberType: 'member', joinDate: '2024-02-01', phone: '0923456789', dob: '1996-03-12', gender: 'male', address: 'Bình Thạnh, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&q=80' },
+  Guest: { id: 4, user_id: 4, guest_id: 1, name: 'Nguyễn Văn Khang', email: 'khang.guest@gmail.com', role: 'Guest', memberType: 'member', joinDate: '2024-06-10', phone: '0934567890', dob: '1998-09-05', gender: 'male', address: 'Quận 7, TP. Hồ Chí Minh', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80' }
 };
 
 var MOCK_USER = PR_USERS.Admin;
@@ -469,10 +469,174 @@ function init() {
   prefillProfileForm();
   initPasswordStrength();
 
+  // Đồng bộ vé đã mua và danh sách yêu thích từ Database
+  syncProfileDataWithDB();
+
   // Escape key for modal
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeQRModal();
   });
+}
+
+function getApiBaseUrl() {
+  var host = window.location.hostname || 'localhost';
+  return 'http://' + host + ':8000';
+}
+
+async function syncProfileDataWithDB() {
+  var baseUrl = getApiBaseUrl();
+  var headers = { 'Content-Type': 'application/json' };
+  if (currentUser && currentUser.token) {
+    headers['Authorization'] = 'Bearer ' + currentUser.token;
+  }
+  var userId = currentUser ? (currentUser.user_id || currentUser.id) : null;
+  var guestId = currentUser ? (currentUser.guest_id || (currentUser.role === 'Guest' ? 1 : null)) : null;
+
+  // 1. Đồng bộ vé đã mua (Bookings / Registrations) từ DB
+  try {
+    var queryParams = [];
+    if (guestId) queryParams.push('guest_id=' + guestId);
+    var bookingsUrl = baseUrl + '/api/my-bookings' + (queryParams.length ? '?' + queryParams.join('&') : '');
+    var resBookings = await fetch(bookingsUrl, { method: 'GET', headers: headers });
+    if (resBookings.ok) {
+      var dbBookings = await resBookings.json();
+      if (Array.isArray(dbBookings)) {
+        var mappedDbBookings = dbBookings.map(function (r) {
+          var regId = r.registration_id || (Date.now() + Math.floor(Math.random() * 1000));
+          var evtDate = r.event_date || new Date().toISOString();
+          var isPast = new Date(evtDate) < new Date();
+          var st = (r.status || '').toLowerCase();
+          var bookingStatus = st === 'cancelled' ? 'cancelled' : (r.attendance_status || isPast ? 'attended' : 'confirmed');
+          return normalizeBooking({
+            bookingId: 'EVT-BK-' + regId,
+            orderId: '#EH-' + (r.registration_id ? String(r.registration_id).padStart(6, '0') : String(regId).slice(-6)),
+            eventId: r.event_id,
+            eventName: r.event_name,
+            eventDate: evtDate,
+            eventVenue: r.venue_name || 'Việt Nam',
+            eventImage: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+            status: bookingStatus,
+            is_checked_in: !!r.attendance_status,
+            grand: Number(r.base_price) || 0,
+            total_price: Number(r.base_price) || 0,
+            ticket_count: 1,
+            attendee: {
+              name: currentUser.name || 'Khách EventHub',
+              email: currentUser.email || '',
+              phone: currentUser.phone || ''
+            },
+            createdAt: r.registration_date || evtDate
+          });
+        }).filter(Boolean);
+
+        // Merge với vé local (không trùng lặp)
+        var localStored = [];
+        try {
+          var rawStored = localStorage.getItem('eventhub_bookings');
+          if (rawStored) localStored = (JSON.parse(rawStored) || []).map(normalizeBooking).filter(Boolean);
+        } catch (e) {}
+
+        var seenKeys = new Set();
+        mappedDbBookings.forEach(function (b) {
+          seenKeys.add(b.bookingId);
+          seenKeys.add('EVT-' + b.eventId);
+        });
+
+        localStored.forEach(function (lb) {
+          if (!seenKeys.has(lb.bookingId) && !seenKeys.has('EVT-' + lb.eventId)) {
+            mappedDbBookings.push(lb);
+          }
+        });
+
+        allBookings = mappedDbBookings;
+        renderHero();
+        renderTickets(activeTicketFilter);
+      }
+    }
+  } catch (err) {
+    // API backend offline -> fallback to local data
+  }
+
+  // 2. Đồng bộ danh sách yêu thích (Wishlist) từ DB & Events API
+  try {
+    var wlUrl = baseUrl + '/api/wishlist' + (userId ? '?user_id=' + userId : '');
+    var resWl = await fetch(wlUrl, { method: 'GET', headers: headers });
+    var dbWishlist = null;
+    if (resWl.ok) {
+      var wlData = await resWl.json();
+      if (Array.isArray(wlData) && wlData.length > 0) {
+        dbWishlist = wlData.map(function (item) {
+          var cat = Array.isArray(item.categories) ? item.categories.join(', ') : (item.categories || 'Sự kiện');
+          return {
+            id: item.event_id,
+            name: item.event_name,
+            category: cat,
+            date: item.event_date,
+            venue: item.venue_name || 'Toàn quốc',
+            price: Number(item.base_price) || 0,
+            image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80'
+          };
+        });
+      }
+    }
+
+    // Lấy live events từ API để map chi tiết sự kiện
+    var resEvents = await fetch(baseUrl + '/api/events', { method: 'GET' });
+    var liveEventsMap = {};
+    if (resEvents.ok) {
+      var eventsList = await resEvents.json();
+      if (Array.isArray(eventsList)) {
+        eventsList.forEach(function (ev) {
+          var cat = Array.isArray(ev.categories) ? ev.categories.join(', ') : (ev.categories || 'Sự kiện');
+          liveEventsMap[ev.event_id] = {
+            id: ev.event_id,
+            name: ev.event_name,
+            category: cat,
+            date: ev.event_date,
+            venue: ev.venue_name || 'Toàn quốc',
+            price: Number(ev.base_price) || 0,
+            image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80'
+          };
+        });
+      }
+    }
+
+    if (dbWishlist && dbWishlist.length > 0) {
+      wishlist = dbWishlist;
+      var ids = wishlist.map(function (e) { return e.id; });
+      localStorage.setItem('eventhub_wishlist', JSON.stringify(ids));
+    } else {
+      var storedWL = localStorage.getItem('eventhub_wishlist');
+      if (storedWL) {
+        var parsed = JSON.parse(storedWL);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          wishlist = parsed.map(function (item) {
+            var id = typeof item === 'object' ? (item.id || item.eventId) : parseInt(item, 10);
+            if (!id) return null;
+            if (liveEventsMap[id]) return liveEventsMap[id];
+            if (EVENT_CATALOG[id]) return EVENT_CATALOG[id];
+            return typeof item === 'object' ? item : null;
+          }).filter(Boolean);
+
+          // Tự động đẩy lên DB nếu user đã có user_id
+          if (userId && wishlist.length > 0) {
+            wishlist.forEach(function (ev) {
+              fetch(baseUrl + '/api/wishlist?user_id=' + userId, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ event_id: ev.id })
+              }).catch(function () {});
+            });
+          }
+        }
+      }
+    }
+
+    renderHero();
+    renderWishlist();
+  } catch (err) {
+    // API backend offline -> fallback to local data
+  }
 }
 
 /* ============================================================
@@ -598,6 +762,7 @@ function switchRoleQuickly(roleName) {
   localStorage.setItem('eventhub_user', JSON.stringify(currentUser));
   renderHero();
   prefillProfileForm();
+  syncProfileDataWithDB();
   var dropdown = document.getElementById('pr-nav-dropdown');
   if (dropdown) dropdown.style.display = 'none';
   showToast('⚡ Đã chuyển sang vai trò: ' + profile.name + ' (' + profile.role + ')');
@@ -951,6 +1116,19 @@ function removeFromWishlist(eventId) {
     var idList = wishlist.map(function (ev) { return ev.id; });
     localStorage.setItem('eventhub_wishlist', JSON.stringify(idList));
   } catch (e) { /* ignore */ }
+
+  try {
+    var baseUrl = getApiBaseUrl();
+    var userId = currentUser ? (currentUser.user_id || currentUser.id) : null;
+    var headers = { 'Content-Type': 'application/json' };
+    if (currentUser && currentUser.token) headers['Authorization'] = 'Bearer ' + currentUser.token;
+    fetch(baseUrl + '/api/wishlist/' + eventId + (userId ? '?user_id=' + userId : ''), {
+      method: 'DELETE',
+      headers: headers
+    }).catch(function () {});
+  } catch (e) {}
+
+  renderHero();
   renderWishlist();
   showToast('💔 Đã xóa khỏi danh sách yêu thích', 'info');
 }

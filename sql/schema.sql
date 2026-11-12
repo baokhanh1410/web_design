@@ -116,6 +116,16 @@ CREATE TABLE users (
 );
 CREATE INDEX users_username_index ON users (username);
 
+-- wishlists (User event bookmarks)
+CREATE TABLE wishlists (
+    wishlist_id   BIGSERIAL PRIMARY KEY,
+    user_id       BIGINT NOT NULL,
+    event_id      BIGINT NOT NULL,
+    created_at    TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT uq_user_event UNIQUE (user_id, event_id)
+);
+CREATE INDEX wishlists_user_id_index ON wishlists (user_id);
+
 -- ============================================================
 -- FOREIGN KEYS
 -- ============================================================
@@ -131,6 +141,8 @@ ALTER TABLE role_permissions ADD CONSTRAINT role_permissions_role_id_foreign FOR
 ALTER TABLE role_permissions ADD CONSTRAINT role_permissions_permission_id_foreign FOREIGN KEY (permission_id) REFERENCES permissions (permission_id);
 ALTER TABLE event_categories ADD CONSTRAINT event_categories_event_id_foreign FOREIGN KEY (event_id) REFERENCES events (event_id);
 ALTER TABLE event_categories ADD CONSTRAINT event_categories_category_id_foreign FOREIGN KEY (category_id) REFERENCES categories (category_id);
+ALTER TABLE wishlists ADD CONSTRAINT wishlists_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
+ALTER TABLE wishlists ADD CONSTRAINT wishlists_event_id_foreign FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE;
 
 -- ============================================================
 -- FUNCTIONS & TRIGGERS

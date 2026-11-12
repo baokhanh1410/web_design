@@ -620,6 +620,36 @@ function onPaymentSuccess() {
     localStorage.setItem('eventhub_bookings', JSON.stringify(existing));
   } catch (e) { /* ignore */ }
 
+  // Sync booking to backend DB if logged in or API is active
+  try {
+    var userStr = localStorage.getItem('eventhub_user');
+    var u = userStr ? JSON.parse(userStr) : null;
+    var apiHost = window.location.hostname || 'localhost';
+    var headers = { 'Content-Type': 'application/json' };
+    if (u && u.token) headers['Authorization'] = 'Bearer ' + u.token;
+    var guestParam = (u && u.guest_id) ? ('?guest_id=' + u.guest_id) : '';
+    fetch('http://' + apiHost + ':8000/api/bookings' + guestParam, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ event_id: d.eventId || 1 })
+    }).then(function (res) {
+      if (res.ok) return res.json();
+    }).then(function (data) {
+      if (data && data.registration_id) {
+        booking.bookingId = 'EVT-BK-' + data.registration_id;
+        booking.orderId = '#EH-' + String(data.registration_id).padStart(6, '0');
+        try {
+          var arr = JSON.parse(localStorage.getItem('eventhub_bookings') || '[]');
+          if (arr.length > 0 && arr[0].bookingId === bookingId) {
+            arr[0].bookingId = booking.bookingId;
+            arr[0].orderId = booking.orderId;
+            localStorage.setItem('eventhub_bookings', JSON.stringify(arr));
+          }
+        } catch (e) {}
+      }
+    }).catch(function () {});
+  } catch (e) {}
+
   // Clear checkout session
   try { sessionStorage.removeItem('eventhub_checkout'); } catch (e) { /* ignore */ }
 

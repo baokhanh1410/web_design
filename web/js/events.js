@@ -1083,6 +1083,7 @@ function setView(view) {
 
 function toggleLike(e, id) {
   e.stopPropagation();
+  const willLike = !evState.liked.has(id);
   if (evState.liked.has(id)) {
     evState.liked.delete(id);
     showToast('💔 Đã bỏ yêu thích', 'info');
@@ -1094,6 +1095,29 @@ function toggleLike(e, id) {
     const list = Array.from(evState.liked);
     localStorage.setItem('eventhub_wishlist', JSON.stringify(list));
   } catch (err) {}
+
+  // Sync to backend DB if user is logged in
+  try {
+    const userStr = localStorage.getItem('eventhub_user');
+    const u = userStr ? JSON.parse(userStr) : null;
+    const userId = u ? (u.user_id || u.id) : null;
+    const apiHost = window.location.hostname || 'localhost';
+    const headers = { 'Content-Type': 'application/json' };
+    if (u && u.token) headers['Authorization'] = 'Bearer ' + u.token;
+    if (willLike) {
+      fetch(`http://${apiHost}:8000/api/wishlist` + (userId ? `?user_id=${userId}` : ''), {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ event_id: id })
+      }).catch(() => {});
+    } else {
+      fetch(`http://${apiHost}:8000/api/wishlist/${id}` + (userId ? `?user_id=${userId}` : ''), {
+        method: 'DELETE',
+        headers: headers
+      }).catch(() => {});
+    }
+  } catch (err) {}
+
   renderResults();
 }
 

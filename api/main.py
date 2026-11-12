@@ -14,7 +14,7 @@ from datetime import datetime
 
 from api.database import get_db
 from api.auth_utils import (
-    create_access_token, get_current_user,
+    create_access_token, get_current_user, get_optional_current_user,
     require_organizer_or_admin, require_admin
 )
 import src.auth as auth_module
@@ -68,6 +68,9 @@ class UpdateEventRequest(BaseModel):
     price: float
 
 class CreateBookingRequest(BaseModel):
+    event_id: int
+
+class WishlistRequest(BaseModel):
     event_id: int
 
 class CheckinRequest(BaseModel):
@@ -226,30 +229,128 @@ def get_categories(db=Depends(get_db)):
 # ─── Bookings ─────────────────────────────────────────────────────────────────
 
 @app.get("/api/my-bookings")
-def my_bookings(current_user: dict = Depends(get_current_user), db=Depends(get_db)):
-    guest_id = current_user.get("guest_id")
-    if not guest_id:
-        raise HTTPException(status_code=400, detail="No guest profile linked to this account")
-    df = crud.get_guest_registered_events(db, guest_id)
+def my_bookings(
+    guest_id: Optional[int] = Query(None),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+    db=Depends(get_db)
+):
+    target_gid = guest_id
+    if current_user:
+        target_gid = current_user.get("guest_id") or target_gid
+        if not target_gid:
+            from sqlalchemy import text
+            email = current_user.get("email") or ""
+            if email:
+                row = db.execute(text("SELECT guest_id FROM guests WHERE guest_email = :email LIMIT 1"), {"email": email}).fetchone()
+                if row:
+                    target_gid = row[0]
+    if not target_gid:
+        return []
+    df = crud.get_guest_registered_events(db, target_gid)
     return df_to_list(df)
 
 
 @app.post("/api/bookings", status_code=201)
-def create_booking(req: CreateBookingRequest, current_user: dict = Depends(get_current_user), db=Depends(get_db)):
-    guest_id = current_user.get("guest_id")
-    if not guest_id:
-        raise HTTPException(status_code=400, detail="No guest profile linked to this account")
-    success, message = crud.create_registration(db, req.event_id, guest_id)
+def create_booking(
+    req: CreateBookingRequest,
+    guest_id: Optional[int] = Query(None),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+    db=Depends(get_db)
+):
+    target_gid = guest_id
+    if current_user:
+        target_gid = current_user.get("guest_id") or target_gid
+        if not target_gid:
+            from sqlalchemy import text
+            name = current_user.get("name") or current_user.get("username") or "Khách EventHub"
+            email = current_user.get("email") or f"{current_user.get('username')}@eventhub.vn"
+            row = db.execute(text("SELECT guest_id FROM guests WHERE guest_email = :email LIMIT 1"), {"email": email}).fetchone()
+            if row:
+                target_gid = row[0]
+            else:
+                ins = text("INSERT INTO guests (guest_name, guest_email, phone_number) VALUES (:name, :email, '') RETURNING guest_id")
+                target_gid = db.execute(ins, {"name": name, "email": email}).scalar()
+            uid = current_user.get("user_id")
+            if uid:
+                db.execute(text("UPDATE users SET guest_id = :gid WHERE user_id = :uid"), {"gid": target_gid, "uid": uid})
+            db.commit()
+
+    if not target_gid:
+        raise HTTPException(status_code=400, detail="Vui lòng đăng nhập hoặc cung cấp guest_id để đặt vé")
+
+    success, message = crud.create_registration(db, req.event_id, target_gid)
     if not success:
         raise HTTPException(status_code=400, detail=message)
     # Fetch the registration_id
     from sqlalchemy import text
     row = db.execute(
         text("SELECT registration_id FROM registrations WHERE event_id=:eid AND guest_id=:gid ORDER BY registration_date DESC LIMIT 1"),
-        {"eid": req.event_id, "gid": guest_id}
+        {"eid": req.event_id, "gid": target_gid}
     ).fetchone()
     registration_id = row[0] if row else None
     return {"success": True, "message": message, "registration_id": registration_id}
+
+
+@app.delete("/api/bookings/{registration_id}")
+def delete_booking(
+    registration_id: int,
+    guest_id: Optional[int] = Query(None),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+    db=Depends(get_db)
+):
+    target_gid = (current_user.get("guest_id") if current_user else None) or guest_id
+    is_admin = current_user and current_user.get("role") in ["Admin", "Organizer"]
+    success, message = crud.cancel_guest_registration(db, registration_id, None if is_admin else target_gid)
+    if not success:
+        raise HTTPException(status_code=400, detail=message)
+    return {"success": True, "message": message}
+
+
+# ─── Wishlist ─────────────────────────────────────────────────────────────────
+
+@app.get("/api/wishlist")
+def get_wishlist(
+    user_id: Optional[int] = Query(None),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+    db=Depends(get_db)
+):
+    target_uid = (current_user.get("user_id") if current_user else None) or user_id
+    if not target_uid:
+        return []
+    df = crud.get_user_wishlist(db, target_uid)
+    return df_to_list(df)
+
+
+@app.post("/api/wishlist", status_code=201)
+def add_wishlist(
+    req: WishlistRequest,
+    user_id: Optional[int] = Query(None),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+    db=Depends(get_db)
+):
+    target_uid = (current_user.get("user_id") if current_user else None) or user_id
+    if not target_uid:
+        raise HTTPException(status_code=400, detail="Vui lòng đăng nhập để lưu sự kiện yêu thích")
+    success, message = crud.add_to_wishlist(db, target_uid, req.event_id)
+    if not success:
+        raise HTTPException(status_code=400, detail=message)
+    return {"success": True, "message": message}
+
+
+@app.delete("/api/wishlist/{event_id}")
+def remove_wishlist(
+    event_id: int,
+    user_id: Optional[int] = Query(None),
+    current_user: Optional[dict] = Depends(get_optional_current_user),
+    db=Depends(get_db)
+):
+    target_uid = (current_user.get("user_id") if current_user else None) or user_id
+    if not target_uid:
+        raise HTTPException(status_code=400, detail="Vui lòng đăng nhập để thao tác yêu thích")
+    success, message = crud.remove_from_wishlist(db, target_uid, event_id)
+    if not success:
+        raise HTTPException(status_code=400, detail=message)
+    return {"success": True, "message": message}
 
 
 @app.post("/api/checkin")

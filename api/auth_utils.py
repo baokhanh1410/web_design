@@ -49,6 +49,16 @@ def get_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depen
     return decode_token(credentials.credentials)
 
 
+def get_optional_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme)) -> Optional[dict]:
+    """FastAPI dependency: returns user payload if valid Bearer token provided, else None."""
+    if credentials is None:
+        return None
+    try:
+        return decode_token(credentials.credentials)
+    except Exception:
+        return None
+
+
 def require_role(*roles: str):
     """Factory for role-based access control dependencies."""
     def role_checker(current_user: dict = Depends(get_current_user)) -> dict:

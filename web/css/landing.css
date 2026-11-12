@@ -1,7 +1,4 @@
-/* ==========================================================================
-   EVENTHUB LANDING PAGE - landing.css
-   Design System: Traveloka-inspired modern aesthetic
-   ========================================================================== */
+
 
 :root {
   --lp-primary: #0194F3;
@@ -44,9 +41,6 @@
   --lp-transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
 
@@ -71,9 +65,6 @@ ul { list-style: none; }
   padding: 0 24px;
 }
 
-/* ============================================================
-   BUTTONS
-   ============================================================ */
 .lp-btn {
   display: inline-flex;
   align-items: center;
@@ -159,9 +150,6 @@ ul { list-style: none; }
 .lp-btn-sm { padding: 7px 14px; font-size: 0.85rem; border-radius: var(--lp-radius-sm); }
 .lp-btn-block { width: 100%; }
 
-/* ============================================================
-   HEADER
-   ============================================================ */
 .lp-header {
   position: sticky;
   top: 0;
@@ -361,9 +349,6 @@ ul { list-style: none; }
   border-top: 1px solid var(--lp-border-light);
 }
 
-/* ============================================================
-   HERO
-   ============================================================ */
 .lp-hero {
   position: relative;
   min-height: 680px;
@@ -631,9 +616,6 @@ ul { list-style: none; }
   transform: translateY(-1px);
 }
 
-/* ============================================================
-   SECTION SHARED
-   ============================================================ */
 .lp-section {
   padding: 80px 0;
 }
@@ -663,9 +645,6 @@ ul { list-style: none; }
   color: var(--lp-text-muted);
 }
 
-/* ============================================================
-   CATEGORIES
-   ============================================================ */
 .lp-section-categories { background: #fff; }
 
 .lp-categories-grid {
@@ -719,9 +698,6 @@ ul { list-style: none; }
   color: var(--lp-text-muted);
 }
 
-/* ============================================================
-   EVENTS GRID
-   ============================================================ */
 .lp-section-events { background: var(--lp-bg-page); }
 
 .lp-events-tabs {
@@ -948,9 +924,6 @@ ul { list-style: none; }
   text-align: center;
 }
 
-/* ============================================================
-   PROMO SLIDER
-   ============================================================ */
 .lp-section-promo { background: #fff; }
 
 .lp-promo-slider {
@@ -1173,9 +1146,6 @@ ul { list-style: none; }
   flex-shrink: 0;
 }
 
-/* ============================================================
-   HOW IT WORKS
-   ============================================================ */
 .lp-section-how { background: var(--lp-bg-page); }
 
 .lp-how-grid {
@@ -1245,9 +1215,6 @@ ul { list-style: none; }
   font-weight: 700;
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
 .lp-footer {
   background: #0d1a2b;
   color: rgba(255,255,255,0.75);
@@ -1361,9 +1328,6 @@ ul { list-style: none; }
 }
 .lp-footer-legal a:hover { color: rgba(255,255,255,0.8); }
 
-/* ============================================================
-   MODAL
-   ============================================================ */
 .lp-modal-backdrop {
   display: none;
   position: fixed;
@@ -1494,9 +1458,6 @@ ul { list-style: none; }
 .lp-form-input:focus { border-color: var(--lp-primary); box-shadow: 0 0 0 3px var(--lp-primary-subtle); }
 .lp-form-input::placeholder { color: var(--lp-text-muted); }
 
-/* ============================================================
-   TOAST
-   ============================================================ */
 .lp-toast-container {
   position: fixed;
   bottom: 24px;
@@ -1543,9 +1504,6 @@ ul { list-style: none; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 
 /* Large tablet: 1024px */
 @media (max-width: 1024px) {

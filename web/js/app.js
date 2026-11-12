@@ -1,12 +1,3 @@
-/**
- * EventHub - Traveloka Style Event Management System
- * Pure Vanilla JavaScript (Zero Build Tools, Zero Dependencies)
- */
-
-// ==========================================================================
-// 1. DATA STORE & INITIAL MOCK DATA
-// ==========================================================================
-
 const INITIAL_EVENTS = [
   {
     id: 1,
@@ -224,9 +215,6 @@ const CATEGORIES = [
   "Thể thao & Giải trí"
 ];
 
-// ==========================================================================
-// 2. APPLICATION STATE & USER PROFILES
-// ==========================================================================
 
 const USER_PROFILES = {
   Admin: {
@@ -406,9 +394,6 @@ const state = {
   apiConnected: false
 };
 
-// ==========================================================================
-// 3. UTILITIES & FORMATTERS
-// ==========================================================================
 
 function formatVND(amount) {
   if (amount == null) return "0 ₫";
@@ -452,10 +437,10 @@ function showToast(message, type = 'info') {
   }, 3500);
 }
 
-// Lightweight Standalone SVG QR Code Generator
+// Thuật toán sinh mã QR SVG thuần
 function generateQRCodeSVG(text, size = 180) {
-  // Generates an interactive scannable SVG QR representation
-  // Encodes text and registration pattern
+  
+  
   let hash = 0;
   for (let i = 0; i < text.length; i++) {
     hash = ((hash << 5) - hash) + text.charCodeAt(i);
@@ -468,7 +453,7 @@ function generateQRCodeSVG(text, size = 180) {
 
   for (let r = 0; r < matrixSize; r++) {
     for (let c = 0; c < matrixSize; c++) {
-      // Corner Finder Patterns
+      // 3 cụm định vị góc Finder Patterns (7x7)
       const isCorner1 = (r < 7 && c < 7);
       const isCorner2 = (r < 7 && c >= matrixSize - 7);
       const isCorner3 = (r >= matrixSize - 7 && c < 7);
@@ -481,7 +466,7 @@ function generateQRCodeSVG(text, size = 180) {
         if (localR === 0 || localR === 6 || localC === 0 || localC === 6) isBlack = true;
         else if (localR >= 2 && localR <= 4 && localC >= 2 && localC <= 4) isBlack = true;
       } else {
-        // Deterministic pseudo-random pattern based on text hash
+        // Sinh ma trận ngẫu nhiên dựa trên chuỗi băm
         const bit = ((hash ^ (r * 31 + c * 17)) + (r ^ c)) % 3;
         isBlack = bit === 0;
       }
@@ -500,9 +485,6 @@ function generateQRCodeSVG(text, size = 180) {
   `;
 }
 
-// ==========================================================================
-// 4. RENDERING FUNCTIONS
-// ==========================================================================
 
 function hasAdminPermission(user) {
   if (!user || !user.role) return false;
@@ -620,24 +602,20 @@ function renderEventsGrid() {
   const countBadge = document.getElementById('event-count-badge');
   if (!grid) return;
 
-  // Filter events
+  // Lọc danh sách sự kiện
   let filtered = state.events.filter(evt => {
-    // Keyword
     if (state.activeFilter.keyword) {
       const q = state.activeFilter.keyword.toLowerCase();
       const matchName = evt.name.toLowerCase().includes(q);
       const matchVenue = evt.venue.toLowerCase().includes(q);
       if (!matchName && !matchVenue) return false;
     }
-    // Category
     if (state.activeFilter.category && state.activeFilter.category !== 'Tất cả') {
       if (!(evt.categories || [evt.category]).includes(state.activeFilter.category)) return false;
     }
-    // Max Price
     if (state.activeFilter.maxPrice) {
       if (evt.price > state.activeFilter.maxPrice) return false;
     }
-    // Date
     if (state.activeFilter.date) {
       if (!evt.start_date.startsWith(state.activeFilter.date)) return false;
     }
@@ -818,7 +796,6 @@ function renderAdminDashboard() {
   const totalCapacity = state.events.reduce((sum, e) => sum + (e.capacity || 0), 0);
   const avgAttendance = Math.round((totalRegistrations / (totalCapacity || 1)) * 100);
 
-  // Update KPI counters
   const kpiRev = document.getElementById('kpi-revenue');
   const kpiEvents = document.getElementById('kpi-events');
   const kpiRegs = document.getElementById('kpi-registrations');
@@ -831,7 +808,6 @@ function renderAdminDashboard() {
   if (kpiAtt) kpiAtt.textContent = `${avgAttendance}%`;
   if (tabEvCount) tabEvCount.textContent = totalEvents;
 
-  // Render role label in header card
   const roleLabel = document.getElementById('admin-current-role-label');
   if (roleLabel && state.user) {
     roleLabel.textContent = state.user.role === 'Admin'
@@ -981,9 +957,6 @@ function renderCheckinTable() {
   }).join('');
 }
 
-// ==========================================================================
-// 5. EVENT HANDLERS & MODALS
-// ==========================================================================
 
 function selectCategory(cat) {
   state.activeFilter.category = cat;
@@ -1021,11 +994,9 @@ function switchView(viewName) {
 
   state.activeView = viewName;
   
-  // Update Nav Active state
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById(`nav-${viewName}`)?.classList.add('active');
 
-  // Toggle View Containers
   const exploreView = document.getElementById('view-explore');
   const myBookingsView = document.getElementById('view-my-bookings');
   const adminView = document.getElementById('view-admin');
@@ -1040,7 +1011,7 @@ function switchView(viewName) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Booking Flow
+// Quy trình đặt vé
 function openBookingModal(eventId) {
   const event = state.events.find(e => e.id === eventId);
   if (!event) return;
@@ -1050,10 +1021,8 @@ function openBookingModal(eventId) {
   state.appliedVoucher = null;
   state.voucherDiscount = 0;
 
-  // Set Step 1
   setBookingStep(1);
 
-  // Fill Event info
   document.getElementById('booking-event-title').textContent = event.name;
   document.getElementById('booking-event-venue').textContent = event.venue;
   document.getElementById('booking-event-date').textContent = formatDate(event.start_date);
@@ -1061,7 +1030,6 @@ function openBookingModal(eventId) {
   
   updateBookingSummary();
 
-  // Pre-fill attendee details
   if (state.user) {
     document.getElementById('booking-attendee-name').value = state.user.name;
     document.getElementById('booking-attendee-email').value = state.user.email;
@@ -1078,7 +1046,6 @@ function closeBookingModal() {
 function setBookingStep(step) {
   state.bookingStep = step;
 
-  // Update step indicator
   for (let i = 1; i <= 3; i++) {
     const el = document.getElementById(`wizard-step-${i}`);
     if (!el) continue;
@@ -1087,7 +1054,6 @@ function setBookingStep(step) {
     else if (i < step) el.classList.add('completed');
   }
 
-  // Toggle step panes
   document.getElementById('step-pane-1').style.display = step === 1 ? 'block' : 'none';
   document.getElementById('step-pane-2').style.display = step === 2 ? 'block' : 'none';
   document.getElementById('step-pane-3').style.display = step === 3 ? 'block' : 'none';
@@ -1161,7 +1127,7 @@ function confirmBooking() {
   else discountAmount = state.voucherDiscount;
   const finalTotal = Math.max(0, basePrice - discountAmount);
 
-  // Add booking to state
+  // Thêm vé vào đối tượng trạng thái
   const newBooking = normalizeBooking({
     booking_id: bookingId,
     bookingId: bookingId,
@@ -1194,7 +1160,7 @@ function confirmBooking() {
   state.bookings.unshift(newBooking);
   localStorage.setItem('eventhub_bookings', JSON.stringify(state.bookings));
 
-  // Increment event registered count
+  // Tăng số lượng vé đã đăng ký
   event.registered += state.bookingQty;
   localStorage.setItem('eventhub_events', JSON.stringify(state.events));
 
@@ -1202,13 +1168,13 @@ function confirmBooking() {
   renderEventsGrid();
   showToast("Đặt vé thành công! E-Ticket QR đã được tạo.", "success");
 
-  // Automatically open E-Ticket modal
+  // Tự động mở modal vé điện tử E-Ticket
   setTimeout(() => {
     openETicketModal(bookingId);
   }, 400);
 }
 
-// E-Ticket Modal
+// Modal vé điện tử
 function openETicketModal(bookingId) {
   const booking = state.bookings.find(b => (b.booking_id === bookingId || b.bookingId === bookingId));
   if (!booking) return;
@@ -1232,7 +1198,7 @@ function openETicketModal(bookingId) {
     statusBadge.textContent = booking.is_checked_in ? '✓ ĐÃ ĐIỂM DANH' : '🎟️ HỢP LỆ';
   }
 
-  // Render QR Code SVG
+  // Kết xuất mã QR SVG
   const qrContainer = document.getElementById('eticket-qr-box');
   if (qrContainer) {
     qrContainer.innerHTML = generateQRCodeSVG(bId, 170);
@@ -1256,7 +1222,7 @@ function toggleCheckin(bookingId) {
   }
 }
 
-// Auth Modal
+// Modal đăng nhập
 function openAuthModal(tab = 'login') {
   setAuthTab(tab);
   document.getElementById('auth-modal').classList.add('open');
@@ -1535,7 +1501,7 @@ function handleCreateEventSubmit(e) {
   showToast("Đã thêm sự kiện mới thành công!", "success");
 }
 
-// Machine Learning AI Pricing Recommender Widget
+// Công cụ AI / Học máy gợi ý định giá vé tối ưu
 function calculateRecommendedPrice() {
   if (!hasAdminPermission(state.user)) {
     return;
@@ -1544,7 +1510,7 @@ function calculateRecommendedPrice() {
   const cat = document.getElementById('ml-input-category')?.value || 'Công nghệ & AI';
   const base = Number(document.getElementById('ml-input-price')?.value) || 300000;
 
-  // Multiplier heuristic based on category demand and scale
+  // Hệ số tính toán dựa trên nhu cầu danh mục và quy mô
   let multiplier = 1.0;
   if (cat.includes("Âm nhạc")) multiplier = 1.25;
   else if (cat.includes("Công nghệ")) multiplier = 1.18;
@@ -1552,7 +1518,7 @@ function calculateRecommendedPrice() {
   else if (cat.includes("Ẩm thực")) multiplier = 0.95;
   else if (cat.includes("Thể thao")) multiplier = 1.08;
 
-  // Capacity factor
+  // Hệ số sức chứa địa điểm
   if (cap > 2000) multiplier *= 0.90;
   else if (cap < 300) multiplier *= 1.15;
 
@@ -1576,7 +1542,7 @@ function calculateRecommendedPrice() {
   }
 }
 
-// Check if live FastAPI backend is running
+// Kiểm tra máy chủ FastAPI backend đang hoạt động
 async function checkApiConnection() {
   try {
     const apiHost = window.location.hostname || 'localhost';
@@ -1634,9 +1600,6 @@ async function checkApiConnection() {
   }
 }
 
-// ==========================================================================
-// 6. APP INITIALIZATION
-// ==========================================================================
 
 function handleInitialHash() {
   const hash = window.location.hash;
@@ -1669,7 +1632,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('hashchange', handleInitialHash);
 
-  // Search form submit
   document.getElementById('search-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
     state.activeFilter.keyword = document.getElementById('search-keyword').value.trim();
@@ -1683,7 +1645,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast("Đã cập nhật kết quả tìm kiếm", "info");
   });
 
-  // Sticky header scroll shadow
   window.addEventListener('scroll', () => {
     const header = document.querySelector('.header');
     if (header) {

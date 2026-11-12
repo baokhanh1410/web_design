@@ -155,9 +155,6 @@
   <!-- Main Layout: Sidebar & Results -->
   <div class="ev-container ev-layout">
 
-    <!-- ----------------------------------------------------------------
-         SIDEBAR FILTER (desktop: left column | mobile: overlay drawer)
-         ---------------------------------------------------------------- -->
     <aside class="ev-sidebar" id="ev-sidebar" aria-label="Bộ lọc sự kiện">
 
       <!-- Mobile header -->
@@ -168,7 +165,6 @@
         </button>
       </div>
 
-      <!-- ---- FILTER: CATEGORIES ---- -->
       <div class="ev-filter-section">
         <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
           <span>Danh mục sự kiện</span>
@@ -221,7 +217,6 @@
 
       <div class="ev-filter-divider"></div>
 
-      <!-- ---- FILTER: PRICE ---- -->
       <div class="ev-filter-section">
         <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
           <span>Khoảng giá vé</span>
@@ -260,7 +255,6 @@
 
       <div class="ev-filter-divider"></div>
 
-      <!-- ---- FILTER: DATE ---- -->
       <div class="ev-filter-section">
         <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
           <span>Thời gian diễn ra</span>
@@ -294,7 +288,6 @@
 
       <div class="ev-filter-divider"></div>
 
-      <!-- ---- FILTER: FORMAT ---- -->
       <div class="ev-filter-section">
         <button class="ev-filter-toggle" onclick="toggleFilterSection(this)" aria-expanded="true">
           <span>Hình thức tổ chức</span>
@@ -334,9 +327,6 @@
     <!-- Mobile filter overlay backdrop -->
     <div class="ev-overlay" id="ev-overlay" onclick="closeMobileFilter()"></div>
 
-    <!-- ----------------------------------------------------------------
-         RESULTS COLUMN
-         ---------------------------------------------------------------- -->
     <main class="ev-results" id="ev-results">
 
       <!-- Toolbar -->

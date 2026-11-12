@@ -1,13 +1,5 @@
-/**
- * EventHub — Events Listing Page (events.js)
- * Vanilla JS: filtering, sorting, pagination, search, view toggle
- */
-
 'use strict';
 
-// ============================================================
-// 1. MOCK DATA — 12 events, diverse categories
-// ============================================================
 
 const EV_EVENTS = [
   {
@@ -216,12 +208,9 @@ const EV_EVENTS = [
   }
 ];
 
-// ============================================================
-// 2. STATE
-// ============================================================
 
 const evState = {
-  // Filter values
+  // Giá trị bộ lọc
   categories: [],       // empty = all
   price: 'all',
   dateFilter: 'all',
@@ -231,21 +220,18 @@ const evState = {
   sort: 'hot',
   keyword: '',
 
-  // Pagination
+  // Phân trang
   page: 1,
   perPage: 6,
   currentView: 'grid',
 
-  // Liked events
+  // Danh sách yêu thích
   liked: new Set(),
 
-  // Filtered + sorted results cache
+  // Bộ nhớ đệm kết quả lọc và sắp xếp
   results: []
 };
 
-// ============================================================
-// 3. INIT
-// ============================================================
 
 function getAllEvents() {
   try {
@@ -354,7 +340,7 @@ function initFiltersFromUrl() {
       const mapped = catMap[lower] || lower;
       evState.categories = [mapped];
 
-      // Sync sidebar category checkboxes
+      // Đồng bộ checkbox danh mục ở thanh bên
       const allCb = document.querySelector('input[name="category"][value="all"]');
       if (allCb) allCb.checked = false;
       const targetCb = document.querySelector(`input[name="category"][value="${mapped}"]`);
@@ -383,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyFilters();
   syncLiveEvents();
 
-  // Attach listener to user chip for click & keyboard accessibility
+  // Lắng nghe sự kiện click trên avatar
   const userChip = document.getElementById('ev-user-chip');
   if (userChip) {
     userChip.addEventListener('click', (e) => toggleUserDropdown(e));
@@ -395,15 +381,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Header scroll shadow
+  // Đổ bóng khi cuộn trang
   window.addEventListener('scroll', () => {
     document.getElementById('ev-header').classList.toggle('scrolled', window.scrollY > 10);
   }, { passive: true });
 });
 
-// ============================================================
-// 4. AUTH (sync with localStorage)
-// ============================================================
 
 const EV_USERS = {
   Admin: { id: 1, name: 'Nguyễn Bảo Khánh', email: 'khanh.admin@eventhub.vn', role: 'Admin', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80' },
@@ -415,7 +398,7 @@ const EV_USERS = {
 function loadUser() {
   try {
     let saved = localStorage.getItem('eventhub_user');
-    // If not set yet, initialize default user
+    // Khởi tạo người dùng mặc định nếu chưa có
     if (!saved) {
       saved = JSON.stringify(EV_USERS.Admin);
       localStorage.setItem('eventhub_user', saved);
@@ -430,7 +413,7 @@ function loadUser() {
         document.getElementById('ev-user-avatar').src = user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80';
         document.getElementById('ev-user-name').textContent = user.name.split(' ').pop();
 
-        // Dropdown info
+        // Thông tin menu người dùng
         const ddName = document.getElementById('ev-dropdown-name');
         const ddEmail = document.getElementById('ev-dropdown-email');
         const ddRole = document.getElementById('ev-dropdown-role');
@@ -441,7 +424,7 @@ function loadUser() {
           ddRole.className = 'ev-role-badge ' + (user.role || '').toLowerCase();
         }
 
-        // Role-based permissions: Admin and Organizer
+        // Phân quyền theo vai trò
         const role = (user.role || '').toLowerCase();
         const hasAdminAccess = (role === 'admin' || role === 'organizer');
         const navCreate = document.getElementById('ev-nav-create');
@@ -497,16 +480,13 @@ function handleLogout() {
   setTimeout(() => window.location.reload(), 600);
 }
 
-// ============================================================
-// 5. HEADER SEARCH
-// ============================================================
 
 function setupHeaderSearch() {
   const input = document.getElementById('hub-search-input') || document.getElementById('ev-header-keyword');
   const clearBtn = document.getElementById('hub-search-clear') || document.getElementById('ev-header-clear');
   if (!input) return;
 
-  // Realtime debounced search
+  // Tìm kiếm tức thời (debounced)
   let debounceTimer;
   input.addEventListener('input', () => {
     clearTimeout(debounceTimer);
@@ -538,9 +518,6 @@ function clearHeaderSearch() {
   applyFilters();
 }
 
-// ============================================================
-// 6. FILTER SECTION COLLAPSE
-// ============================================================
 
 function toggleFilterSection(btn) {
   const expanded = btn.getAttribute('aria-expanded') !== 'false';
@@ -549,9 +526,6 @@ function toggleFilterSection(btn) {
   if (body) body.classList.toggle('collapsed', expanded);
 }
 
-// ============================================================
-// 7. MOBILE FILTER DRAWER
-// ============================================================
 
 function toggleMobileFilter() {
   const sidebar = document.getElementById('ev-sidebar');
@@ -567,13 +541,9 @@ function closeMobileFilter() {
   document.body.style.overflow = '';
 }
 
-// ============================================================
-// 8. FILTER CHANGE HANDLERS
-// ============================================================
 
 function onCategoryAll(checkbox) {
   if (checkbox.checked) {
-    // Uncheck all specific categories
     document.querySelectorAll('input[name="category"]:not([value="all"])').forEach(cb => {
       cb.checked = false;
     });
@@ -587,7 +557,6 @@ function onCategoryChange() {
   const checked = [...document.querySelectorAll('input[name="category"]:not([value="all"]):checked')]
     .map(cb => cb.value);
 
-  // Uncheck "all" if any specific is checked
   const allCheckbox = document.querySelector('input[name="category"][value="all"]');
   if (checked.length > 0) {
     allCheckbox.checked = false;
@@ -614,7 +583,7 @@ function setDateFilter(btn) {
   document.querySelectorAll('.ev-date-chip').forEach(c => c.classList.remove('active'));
   btn.classList.add('active');
   evState.dateFilter = btn.dataset.datefilter;
-  // Hide custom date range if quick option chosen
+  // Ẩn khung chọn ngày tùy chỉnh
   if (evState.dateFilter !== 'custom') {
     document.getElementById('ev-date-range').style.display = 'none';
   }
@@ -628,14 +597,12 @@ function toggleDateRange(btn) {
   rangeEl.style.display = isOpen ? 'none' : 'flex';
   btn.textContent = isOpen ? '📅 Chọn khoảng ngày cụ thể' : '📅 Ẩn bộ chọn ngày';
   if (!isOpen) {
-    // Deactivate quick chips
     document.querySelectorAll('.ev-date-chip').forEach(c => c.classList.remove('active'));
     evState.dateFilter = 'custom';
   }
 }
 
 function resetFilters() {
-  // Reset checkboxes
   document.querySelectorAll('input[name="category"]').forEach(cb => {
     cb.checked = cb.value === 'all';
   });
@@ -645,20 +612,16 @@ function resetFilters() {
   document.querySelectorAll('input[name="format"]').forEach(r => {
     r.checked = r.value === 'all';
   });
-  // Reset date chips
   document.querySelectorAll('.ev-date-chip').forEach(c => c.classList.remove('active'));
   document.querySelector('.ev-date-chip[data-datefilter="all"]')?.classList.add('active');
   document.getElementById('ev-date-range').style.display = 'none';
   document.getElementById('ev-date-from').value = '';
   document.getElementById('ev-date-to').value = '';
-  // Reset sort
   document.getElementById('ev-sort').value = 'hot';
-  // Reset header search
   const headerInput = document.getElementById('hub-search-input') || document.getElementById('ev-header-keyword');
   if (headerInput) { headerInput.value = ''; }
   (document.getElementById('hub-search-clear') || document.getElementById('ev-header-clear'))?.classList.remove('visible');
 
-  // Reset state
   Object.assign(evState, {
     categories: [], price: 'all', dateFilter: 'all',
     dateFrom: null, dateTo: null, format: 'all',
@@ -669,12 +632,9 @@ function resetFilters() {
   showToast('🔄 Đã xóa tất cả bộ lọc', 'info');
 }
 
-// ============================================================
-// 9. CORE FILTER + SORT LOGIC
-// ============================================================
 
 function applyFilters() {
-  // Also read sort from DOM (may change via dropdown)
+  // Đọc tùy chọn sắp xếp
   evState.sort   = document.getElementById('ev-sort')?.value || evState.sort;
   evState.price  = document.querySelector('input[name="price"]:checked')?.value || evState.price;
   evState.format = document.querySelector('input[name="format"]:checked')?.value || evState.format;
@@ -684,7 +644,6 @@ function applyFilters() {
   const allEvts = getAllEvents();
   let results = allEvts.filter(evt => {
 
-    // --- keyword ---
     if (evState.keyword) {
       const q = evState.keyword.toLowerCase();
       if (!evt.name.toLowerCase().includes(q) &&
@@ -693,10 +652,8 @@ function applyFilters() {
           !evt.organizer.toLowerCase().includes(q)) return false;
     }
 
-    // --- category ---
     if (evState.categories.length > 0 && !evState.categories.includes(evt.category)) return false;
 
-    // --- price ---
     switch (evState.price) {
       case 'free':       if (evt.price !== 0)                            return false; break;
       case 'under500':   if (evt.price <= 0 || evt.price >= 500000)      return false; break;
@@ -704,10 +661,8 @@ function applyFilters() {
       case 'above2000':  if (evt.price < 2000000)                        return false; break;
     }
 
-    // --- format ---
     if (evState.format !== 'all' && evt.format !== evState.format) return false;
 
-    // --- date ---
     const evDate = evt.date;
     switch (evState.dateFilter) {
       case 'today': {
@@ -751,7 +706,6 @@ function applyFilters() {
     return true;
   });
 
-  // --- sort ---
   results.sort((a, b) => {
     switch (evState.sort) {
       case 'hot':        return (b.isHot - a.isHot) || (b.registered / b.capacity) - (a.registered / a.capacity);
@@ -771,7 +725,6 @@ function applyFilters() {
   updateCategoryCountsFiltered(results);
 }
 
-// Date helpers
 function startOf(d, unit) {
   const r = new Date(d);
   if (unit === 'day')   { r.setHours(0,0,0,0); return r; }
@@ -787,9 +740,6 @@ function endOf(d, unit) {
   return r;
 }
 
-// ============================================================
-// 10. RENDER
-// ============================================================
 
 function renderResults() {
   const grid = document.getElementById('ev-grid');
@@ -952,12 +902,10 @@ function renderPagination() {
 
   let html = '';
 
-  // Prev
   html += `<button class="ev-page-btn" onclick="goPage(${current - 1})" ${current === 1 ? 'disabled' : ''} aria-label="Trang trước">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
   </button>`;
 
-  // Pages
   const pages = getPagesToShow(current, totalPages);
   pages.forEach(p => {
     if (p === '...') {
@@ -967,7 +915,6 @@ function renderPagination() {
     }
   });
 
-  // Next
   html += `<button class="ev-page-btn" onclick="goPage(${current + 1})" ${current === totalPages ? 'disabled' : ''} aria-label="Trang tiếp">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
   </button>`;
@@ -1000,9 +947,6 @@ function goPage(page) {
   document.getElementById('ev-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ============================================================
-// 11. TOOLBAR UPDATES
-// ============================================================
 
 function updateToolbar() {
   const count = evState.results.length;
@@ -1054,7 +998,7 @@ function updateFilterBadge() {
   }
 }
 
-// Quick chip remove actions
+// Xóa nhanh bộ lọc chip
 function clearKeyword() {
   evState.keyword = '';
   const inp = document.getElementById('hub-search-input') || document.getElementById('ev-header-keyword');
@@ -1089,9 +1033,6 @@ function removeFormatFilter() {
   evState.page = 1; applyFilters();
 }
 
-// ============================================================
-// 12. CATEGORY COUNTS
-// ============================================================
 
 function updateCategoryCounts() {
   const counts = { music:0, tech:0, sport:0, art:0, food:0, night:0 };
@@ -1111,9 +1052,6 @@ function updateCategoryCountsFiltered(results) {
   });
 }
 
-// ============================================================
-// 13. VIEW TOGGLE
-// ============================================================
 
 function setView(view) {
   evState.currentView = view;
@@ -1122,9 +1060,6 @@ function setView(view) {
   renderResults();
 }
 
-// ============================================================
-// 14. WISHLIST
-// ============================================================
 
 function toggleLike(e, id) {
   e.stopPropagation();
@@ -1141,7 +1076,7 @@ function toggleLike(e, id) {
     localStorage.setItem('eventhub_wishlist', JSON.stringify(list));
   } catch (err) {}
 
-  // Sync to backend DB if user is logged in
+  // Đồng bộ lên cơ sở dữ liệu nếu đã đăng nhập
   try {
     const userStr = localStorage.getItem('eventhub_user');
     const u = userStr ? JSON.parse(userStr) : null;
@@ -1166,18 +1101,12 @@ function toggleLike(e, id) {
   renderResults();
 }
 
-// ============================================================
-// 15. NAVIGATE TO EVENT
-// ============================================================
 
 function goToEvent(id) {
-  // Navigate to event detail page
+  // Chuyển sang trang chi tiết sự kiện
   window.location.href = `event-detail.html?id=${id}`;
 }
 
-// ============================================================
-// 16. TOAST
-// ============================================================
 
 function showToast(message, type = 'info') {
   const container = document.getElementById('ev-toast-container');
@@ -1194,9 +1123,6 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-// ============================================================
-// 17. HELPERS
-// ============================================================
 
 function formatVND(amount) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);

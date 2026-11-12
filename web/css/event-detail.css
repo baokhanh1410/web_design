@@ -1,6 +1,4 @@
-/* ==========================================================================
-   EVENTHUB — EVENT DETAIL PAGE  (event-detail.css)
-   ========================================================================== */
+
 
 :root {
   --p:         #0194F3;
@@ -51,10 +49,8 @@ button,input,select{font-family:inherit;font-size:inherit}
 button{cursor:pointer;border:none;background:none}
 ul{list-style:none}
 
-/* ============================================================ CONTAINER */
 .ed-container{width:100%;max-width:1240px;margin:0 auto;padding:0 24px}
 
-/* ============================================================ BUTTONS */
 .ed-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
   font-weight:600;font-size:.9rem;padding:10px 18px;
@@ -96,7 +92,6 @@ ul{list-style:none}
 .ed-btn-book:hover:not(:disabled){background:#e04e14;box-shadow:0 6px 20px rgba(255,94,31,.4);transform:translateY(-2px)}
 .ed-btn-book:disabled{background:#9EA5AD;border-color:#9EA5AD;box-shadow:none;cursor:not-allowed;transform:none}
 
-/* ============================================================ HEADER */
 .ed-header{
   position:sticky;top:0;z-index:200;
   background:rgba(255,255,255,.97);backdrop-filter:blur(16px);
@@ -206,7 +201,6 @@ ul{list-style:none}
 .ed-dropdown-logout{color:var(--txt-muted)}
 .ed-dropdown-logout:hover{color:#E74C3C;background:#FFF5F5}
 
-/* ============================================================ COVER */
 .ed-cover{
   position:relative;min-height:var(--cover-height);
   display:flex;flex-direction:column;justify-content:flex-end;
@@ -277,7 +271,6 @@ ul{list-style:none}
 .ed-cover-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .ed-mobile-only{display:none}
 
-/* ============================================================ LAYOUT */
 .ed-layout{
   display:grid;
   grid-template-columns:1fr var(--sidebar-w);
@@ -286,7 +279,6 @@ ul{list-style:none}
   align-items:start;
 }
 
-/* ============================================================ TABS */
 .ed-tabs{
   display:flex;gap:4px;border-bottom:2px solid var(--border-lt);
   margin-bottom:28px;overflow-x:auto;
@@ -301,7 +293,6 @@ ul{list-style:none}
 .ed-tab:hover{color:var(--p);background:var(--p-light)}
 .ed-tab.active{color:var(--p);border-bottom-color:var(--p);background:transparent}
 
-/* ============================================================ CONTENT SECTIONS */
 .ed-section{
   background:var(--card);border-radius:var(--r-lg);border:1px solid var(--border-lt);
   padding:28px;box-shadow:var(--sh-sm);margin-bottom:0;
@@ -332,7 +323,7 @@ ul{list-style:none}
 .ed-hi-label{font-size:.78rem;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:.3px}
 .ed-hi-value{font-size:.9rem;font-weight:600;color:var(--txt-dark);margin-top:2px}
 
-/* ---- AGENDA ---- */
+
 .ed-agenda{position:relative;padding-left:28px}
 .ed-agenda::before{
   content:'';position:absolute;left:8px;top:8px;bottom:8px;
@@ -364,7 +355,7 @@ ul{list-style:none}
   font-size:.75rem;font-weight:600;color:var(--p);
 }
 
-/* ---- LINEUP ---- */
+
 .ed-lineup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .ed-lineup-card{
   background:var(--bg);border-radius:var(--r-lg);border:1px solid var(--border-lt);
@@ -384,7 +375,7 @@ ul{list-style:none}
 .ed-lineup-name{font-size:.9rem;font-weight:700;color:var(--txt-dark)}
 .ed-lineup-genre{font-size:.78rem;color:var(--txt-muted);margin-top:2px}
 
-/* ---- RULES & GUIDELINES ---- */
+
 .ed-rules-card {
   background: var(--bg);
   border: 1px solid var(--border-lt);
@@ -442,7 +433,7 @@ ul{list-style:none}
   line-height: 1.55;
 }
 
-/* ---- POLICY ---- */
+
 .ed-policy-accordion{}
 .ed-policy-item{border-bottom:1px solid var(--border-lt)}
 .ed-policy-item:last-child{border-bottom:none}
@@ -462,7 +453,7 @@ ul{list-style:none}
 .ed-policy-body.open{display:block}
 .ed-policy-body ul{padding-left:18px;list-style:disc;display:flex;flex-direction:column;gap:6px}
 
-/* ---- LOCATION ---- */
+
 .ed-map-frame{
   width:100%;height:280px;border-radius:var(--r-lg);overflow:hidden;
   background:var(--bg);border:1px solid var(--border-lt);
@@ -493,7 +484,7 @@ ul{list-style:none}
 .ed-map-btn-outline{background:#fff;color:var(--txt-dark);border-color:var(--border)}
 .ed-map-btn-outline:hover{border-color:var(--p);color:var(--p)}
 
-/* ---- ORGANIZER ---- */
+
 .ed-org-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
 .ed-org-avatar{
   width:72px;height:72px;border-radius:var(--r-lg);overflow:hidden;
@@ -512,7 +503,6 @@ ul{list-style:none}
 
 .ed-org-desc{font-size:.9rem;color:var(--txt-body);line-height:1.75}
 
-/* ============================================================ TICKET SIDEBAR */
 .ed-ticket-sidebar{position:sticky;top:88px;max-height:calc(100vh - 108px);overflow-y:auto}
 
 .ed-ticket-box{
@@ -620,7 +610,6 @@ ul{list-style:none}
 }
 .ed-ticket-note svg{flex-shrink:0;margin-top:2px;color:var(--p)}
 
-/* ============================================================ MOBILE BAR */
 .ed-mobile-bar{
   display:none;
   position:fixed;bottom:0;left:0;right:0;z-index:300;
@@ -670,7 +659,6 @@ ul{list-style:none}
 }
 .ed-sheet-overlay.open{display:block}
 
-/* ============================================================ SHARE MODAL */
 .ed-modal-backdrop{
   display:none;position:fixed;inset:0;
   background:rgba(10,20,40,.6);backdrop-filter:blur(6px);
@@ -698,7 +686,6 @@ ul{list-style:none}
 }
 .ed-share-btn:hover{opacity:.88;transform:translateY(-1px)}
 
-/* ============================================================ TOAST */
 .ed-toast-container{
   position:fixed;bottom:24px;right:24px;z-index:1000;
   display:flex;flex-direction:column;gap:8px;pointer-events:none;
@@ -714,12 +701,10 @@ ul{list-style:none}
 .ed-toast-error  {border-left:4px solid var(--danger)}
 .ed-toast-info   {border-left:4px solid var(--p)}
 
-/* ============================================================ KEYFRAMES */
 @keyframes fadeIn  {from{opacity:0}to{opacity:1}}
 @keyframes slideUp {from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes toastIn {from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-/* ============================================================ RESPONSIVE */
 @media(max-width:1100px){
   :root{--sidebar-w:300px}
   .ed-lineup-grid{grid-template-columns:repeat(2,1fr)}

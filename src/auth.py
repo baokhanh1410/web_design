@@ -1,20 +1,12 @@
 import bcrypt
 from sqlalchemy import text
 
-# ============================================================
-# PASSWORD HASHING & VERIFICATION
-# ============================================================
-
 def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
 def verify_password(password: str, hashed: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
-
-# ============================================================
-# USER AUTHENTICATION
-# ============================================================
 
 def authenticate_user(session, username, password):
     query = text("""
@@ -43,18 +35,14 @@ def authenticate_user(session, username, password):
             return user_data
     return None
 
-# ============================================================
-# REGISTRATION
-# ============================================================
-
 def register_new_guest_user(session, username, password, name, email, phone):
     try:
-        # Check if username exists
+        # Kiểm tra trùng tên đăng nhập
         check_query = text("SELECT COUNT(*) FROM users WHERE username = :username")
         if session.execute(check_query, {"username": username}).scalar() > 0:
-            return False, "Username already exists!"
+            return False, "Tên đăng nhập đã tồn tại!"
 
-        # 1. Insert into guests, return guest_id
+        # Tạo bản ghi khách hàng
         insert_guest = text("""
             INSERT INTO guests (guest_name, guest_email, phone_number)
             VALUES (:name, :email, :phone)
@@ -62,7 +50,7 @@ def register_new_guest_user(session, username, password, name, email, phone):
         """)
         guest_id = session.execute(insert_guest, {"name": name, "email": email, "phone": phone}).scalar()
 
-        # 2. Insert into users
+        # Tạo tài khoản người dùng
         hashed_pw = hash_password(password)
         insert_user = text("""
             INSERT INTO users (username, password_hash, role_id, guest_id)
@@ -75,7 +63,7 @@ def register_new_guest_user(session, username, password, name, email, phone):
         })
 
         session.commit()
-        return True, "Registration successful! Please login."
+        return True, "Đăng ký thành công! Vui lòng đăng nhập."
     except Exception as e:
         session.rollback()
-        return False, f"System error: {str(e)}"
+        return False, f"Lỗi hệ thống: {str(e)}"

@@ -1,7 +1,3 @@
-"""
-FastAPI Bridge - api/auth_utils.py
-JWT creation and verification utilities. Provides the get_current_user dependency.
-"""
 import os
 from datetime import datetime, timedelta, timezone
 from typing import Optional
@@ -12,45 +8,36 @@ from jose import JWTError, jwt
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "traveloka-event-secret-key-change-in-production")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 8  # 8 hours
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 8
 
 bearer_scheme = HTTPBearer(auto_error=False)
 
-
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Create a signed JWT access token."""
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-
 def decode_token(token: str) -> dict:
-    """Decode and validate a JWT token. Raises HTTPException on failure."""
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
+        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token",
+            detail="Token không hợp lệ hoặc đã hết hạn",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-
 def get_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme)) -> dict:
-    """FastAPI dependency: validates Bearer token and returns user payload."""
     if credentials is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated",
+            detail="Chưa xác thực người dùng",
             headers={"WWW-Authenticate": "Bearer"},
         )
     return decode_token(credentials.credentials)
 
-
 def get_optional_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme)) -> Optional[dict]:
-    """FastAPI dependency: returns user payload if valid Bearer token provided, else None."""
     if credentials is None:
         return None
     try:
@@ -58,20 +45,16 @@ def get_optional_current_user(credentials: Optional[HTTPAuthorizationCredentials
     except Exception:
         return None
 
-
 def require_role(*roles: str):
-    """Factory for role-based access control dependencies."""
     def role_checker(current_user: dict = Depends(get_current_user)) -> dict:
         if current_user.get("role") not in roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Access denied. Required roles: {', '.join(roles)}"
+                detail=f"Quyền truy cập bị từ chối. Yêu cầu vai trò: {', '.join(roles)}"
             )
         return current_user
     return role_checker
 
-
-# Pre-built role dependencies
 require_admin = require_role("Admin")
 require_organizer_or_admin = require_role("Organizer", "Admin")
 require_guest = require_role("Guest")

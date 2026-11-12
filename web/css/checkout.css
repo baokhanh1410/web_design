@@ -1,6 +1,4 @@
-/* ==========================================================================
-   EVENTHUB — CHECKOUT PAGE  (checkout.css)
-   ========================================================================== */
+
 
 :root {
   --p:         #0194F3;
@@ -50,10 +48,8 @@ img{max-width:100%;height:auto;display:block}
 button,input,select,textarea{font-family:inherit;font-size:inherit}
 button{cursor:pointer;border:none;background:none}
 
-/* ============================================================ CONTAINER */
 .ck-container{width:100%;max-width:1120px;margin:0 auto;padding:0 24px}
 
-/* ============================================================ BUTTONS */
 .ck-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   font-weight:600;font-size:.92rem;padding:11px 20px;
@@ -97,7 +93,6 @@ button{cursor:pointer;border:none;background:none}
 }
 .ck-btn-home:hover{color:var(--txt-dark);border-color:var(--txt-muted)}
 
-/* ============================================================ HEADER */
 .ck-header{
   background:#fff;border-bottom:1px solid var(--border-lt);
   box-shadow:var(--sh-sm);position:sticky;top:0;z-index:100;
@@ -153,7 +148,6 @@ button{cursor:pointer;border:none;background:none}
   border:1px solid rgba(0,166,81,.15);
 }
 
-/* ============================================================ MAIN */
 .ck-main{padding:28px 0 80px}
 .ck-layout{
   display:grid;
@@ -161,7 +155,6 @@ button{cursor:pointer;border:none;background:none}
   gap:28px;align-items:start;
 }
 
-/* ============================================================ FORM CARDS */
 .ck-card{
   background:var(--card);border-radius:var(--r-lg);border:1px solid var(--border-lt);
   box-shadow:var(--sh-sm);padding:24px;margin-bottom:16px;
@@ -207,7 +200,6 @@ button{cursor:pointer;border:none;background:none}
 
 .ck-error{font-size:.78rem;color:var(--danger);font-weight:600;min-height:16px;margin-top:2px}
 
-/* ============================================================ PAYMENT METHODS */
 .ck-payment-methods{display:flex;flex-direction:column;gap:0}
 .ck-pm-item{border:2px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:border-color var(--t);margin-bottom:10px}
 .ck-pm-item.selected{border-color:var(--p)}
@@ -327,7 +319,6 @@ button{cursor:pointer;border:none;background:none}
   vertical-align:middle;cursor:help;
 }
 
-/* ============================================================ VOUCHER */
 .ck-voucher-row{display:flex;gap:10px;margin-bottom:10px}
 .ck-voucher-input-wrap{flex:1}
 .ck-voucher-input{width:100%;font-family:'Courier New',monospace;letter-spacing:1px;font-size:.92rem}
@@ -343,7 +334,6 @@ button{cursor:pointer;border:none;background:none}
 .ck-voucher-result.success{color:var(--success)}
 .ck-voucher-result.error{color:var(--danger)}
 
-/* ============================================================ TERMS */
 .ck-terms-label{display:flex;align-items:flex-start;gap:12px;cursor:pointer;line-height:1.6;font-size:.9rem;color:var(--txt-body)}
 .ck-checkbox{display:none}
 .ck-checkbox-box{
@@ -359,7 +349,6 @@ button{cursor:pointer;border:none;background:none}
 /* Mobile pay button */
 .ck-mobile-pay-btn{display:none;margin-top:16px}
 
-/* ============================================================ ORDER SUMMARY */
 .ck-summary-box{
   background:var(--card);border-radius:var(--r-xl);border:1px solid var(--border-lt);
   box-shadow:var(--sh-lg);overflow:hidden;position:sticky;top:88px;
@@ -426,7 +415,6 @@ button{cursor:pointer;border:none;background:none}
 }
 .ck-trust-item{font-size:.72rem;font-weight:600;color:var(--txt-muted)}
 
-/* ============================================================ SUCCESS OVERLAY */
 .ck-success-overlay{
   position:fixed;inset:0;z-index:900;
   background:linear-gradient(135deg,#001f4d 0%,#003580 50%,#005fa0 100%);
@@ -528,7 +516,6 @@ button{cursor:pointer;border:none;background:none}
 }
 .ck-success-actions > *{flex:1;min-width:140px}
 
-/* ============================================================ EXPIRED OVERLAY */
 .ck-expired-overlay{
   position:fixed;inset:0;z-index:800;
   background:rgba(10,20,40,.85);backdrop-filter:blur(10px);
@@ -543,7 +530,6 @@ button{cursor:pointer;border:none;background:none}
 .ck-expired-desc{font-size:.9rem;color:var(--txt-muted);line-height:1.7;margin-bottom:24px}
 .ck-expired-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
-/* ============================================================ TOAST */
 .ck-toast-container{
   position:fixed;bottom:24px;right:24px;z-index:1000;
   display:flex;flex-direction:column;gap:8px;pointer-events:none;
@@ -567,13 +553,11 @@ button{cursor:pointer;border:none;background:none}
   .ck-eticket-top{background:#003580!important;-webkit-print-color-adjust:exact}
 }
 
-/* ============================================================ KEYFRAMES */
 @keyframes slideUp  {from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes popIn    {from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes toastIn  {from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.6}}
 
-/* ============================================================ RESPONSIVE */
 @media(max-width:900px){
   .ck-layout{grid-template-columns:1fr;gap:0}
   .ck-summary-col{order:-1;margin-bottom:16px}
@@ -599,26 +583,21 @@ button{cursor:pointer;border:none;background:none}
   .ck-wallet-grid{flex-direction:column}
 }
 
-/* ============================================================ EVENT CARD (rendered by JS) */
 .ck-ec-row{display:flex;gap:12px;align-items:flex-start}
 .ck-ec-thumb{width:72px;height:54px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--border)}
 .ck-ec-info{flex:1;min-width:0}
 .ck-ec-name{font-weight:700;font-size:.92rem;color:var(--txt-dark);line-height:1.3;margin-bottom:4px}
 .ck-ec-meta{font-size:.78rem;color:var(--txt-muted);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* ============================================================ TICKET LINE */
 .ck-ticket-line{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
 .ck-tl-name{font-size:.85rem;color:var(--txt-dark)}
 .ck-tl-price{font-size:.85rem;font-weight:600;color:var(--txt-dark);white-space:nowrap}
 
-/* ============================================================ VOUCHER RESULT */
 .ck-voucher-ok{color:#00A651;font-size:.85rem;font-weight:500}
 .ck-voucher-err{color:#E74C3C;font-size:.85rem;font-weight:500}
 
-/* ============================================================ TOAST .show (opacity transition) */
 .ck-toast{opacity:0;transform:translateX(120%);transition:opacity .3s ease,transform .3s ease}
 .ck-toast.show{opacity:1;transform:translateX(0)}
 
-/* ============================================================ INPUT STATES */
 .ck-input.valid{border-color:#00A651}
 .ck-input.error{border-color:#E74C3C;background:#fff8f8}

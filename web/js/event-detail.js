@@ -1,14 +1,5 @@
-/**
- * EventHub — Event Detail Page (event-detail.js)
- * Vanilla JS: ticket selection, quantity stepper, order summary,
- * sessionStorage handoff to checkout, tabs, sticky header, share.
- */
-
 'use strict';
 
-// ============================================================
-// 1. EVENT DATA (mock — in a real app, loaded via API query param)
-// ============================================================
 
 const EVENT_1 = {
   id: 1,
@@ -214,9 +205,6 @@ const EVENT_1 = {
   ]
 };
 
-// ============================================================
-// DEFAULT FALLBACK RULES & POLICY
-// ============================================================
 
 const DEFAULT_RULES = [
   {
@@ -277,7 +265,7 @@ const DEFAULT_POLICY = [
   }
 ];
 
-// Master events repository for detail pages
+// Dữ liệu chi tiết sự kiện
 const MASTER_EVENTS_DATA = {
   1: EVENT_1,
   2: {
@@ -1235,7 +1223,7 @@ function initEventData() {
   const rawId = urlParams.get('id');
   const eventId = rawId ? Number(rawId) : 1;
 
-  // Check localStorage for customized/created events from admin
+  // Kiểm tra sự kiện tạo từ trang quản trị trong localStorage
   let customEvent = null;
   try {
     const stored = JSON.parse(localStorage.getItem('eventhub_events') || '[]');
@@ -1325,7 +1313,7 @@ function initEventData() {
     }
   }
 
-  // Ensure agenda, lineup, rules, and policy are never undefined
+  // Khởi tạo cấu trúc mặc định cho lịch trình, nghệ sĩ và quy định
   if (!EVENT.rules || EVENT.rules.length === 0) EVENT.rules = DEFAULT_RULES;
   if (!EVENT.policy || EVENT.policy.length === 0) EVENT.policy = DEFAULT_POLICY;
   if (!EVENT.agenda) EVENT.agenda = [];
@@ -1423,9 +1411,6 @@ async function fetchLiveEventDetails() {
   } catch (e) {}
 }
 
-// ============================================================
-// 2. STATE
-// ============================================================
 
 const edState = {
   quantities: {},      // { ticketId: count }
@@ -1433,9 +1418,6 @@ const edState = {
   saleCountdownTimer: null,
 };
 
-// ============================================================
-// 3. INIT
-// ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
   initEventData();
@@ -1455,7 +1437,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSavedState();
   fetchLiveEventDetails();
 
-  // Attach listener to user chip for click & keyboard accessibility
+  // Lắng nghe sự kiện click/phím trên avatar
   const userChip = document.getElementById('ed-user-chip');
   if (userChip) {
     userChip.addEventListener('click', (e) => toggleUserDropdown(e));
@@ -1468,9 +1450,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ============================================================
-// 4. AUTH
-// ============================================================
 
 const ED_USERS = {
   Admin: { id: 1, name: 'Nguyễn Bảo Khánh', email: 'khanh.admin@eventhub.vn', role: 'Admin', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80' },
@@ -1495,7 +1474,6 @@ function loadUser() {
         document.getElementById('ed-user-avatar').src = user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&q=80';
         document.getElementById('ed-user-name').textContent = user.name.split(' ').pop();
 
-        // Dropdown info
         const ddName = document.getElementById('ed-dropdown-name');
         const ddEmail = document.getElementById('ed-dropdown-email');
         const ddRole = document.getElementById('ed-dropdown-role');
@@ -1506,7 +1484,6 @@ function loadUser() {
           ddRole.className = 'ed-role-badge ' + (user.role || '').toLowerCase();
         }
 
-        // Role permissions
         const role = (user.role || '').toLowerCase();
         const hasAdminAccess = (role === 'admin' || role === 'organizer');
         const navCreate = document.getElementById('ed-nav-create');
@@ -1562,35 +1539,25 @@ function handleLogout() {
   setTimeout(() => window.location.reload(), 600);
 }
 
-// ============================================================
-// 5. COVER
-// ============================================================
 
 function renderCover() {
-  // Background image
   document.getElementById('ed-cover-bg').style.backgroundImage = `url('${EVENT.image}')`;
 
-  // Breadcrumb + title
   document.getElementById('ed-bc-name').textContent = truncate(EVENT.name, 40);
   document.title = `${EVENT.name} — EventHub`;
   document.getElementById('ed-cover-title').textContent = EVENT.name;
 
-  // Date range
   document.getElementById('ed-cover-date').textContent =
     `${formatDT(EVENT.dateStart)} → ${formatTime(EVENT.dateEnd)}`;
 
-  // Venue
   document.getElementById('ed-cover-venue').textContent = EVENT.venue;
 
-  // Organizer
   document.getElementById('ed-cover-org').textContent = EVENT.organizer;
 
-  // Sold progress
   const pct = Math.round(EVENT.registered / EVENT.capacity * 100);
   document.getElementById('ed-cover-sold').textContent =
     `${EVENT.registered.toLocaleString('vi-VN')} / ${EVENT.capacity.toLocaleString('vi-VN')} (${pct}%)`;
 
-  // Badges
   const pct2 = Math.round(EVENT.registered / EVENT.capacity * 100);
   const statusLabel = pct2 >= 100 ? 'Hết vé' : pct2 >= 85 ? 'Sắp hết vé' : 'Đang mở bán';
   const statusClass = pct2 >= 100 ? 'ed-cb-sold' : pct2 >= 85 ? 'ed-cb-almost' : 'ed-cb-status';
@@ -1601,16 +1568,12 @@ function renderCover() {
     ${EVENT.format === 'online' ? '<span class="ed-cb ed-cb-format">💻 Online</span>' : ''}
   `;
 
-  // Min price
   const availableTickets = (EVENT.tickets || []).filter(t => t.status !== 'sold');
   const minPrice = availableTickets.length > 0 ? Math.min(...availableTickets.map(t => t.price)) : (EVENT.price || 0);
   document.getElementById('ed-min-price').textContent = formatVND(minPrice);
   document.getElementById('ed-mobile-price').textContent = formatVND(minPrice);
 }
 
-// ============================================================
-// 6. ABOUT
-// ============================================================
 
 function renderAbout() {
   document.getElementById('ed-about-content').innerHTML = EVENT.description;
@@ -1625,9 +1588,6 @@ function renderAbout() {
   `).join('');
 }
 
-// ============================================================
-// 7. AGENDA
-// ============================================================
 
 function renderAgenda() {
   const container = document.getElementById('ed-agenda-content');
@@ -1656,9 +1616,6 @@ function renderAgenda() {
   `).join('');
 }
 
-// ============================================================
-// 8. LINEUP
-// ============================================================
 
 function renderLineup() {
   const container = document.getElementById('ed-lineup-content');
@@ -1692,9 +1649,6 @@ function renderLineup() {
   `).join('');
 }
 
-// ============================================================
-// 9. POLICY & RULES
-// ============================================================
 
 function renderPolicy() {
   const container = document.getElementById('ed-policy-content');
@@ -1745,9 +1699,6 @@ function togglePolicy(btn) {
   }
 }
 
-// ============================================================
-// 10. LOCATION
-// ============================================================
 
 function renderLocation() {
   document.getElementById('ed-location-content').innerHTML = `
@@ -1807,9 +1758,6 @@ function copyAddress() {
   }
 }
 
-// ============================================================
-// 11. ORGANIZER
-// ============================================================
 
 function renderOrganizer() {
   document.getElementById('ed-organizer-content').innerHTML = `
@@ -1859,9 +1807,6 @@ function renderOrganizer() {
 function followOrg() { showToast('✅ Đã theo dõi Monsoon Production', 'success'); }
 function contactOrg() { showToast('✉️ Mở form liên hệ ban tổ chức', 'info'); }
 
-// ============================================================
-// 12. TICKET TIERS
-// ============================================================
 
 function renderTicketTiers() {
   const container = document.getElementById('ed-ticket-tiers');
@@ -1936,9 +1881,6 @@ function renderTierHTML(t, context) {
   `;
 }
 
-// ============================================================
-// 13. QUANTITY STEPPER — Core logic
-// ============================================================
 
 function changeQty(ticketId, delta, context) {
   const ticket = EVENT.tickets.find(t => t.id === ticketId);
@@ -1948,7 +1890,7 @@ function changeQty(ticketId, delta, context) {
   const next = Math.max(0, Math.min(ticket.maxPerOrder, current + delta));
   edState.quantities[ticketId] = next;
 
-  // Update both desktop & mobile steppers in sync
+  // Đồng bộ bộ chọn số lượng vé giữa desktop và mobile
   updateStepper(ticketId, next, ticket, 'desktop');
   updateStepper(ticketId, next, ticket, 'mobile');
 
@@ -1965,10 +1907,10 @@ function updateStepper(ticketId, qty, ticket, context) {
 
   qtyEl.textContent = qty;
 
-  // Update tier selection highlight
+  // Đánh dấu hạng vé đang chọn
   tierEl.classList.toggle('ed-tier-selected', qty > 0);
 
-  // Update stepper button states
+  // Cập nhật trạng thái nút tăng giảm
   if (stepEl) {
     const minusBtn = stepEl.querySelector('.ed-stepper-btn:first-child');
     const plusBtn  = stepEl.querySelector('.ed-stepper-btn:last-child');
@@ -1977,9 +1919,6 @@ function updateStepper(ticketId, qty, ticket, context) {
   }
 }
 
-// ============================================================
-// 14. ORDER SUMMARY
-// ============================================================
 
 function updateOrderSummary() {
   const hasAny = Object.values(edState.quantities).some(q => q > 0);
@@ -1997,7 +1936,7 @@ function updateOrderSummary() {
     lines.push({ name: ticket.name, qty, price: ticket.price, total: lineTotal });
   });
 
-  // Render order lines
+  // Hiển thị danh sách vé đã chọn
   const linesEl = document.getElementById('ed-order-lines');
   if (linesEl) {
     linesEl.innerHTML = lines.map(l => `
@@ -2008,7 +1947,7 @@ function updateOrderSummary() {
     `).join('');
   }
 
-  // Subtotal + fee (0% for now — real app would apply service fee)
+  // Tính tổng tiền vé và phí dịch vụ
   const fee = 0;
   const grand = subtotal + fee;
 
@@ -2018,9 +1957,6 @@ function updateOrderSummary() {
   setText('ed-mobile-total',   formatVND(grand));
 }
 
-// ============================================================
-// 15. CTA BUTTON STATE
-// ============================================================
 
 function updateCTAButton() {
   const totalQty = Object.values(edState.quantities).reduce((s, q) => s + q, 0);
@@ -2043,9 +1979,6 @@ function updateCTAButton() {
   }
 }
 
-// ============================================================
-// 16. PROCEED TO CHECKOUT — Save to sessionStorage
-// ============================================================
 
 function proceedToCheckout() {
   const totalQty = Object.values(edState.quantities).reduce((s, q) => s + q, 0);
@@ -2054,7 +1987,7 @@ function proceedToCheckout() {
     return;
   }
 
-  // Build cart payload
+  // Đóng gói dữ liệu giỏ vé
   const cartItems = EVENT.tickets
     .filter(t => (edState.quantities[t.id] || 0) > 0)
     .map(t => ({
@@ -2080,9 +2013,9 @@ function proceedToCheckout() {
     createdAt:  new Date().toISOString()
   };
 
-  // Persist to sessionStorage so checkout page can read it
+  // Lưu vào sessionStorage để trang thanh toán sử dụng
   sessionStorage.setItem('eventhub_checkout', JSON.stringify(checkoutData));
-  // Also persist to localStorage as a backup cart
+  // Lưu dự phòng vào localStorage
   localStorage.setItem('eventhub_cart', JSON.stringify(checkoutData));
 
   // KIỂM TRA ĐĂNG NHẬP: BẮT BUỘC ĐĂNG NHẬP ĐỂ ĐẶT VÉ
@@ -2109,9 +2042,6 @@ function proceedToCheckout() {
   }, 1000);
 }
 
-// ============================================================
-// 17. SAVE / WISHLIST
-// ============================================================
 
 function loadSavedState() {
   try {
@@ -2144,7 +2074,7 @@ function toggleSave() {
     }
     localStorage.setItem('eventhub_wishlist', JSON.stringify(list));
 
-    // Sync to backend DB if user is logged in
+    // Đồng bộ lên cơ sở dữ liệu nếu đã đăng nhập
     const userStr = localStorage.getItem('eventhub_user');
     const u = userStr ? JSON.parse(userStr) : null;
     const userId = u ? (u.user_id || u.id) : null;
@@ -2166,16 +2096,11 @@ function toggleSave() {
   } catch (e) { /* ignore */ }
 }
 
-// ============================================================
-// 18. TABS
-// ============================================================
 
 function switchTab(btn) {
-  // Deactivate all tabs
   document.querySelectorAll('.ed-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.ed-section').forEach(s => s.classList.add('ed-section-hidden'));
 
-  // Activate selected
   btn.classList.add('active');
   const target = document.getElementById(btn.dataset.target);
   if (target) {
@@ -2184,7 +2109,7 @@ function switchTab(btn) {
   }
 }
 
-// Auto-highlight tab on scroll
+// Tự động đánh dấu tab khi cuộn trang
 function setupTabScroll() {
   const sections = document.querySelectorAll('.ed-section[id]');
   const tabs = document.querySelectorAll('.ed-tab');
@@ -2202,9 +2127,6 @@ function setupTabScroll() {
   }, { passive: true });
 }
 
-// ============================================================
-// 19. MOBILE SHEET
-// ============================================================
 
 function toggleMobileTicket() {
   const sheet   = document.getElementById('ed-mobile-sheet');
@@ -2220,9 +2142,6 @@ function closeMobileSheet() {
   document.body.style.overflow = '';
 }
 
-// ============================================================
-// 20. SALE COUNTDOWN
-// ============================================================
 
 function startSaleCountdown() {
   const el = document.getElementById('ed-ticket-countdown');
@@ -2245,9 +2164,6 @@ function startSaleCountdown() {
   edState.saleCountdownTimer = setInterval(update, 60000);
 }
 
-// ============================================================
-// 21. STICKY HEADER
-// ============================================================
 
 function setupStickyHeader() {
   const header = document.getElementById('ed-header');
@@ -2256,9 +2172,6 @@ function setupStickyHeader() {
   }, { passive: true });
 }
 
-// ============================================================
-// 22. SHARE
-// ============================================================
 
 function shareEvent() {
   if (navigator.share) {
@@ -2296,15 +2209,12 @@ function shareTo(platform) {
   }
 }
 
-// Close share modal on backdrop click
+// Đóng modal chia sẻ khi click ra ngoài nền mờ
 document.addEventListener('click', (e) => {
   const modal = document.getElementById('ed-share-modal');
   if (modal && e.target === modal) closeShareModal();
 });
 
-// ============================================================
-// 23. TOAST
-// ============================================================
 
 function showToast(message, type = 'info') {
   const container = document.getElementById('ed-toast-container');
@@ -2321,9 +2231,6 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-// ============================================================
-// 24. HELPERS
-// ============================================================
 
 function formatVND(amount) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);

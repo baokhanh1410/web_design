@@ -1,12 +1,7 @@
-/* =============================================================
-   checkout.js — EventHub Checkout Page
-   Handles: data loading, payment methods, card preview,
-            vouchers, form validation, timer, confetti, success
-   ============================================================= */
+
 
 'use strict';
 
-// ─── State ────────────────────────────────────────────────────
 var checkoutData = null;      // loaded from sessionStorage
 var voucherDiscount = 0;      // discount amount in VND
 var appliedVoucher = null;    // voucher code string
@@ -16,14 +11,14 @@ var holdLeft = 600;
 var selectedWallet = null;
 var confettiAnim = null;
 
-// Voucher definitions
+// Danh sách mã giảm giá
 var VOUCHERS = {
   WELCOME20:    { type: 'pct',  val: 20 },
   WEEKEND50K:   { type: 'flat', val: 50000 },
   GROUP3PLUS1:  { type: 'pct',  val: 10 }
 };
 
-// Mock fallback data (shown when sessionStorage is empty)
+// Dữ liệu mẫu dự phòng khi chưa có giỏ vé
 var MOCK_DATA = {
   eventId: 1,
   eventName: 'Lễ Hội Âm Nhạc Gió Mùa — Monsoon Music Festival 2026',
@@ -39,7 +34,6 @@ var MOCK_DATA = {
   createdAt: new Date().toISOString()
 };
 
-// ─── Helpers ──────────────────────────────────────────────────
 
 function formatVND(amount) {
   return new Intl.NumberFormat('vi-VN', {
@@ -64,7 +58,6 @@ function showToast(msg, type) {
   toast.className = 'ck-toast ck-toast-' + (type || 'info');
   toast.textContent = msg;
   container.appendChild(toast);
-  // animate in
   requestAnimationFrame(function() {
     toast.classList.add('show');
   });
@@ -80,7 +73,6 @@ function copyText(text, label) {
       showToast('✅ Đã sao chép ' + (label || '') + ' vào clipboard', 'success');
     });
   } else {
-    // fallback
     var el = document.createElement('textarea');
     el.value = text;
     el.style.position = 'fixed';
@@ -98,7 +90,6 @@ function copyTransferRef() {
   if (el) copyText(el.textContent.trim(), 'nội dung chuyển khoản');
 }
 
-// ─── Load Data ────────────────────────────────────────────────
 
 function loadCheckoutData() {
   try {
@@ -145,7 +136,6 @@ function loadUser() {
   } catch (e) { /* ignore */ }
 }
 
-// ─── Render ───────────────────────────────────────────────────
 
 function renderEventCard() {
   var el = document.getElementById('ck-event-card');
@@ -199,19 +189,18 @@ function generateTransferRef() {
   if (el) el.textContent = ref;
 }
 
-// ─── QR Code (SVG pixel grid — no external lib) ───────────────
 
 function renderQRCode(container, seed, variant) {
   if (!container) return;
   var size = 21;
-  // deterministic pseudo-random based on seed
+  // Sinh số giả ngẫu nhiên từ seed
   var s = seed || 42;
   function next() {
     s = (s * 1664525 + 1013904223) & 0xffffffff;
     return (s >>> 0) / 4294967296;
   }
 
-  // Build a size×size matrix
+  // Tạo ma trận kích thước size x size
   var grid = [];
   var i, j;
   for (i = 0; i < size; i++) {
@@ -221,9 +210,9 @@ function renderQRCode(container, seed, variant) {
     }
   }
 
-  // Overlay finder patterns (top-left, top-right, bottom-left)
+  // Vẽ 3 cụm định vị góc (Finder Patterns)
   function finder(r, c) {
-    // 7×7 finder
+    // Cụm định vị 7x7
     for (var dr = 0; dr < 7; dr++) {
       for (var dc = 0; dc < 7; dc++) {
         var row = r + dr, col = c + dc;
@@ -239,7 +228,7 @@ function renderQRCode(container, seed, variant) {
   finder(0, size - 7);
   finder(size - 7, 0);
 
-  // Timing pattern
+  // Đường định thời
   for (var t = 8; t < size - 8; t++) {
     grid[6][t] = t % 2 === 0 ? 1 : 0;
     grid[t][6] = t % 2 === 0 ? 1 : 0;
@@ -266,7 +255,6 @@ function renderQRCode(container, seed, variant) {
     '</svg>';
 }
 
-// ─── Hold Timer ───────────────────────────────────────────────
 
 function startHoldTimer(seconds) {
   holdTotal = seconds;
@@ -308,7 +296,6 @@ function showExpired() {
   }
 }
 
-// ─── Payment Method Selection ─────────────────────────────────
 
 function selectPayment(method) {
   var methods = ['vietqr', 'ewallet', 'card'];
@@ -326,7 +313,7 @@ function selectPayment(method) {
 }
 
 function selectWallet(btn, walletId) {
-  // Deselect all wallet buttons
+  // Bỏ chọn các nút ví điện tử khác
   var allBtns = document.querySelectorAll('.ck-wallet-btn');
   allBtns.forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
@@ -348,14 +335,11 @@ function selectWallet(btn, walletId) {
   if (redirect) redirect.style.display = 'flex';
 }
 
-// ─── Card Live Preview ────────────────────────────────────────
 
 function formatCardNum(input) {
   var v = input.value.replace(/\D/g, '').slice(0, 16);
-  // Insert spaces every 4 digits
   input.value = v.replace(/(.{4})/g, '$1 ').trim();
 
-  // Detect network
   var logo = document.getElementById('prev-logo');
   var num = document.getElementById('prev-num');
   if (num) {
@@ -399,7 +383,6 @@ function syncCardPreview() {
   }
 }
 
-// ─── Voucher ──────────────────────────────────────────────────
 
 function fillVoucher(code) {
   var el = document.getElementById('voucher-input');
@@ -440,7 +423,7 @@ function applyVoucher() {
   }
   appliedVoucher = code;
 
-  // Update discount row
+  // Cập nhật dòng giảm giá
   var discRow = document.getElementById('sum-discount-row');
   var discEl = document.getElementById('sum-discount');
   if (discRow) discRow.style.display = 'flex';
@@ -454,7 +437,6 @@ function hideDicountRow() {
   if (discRow) discRow.style.display = 'none';
 }
 
-// ─── Form Validation ──────────────────────────────────────────
 
 function setFieldState(inputId, errId, msg) {
   var input = document.getElementById(inputId);
@@ -476,20 +458,17 @@ function setFieldState(inputId, errId, msg) {
 function validateForm() {
   var valid = true;
 
-  // Name
   var name = (document.getElementById('f-name') || {}).value || '';
   if (!setFieldState('f-name', 'err-name', name.trim().length < 2 ? 'Vui lòng nhập họ tên (ít nhất 2 ký tự)' : '')) {
     valid = false;
   }
 
-  // Email
   var email = (document.getElementById('f-email') || {}).value || '';
   var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   if (!setFieldState('f-email', 'err-email', emailOk ? '' : 'Email không hợp lệ (vd: example@gmail.com)')) {
     valid = false;
   }
 
-  // Phone
   var phone = (document.getElementById('f-phone') || {}).value || '';
   var stripped = phone.replace(/\s/g, '');
   var phoneOk = /^(0|\+84)(3|5|7|8|9)\d{8}$/.test(stripped);
@@ -497,7 +476,6 @@ function validateForm() {
     valid = false;
   }
 
-  // Terms
   var terms = document.getElementById('agree-terms');
   var termsErr = document.getElementById('err-terms');
   if (terms && !terms.checked) {
@@ -507,7 +485,7 @@ function validateForm() {
     termsErr.textContent = '';
   }
 
-  // Card fields (only if card payment selected)
+  // Kiểm tra trường thẻ tín dụng
   var payCard = document.getElementById('pay-card');
   if (payCard && payCard.checked) {
     // Card number: 16 digits
@@ -550,7 +528,6 @@ function onTermsChange() {
   if (termsErr) termsErr.textContent = '';
 }
 
-// ─── Submit Payment ───────────────────────────────────────────
 
 function submitPayment() {
   // BẮT BUỘC ĐĂNG NHẬP TRƯỚC KHI THANH TOÁN
@@ -567,7 +544,6 @@ function submitPayment() {
 
   if (!validateForm()) {
     showToast('⚠️ Vui lòng kiểm tra lại thông tin', 'error');
-    // scroll to first error
     var firstErr = document.querySelector('.ck-input.error, .ck-error:not(:empty)');
     if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
@@ -601,14 +577,14 @@ function onPaymentSuccess() {
   var subtotal = d.subtotal || 0;
   var grand = Math.max(0, subtotal - voucherDiscount);
 
-  // Generate booking ID
+  // Tạo mã đặt vé
   var bookingId = 'EVT-BK-' + Date.now();
   var orderId = '#EH-' + Math.floor(100000 + Math.random() * 900000);
   var totalQty = (d.items || []).reduce(function(s, i) { return s + (i.quantity || 0); }, 0);
   var email = (document.getElementById('f-email') || {}).value || '';
   var phone = (document.getElementById('f-phone') || {}).value || '';
 
-  // Build unified booking record
+  // Tạo bản ghi đơn vé chuẩn hóa
   var booking = {
     bookingId: bookingId,
     booking_id: bookingId,
@@ -644,14 +620,14 @@ function onPaymentSuccess() {
     is_checked_in: false
   };
 
-  // Persist to localStorage
+  // Lưu vào localStorage
   try {
     var existing = JSON.parse(localStorage.getItem('eventhub_bookings') || '[]');
     existing.unshift(booking);
     localStorage.setItem('eventhub_bookings', JSON.stringify(existing));
   } catch (e) { /* ignore */ }
 
-  // Sync booking to backend DB if logged in or API is active
+  // Đồng bộ đơn đặt vé lên cơ sở dữ liệu
   try {
     var userStr = localStorage.getItem('eventhub_user');
     var u = userStr ? JSON.parse(userStr) : null;
@@ -681,10 +657,10 @@ function onPaymentSuccess() {
     }).catch(function () {});
   } catch (e) {}
 
-  // Clear checkout session
+  // Xóa giỏ vé tạm thời
   try { sessionStorage.removeItem('eventhub_checkout'); } catch (e) { /* ignore */ }
 
-  // Populate success overlay
+  // Hiển thị màn hình thành công
   var totalQty = (d.items || []).reduce(function(s, i) { return s + i.quantity; }, 0);
   var tierNames = (d.items || []).map(function(i) { return i.ticketName; }).join(', ');
 
@@ -697,16 +673,16 @@ function onPaymentSuccess() {
   setText('et-booking-id', bookingId);
   setText('et-qty', totalQty + ' vé');
 
-  // Render QR on e-ticket
+  // Vẽ mã QR trên vé điện tử
   renderQRCode(document.getElementById('et-qr-box'), Date.now() % 9999, 'eticket');
 
-  // Update step 3
+  // Cập nhật bước 3
   var step3 = document.getElementById('step-3');
   var step2 = document.getElementById('step-2');
   if (step3) { step3.classList.add('active', 'done'); }
   if (step2) { step2.classList.remove('active'); step2.classList.add('done'); }
 
-  // Show overlay
+  // Hiển thị lớp phủ
   var overlay = document.getElementById('ck-success-overlay');
   if (overlay) {
     overlay.classList.add('open');
@@ -714,7 +690,7 @@ function onPaymentSuccess() {
   }
   window.scrollTo(0, 0);
 
-  // Start confetti
+  // Kích hoạt hiệu ứng pháo hoa
   startConfetti();
 }
 
@@ -723,7 +699,6 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
-// ─── Confetti ─────────────────────────────────────────────────
 
 function startConfetti() {
   var canvas = document.getElementById('ck-confetti');
@@ -777,7 +752,6 @@ function startConfetti() {
       p.y += p.vy;
       p.angle += p.spin;
 
-      // Reset if off screen
       if (p.y > canvas.height + 20) {
         p.y = -20;
         p.x = Math.random() * canvas.width;
@@ -791,7 +765,6 @@ function startConfetti() {
   draw();
 }
 
-// ─── Navigation ───────────────────────────────────────────────
 
 function restartSession() {
   window.location.href = 'events.html';
@@ -801,7 +774,6 @@ function goToMyBookings() {
   window.location.href = 'profile.html';
 }
 
-// ─── Note character counter ───────────────────────────────────
 
 function initNoteCounter() {
   var note = document.getElementById('f-note');
@@ -812,7 +784,6 @@ function initNoteCounter() {
   });
 }
 
-// ─── Init ─────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function() {
   loadCheckoutData();
@@ -820,7 +791,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initNoteCounter();
   startHoldTimer(600);
 
-  // Default: show vietqr as selected
+  // Mặc định chọn phương thức VietQR
   selectPayment('vietqr');
 });
 

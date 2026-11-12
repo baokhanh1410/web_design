@@ -235,12 +235,8 @@
   <!-- Main Layout: Detail & Ticket Sidebar -->
   <div class="ed-container ed-layout" id="ed-layout">
 
-    <!-- ----------------------------------------------------------------
-         LEFT: EVENT DETAIL CONTENT
-         ---------------------------------------------------------------- -->
     <div class="ed-main">
 
-      <!-- ---- TAB NAV ---- -->
       <nav class="ed-tabs" aria-label="Nội dung sự kiện">
         <button class="ed-tab active" data-target="ed-sec-about"   onclick="switchTab(this)">Giới thiệu</button>
         <button class="ed-tab" data-target="ed-sec-agenda"         onclick="switchTab(this)">Lịch trình</button>
@@ -250,7 +246,6 @@
         <button class="ed-tab" data-target="ed-sec-organizer"      onclick="switchTab(this)">Ban tổ chức</button>
       </nav>
 
-      <!-- ---- SECTION: ABOUT ---- -->
       <section class="ed-section" id="ed-sec-about">
         <h2 class="ed-section-title">Về sự kiện</h2>
         <div class="ed-rich-text" id="ed-about-content">
@@ -262,7 +257,6 @@
         </div>
       </section>
 
-      <!-- ---- SECTION: AGENDA ---- -->
       <section class="ed-section ed-section-hidden" id="ed-sec-agenda">
         <h2 class="ed-section-title">Lịch trình sự kiện</h2>
         <div class="ed-agenda" id="ed-agenda-content">
@@ -270,7 +264,6 @@
         </div>
       </section>
 
-      <!-- ---- SECTION: LINEUP ---- -->
       <section class="ed-section ed-section-hidden" id="ed-sec-lineup">
         <h2 class="ed-section-title">Nghệ sĩ &amp; Diễn giả</h2>
         <div class="ed-lineup-grid" id="ed-lineup-content">
@@ -278,7 +271,6 @@
         </div>
       </section>
 
-      <!-- ---- SECTION: POLICY ---- -->
       <section class="ed-section ed-section-hidden" id="ed-sec-policy">
         <h2 class="ed-section-title">Quy định &amp; Chính sách tham gia sự kiện</h2>
         <div class="ed-policy" id="ed-policy-content">
@@ -286,7 +278,6 @@
         </div>
       </section>
 
-      <!-- ---- SECTION: LOCATION ---- -->
       <section class="ed-section ed-section-hidden" id="ed-sec-location">
         <h2 class="ed-section-title">Địa điểm tổ chức</h2>
         <div class="ed-location-card" id="ed-location-content">
@@ -294,7 +285,6 @@
         </div>
       </section>
 
-      <!-- ---- SECTION: ORGANIZER ---- -->
       <section class="ed-section ed-section-hidden" id="ed-sec-organizer">
         <h2 class="ed-section-title">Ban tổ chức</h2>
         <div class="ed-organizer-card" id="ed-organizer-content">
@@ -304,9 +294,6 @@
 
     </div><!-- /ed-main -->
 
-    <!-- ----------------------------------------------------------------
-         RIGHT: STICKY TICKET BOX
-         ---------------------------------------------------------------- -->
     <aside class="ed-ticket-sidebar" id="ed-ticket-box" aria-label="Chọn vé">
       <div class="ed-ticket-box" id="ed-ticket-widget">
         <div class="ed-ticket-header">

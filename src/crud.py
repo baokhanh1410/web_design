@@ -1,12 +1,7 @@
 import pandas as pd
 from sqlalchemy import text
 
-# ============================================================
-# SECTION 1: EVENTS — CRUD for Event Management
-# ============================================================
-
 def get_all_events(session):
-    """Fetch list of events including venue, organizer, categories, capacity, and current registrations."""
     query = text("""
         SELECT e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price,
                COALESCE(e.image_url, '') as image_url,
@@ -27,7 +22,6 @@ def get_all_events(session):
     return df
 
 def get_guest_registered_events(session, guest_id):
-    """Fetch list of events that a specific guest HAS REGISTERED for."""
     query = text("""
         SELECT r.registration_id, r.registration_date, r.attendance_status,
                e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name, e.status, e.base_price,
@@ -49,14 +43,12 @@ def get_guest_registered_events(session, guest_id):
     return df
 
 def get_categories(session):
-    """Fetch list of categories for dropdowns."""
     query = text("SELECT category_id, category_name FROM categories ORDER BY category_name ASC")
     with session.get_bind().connect() as conn:
         df = pd.read_sql(query, conn)
     return df
 
 def create_event(session, name, start_datetime, end_datetime, venue_id, org_id, category_ids, price):
-    """Insert a new event into the database."""
     query = text("""
         INSERT INTO events (event_name, event_date, end_time, venue_id, organizer_id, base_price)
         VALUES (:name, :start, :end, :v_id, :o_id, :price)
@@ -68,20 +60,18 @@ def create_event(session, name, start_datetime, end_datetime, venue_id, org_id, 
             "v_id": venue_id, "o_id": org_id, "price": price
         }).scalar()
 
-        # Insert event categories
         if category_ids:
             cat_query = text("INSERT INTO event_categories (event_id, category_id) VALUES (:eid, :cid)")
             for cid in category_ids:
                 session.execute(cat_query, {"eid": new_event_id, "cid": cid})
 
         session.commit()
-        return True, "Event created successfully!"
+        return True, "Tạo sự kiện thành công!"
     except Exception as e:
         session.rollback()
-        return False, f"Error: {str(e)}"
+        return False, f"Lỗi: {str(e)}"
 
 def get_event_by_id(session, event_id):
-    """Fetch detailed information of a specific event by ID with venue, organizer, and categories."""
     query = text("""
         SELECT e.event_id, e.event_name, e.event_date, e.end_time,
                e.venue_id, v.venue_name, v.venue_address, v.capacity,
@@ -110,7 +100,6 @@ def get_event_by_id(session, event_id):
     return df
 
 def update_event(session, event_id, name, start_datetime, end_datetime, venue_id, org_id, category_ids, price):
-    """Update event information."""
     query = text("""
         UPDATE events
         SET event_name = :name, event_date = :start, end_time = :end,
@@ -124,7 +113,6 @@ def update_event(session, event_id, name, start_datetime, end_datetime, venue_id
             "eid": event_id
         })
 
-        # Delete old category mappings and insert new ones
         session.execute(text("DELETE FROM event_categories WHERE event_id = :eid"), {"eid": event_id})
         if category_ids:
             cat_query = text("INSERT INTO event_categories (event_id, category_id) VALUES (:eid, :cid)")
@@ -132,17 +120,12 @@ def update_event(session, event_id, name, start_datetime, end_datetime, venue_id
                 session.execute(cat_query, {"eid": event_id, "cid": cid})
 
         session.commit()
-        return True, "Event updated successfully!"
+        return True, "Cập nhật sự kiện thành công!"
     except Exception as e:
         session.rollback()
-        return False, f"Error: {str(e)}"
-
-# ============================================================
-# SECTION 2: ATTENDANCE — CRUD for Registration & Check-in
-# ============================================================
+        return False, f"Lỗi: {str(e)}"
 
 def get_events_list(session):
-    """Return a list of (event_id, event_name) for dropdown selections."""
     query = text("""
         SELECT event_id, event_name FROM events ORDER BY event_date DESC
     """)
@@ -151,7 +134,6 @@ def get_events_list(session):
     return df
 
 def get_available_events_for_guest(session, guest_id):
-    """Return a list of events that a specific guest HAS NOT REGISTERED for yet."""
     query = text("""
         SELECT e.event_id, e.event_name, v.capacity, COALESCE(r_count.cnt, 0) as current_registrations
         FROM events e
@@ -167,7 +149,6 @@ def get_available_events_for_guest(session, guest_id):
     return df
 
 def get_guests_list(session):
-    """Return a list of (guest_id, guest_name) for dropdown selections."""
     query = text("""
         SELECT guest_id, guest_name FROM guests ORDER BY guest_name ASC
     """)
@@ -176,7 +157,6 @@ def get_guests_list(session):
     return df
 
 def get_registrations_by_event(session, event_id):
-    """Fetch registration list for a specific event, JOINed with guests to show names."""
     query = text("""
         SELECT r.registration_id, g.guest_name, g.guest_email, g.phone_number,
                r.registration_date, r.attendance_status, r.feedback_rating
@@ -190,7 +170,6 @@ def get_registrations_by_event(session, event_id):
     return df
 
 def get_guest_own_registrations(session, event_id, guest_id):
-    """Fetch the registration record of a specific guest for a specific event."""
     query = text("""
         SELECT r.registration_id, g.guest_name, g.guest_email, g.phone_number,
                r.registration_date, r.attendance_status, r.feedback_rating
@@ -204,17 +183,16 @@ def get_guest_own_registrations(session, event_id, guest_id):
     return df
 
 def create_registration(session, event_id, guest_id):
-    """Register a guest for an event. Check for duplicates and capacity before inserting."""
-    # Check if already registered
+    # Kiểm tra đã đăng ký chưa
     check_query = text("""
         SELECT COUNT(*) as cnt FROM registrations
         WHERE event_id = :eid AND guest_id = :gid
     """)
     result = session.execute(check_query, {"eid": event_id, "gid": guest_id}).fetchone()
     if result[0] > 0:
-        return False, "This guest has already registered for this event!"
+        return False, "Khách hàng đã đăng ký sự kiện này rồi!"
 
-    # Check capacity
+    # Kiểm tra sức chứa
     capacity_query = text("""
         SELECT v.capacity, (SELECT COUNT(*) FROM registrations r WHERE r.event_id = :eid) as current_registrations
         FROM events e
@@ -226,9 +204,8 @@ def create_registration(session, event_id, guest_id):
         venue_capacity = capacity_result[0]
         current_registrations = capacity_result[1]
         if current_registrations >= venue_capacity:
-            return False, "This event has reached its maximum capacity and is sold out!"
+            return False, "Sự kiện đã đạt sức chứa tối đa và đã hết vé!"
 
-    # Insert new registration
     insert_query = text("""
         INSERT INTO registrations (event_id, guest_id, registration_date, attendance_status, feedback_rating)
         VALUES (:eid, :gid, NOW(), false, 0)
@@ -236,49 +213,44 @@ def create_registration(session, event_id, guest_id):
     try:
         session.execute(insert_query, {"eid": event_id, "gid": guest_id})
         session.commit()
-        return True, "Registration successful!"
+        return True, "Đăng ký thành công!"
     except Exception as e:
         session.rollback()
-        return False, f"Error: {str(e)}"
+        return False, f"Lỗi: {str(e)}"
 
 def check_in_guest(session, registration_id):
-    """Check-in a guest by updating attendance_status."""
     try:
-        # Check if registration exists
         exists = session.execute(
             text("SELECT COUNT(*) FROM registrations WHERE registration_id = :rid"),
             {"rid": registration_id}
         ).scalar()
         if exists == 0:
-            return False, "Cannot find registration with this ID."
+            return False, "Không tìm thấy lượt đăng ký với mã này."
 
-        # Check if already checked in
         already_in = session.execute(
             text("SELECT attendance_status FROM registrations WHERE registration_id = :rid"),
             {"rid": registration_id}
         ).scalar()
         if already_in:
-            return False, "Guest has already checked in."
+            return False, "Khách đã được điểm danh trước đó."
 
         session.execute(
             text("UPDATE registrations SET attendance_status = true WHERE registration_id = :rid"),
             {"rid": registration_id}
         )
         session.commit()
-        return True, "Check-in successful!"
+        return True, "Điểm danh thành công!"
     except Exception as e:
         session.rollback()
         return False, str(e)
 
 def get_attendance_summary(session):
-    """Fetch attendance rate statistics from View vw_event_attendance_summary."""
     query = text("SELECT * FROM vw_event_attendance_summary")
     with session.get_bind().connect() as conn:
         df = pd.read_sql(query, conn)
     return df
 
 def get_guest_profile(session, guest_id):
-    """Fetch guest profile information by ID."""
     query = text("""
         SELECT guest_name, guest_email, phone_number
         FROM guests
@@ -293,19 +265,13 @@ def get_guest_profile(session, guest_id):
         }
     return None
 
-# ============================================================
-# SECTION 3: FINANCE — CRUD for Finance Management
-# ============================================================
-
 def get_finance_summary(session):
-    """Fetch financial summary from View vw_finance_summary."""
     query = text("SELECT * FROM vw_finance_summary")
     with session.get_bind().connect() as conn:
         df = pd.read_sql(query, conn)
     return df
 
 def get_finance_by_event(session, event_id):
-    """Fetch specific financial details for a single event."""
     query = text("""
         SELECT finance_id, planned_budget, actual_cost
         FROM event_finance
@@ -321,7 +287,6 @@ def get_finance_by_event(session, event_id):
     return None
 
 def update_finance(session, finance_id, planned_budget, actual_cost):
-    """Update event financial records."""
     query = text("""
         UPDATE event_finance
         SET planned_budget = :pb, actual_cost = :ac
@@ -333,17 +298,12 @@ def update_finance(session, finance_id, planned_budget, actual_cost):
             "fid": finance_id
         })
         session.commit()
-        return True, "Financial records updated successfully!"
+        return True, "Cập nhật tài chính thành công!"
     except Exception as e:
         session.rollback()
-        return False, f"Error: {str(e)}"
-
-# ============================================================
-# SECTION 5: REGISTRATIONS & WISHLIST SYNCHRONIZATION
-# ============================================================
+        return False, f"Lỗi: {str(e)}"
 
 def cancel_guest_registration(session, registration_id, guest_id=None):
-    """Cancel (delete) a guest registration record."""
     try:
         if guest_id:
             query = text("DELETE FROM registrations WHERE registration_id = :rid AND guest_id = :gid")
@@ -353,14 +313,13 @@ def cancel_guest_registration(session, registration_id, guest_id=None):
             res = session.execute(query, {"rid": registration_id})
         session.commit()
         if res.rowcount > 0:
-            return True, "Registration cancelled successfully!"
-        return False, "Registration not found."
+            return True, "Hủy đăng ký vé thành công!"
+        return False, "Không tìm thấy vé tương ứng."
     except Exception as e:
         session.rollback()
-        return False, f"Error: {str(e)}"
+        return False, f"Lỗi: {str(e)}"
 
 def get_user_wishlist(session, user_id):
-    """Fetch all events in a user's wishlist joined with venue and categories."""
     query = text("""
         SELECT e.event_id, e.event_name, e.event_date, v.venue_name, o.organizer_name,
                e.status, e.base_price,
@@ -383,7 +342,6 @@ def get_user_wishlist(session, user_id):
     return df
 
 def add_to_wishlist(session, user_id, event_id):
-    """Add an event to user's wishlist."""
     try:
         query = text("""
             INSERT INTO wishlists (user_id, event_id)
@@ -392,20 +350,19 @@ def add_to_wishlist(session, user_id, event_id):
         """)
         session.execute(query, {"uid": user_id, "eid": event_id})
         session.commit()
-        return True, "Added to wishlist successfully!"
+        return True, "Đã thêm vào danh sách yêu thích!"
     except Exception as e:
         session.rollback()
-        return False, f"Error: {str(e)}"
+        return False, f"Lỗi: {str(e)}"
 
 def remove_from_wishlist(session, user_id, event_id):
-    """Remove an event from user's wishlist."""
     try:
         query = text("DELETE FROM wishlists WHERE user_id = :uid AND event_id = :eid")
         res = session.execute(query, {"uid": user_id, "eid": event_id})
         session.commit()
         if res.rowcount > 0:
-            return True, "Removed from wishlist successfully!"
-        return False, "Item not found in wishlist."
+            return True, "Đã xóa khỏi danh sách yêu thích!"
+        return False, "Sự kiện không có trong danh sách yêu thích."
     except Exception as e:
         session.rollback()
-        return False, f"Error: {str(e)}"
+        return False, f"Lỗi: {str(e)}"

@@ -1,8 +1,4 @@
--- ============================================================
--- CORE TABLES
--- ============================================================
-
--- events
+-- Bảng thực thể chính
 CREATE TABLE events (
     event_id   BIGSERIAL PRIMARY KEY,
     event_name VARCHAR(255) NOT NULL,
@@ -19,20 +15,17 @@ CREATE INDEX events_event_name_index ON events (event_name);
 CREATE INDEX events_event_date_index ON events (event_date);
 CREATE INDEX events_venue_id_event_date_index ON events (venue_id, event_date);
 
--- categories
 CREATE TABLE categories (
     category_id   SERIAL PRIMARY KEY,
     category_name VARCHAR(50) NOT NULL
 );
 
--- event_categories
 CREATE TABLE event_categories (
     event_id    BIGINT NOT NULL,
     category_id INT NOT NULL,
     PRIMARY KEY (event_id, category_id)
 );
 
--- guests
 CREATE TABLE guests (
     guest_id     BIGSERIAL PRIMARY KEY,
     guest_name   VARCHAR(255) NOT NULL,
@@ -42,7 +35,6 @@ CREATE TABLE guests (
 CREATE INDEX guests_guest_name_index ON guests (guest_name);
 CREATE INDEX guests_guest_email_index ON guests (guest_email);
 
--- organizers
 CREATE TABLE organizers (
     organizer_id   BIGSERIAL PRIMARY KEY,
     organizer_name VARCHAR(255) NOT NULL,
@@ -50,11 +42,7 @@ CREATE TABLE organizers (
     phone_number   VARCHAR(16) NOT NULL
 );
 
--- ============================================================
--- ATTENDANCE & FINANCE TABLES
--- ============================================================
-
--- venues
+-- Bảng địa điểm, đặt vé & tài chính
 CREATE TABLE venues (
     venue_id      BIGSERIAL PRIMARY KEY,
     venue_name    VARCHAR(255) NOT NULL,
@@ -62,7 +50,6 @@ CREATE TABLE venues (
     capacity      INT NOT NULL
 );
 
--- registrations
 CREATE TABLE registrations (
     registration_id  BIGSERIAL PRIMARY KEY,
     event_id         BIGINT NOT NULL,
@@ -74,7 +61,6 @@ CREATE TABLE registrations (
 CREATE INDEX registrations_registration_date_index ON registrations (registration_date);
 CREATE INDEX registrations_attendance_status_index ON registrations (attendance_status);
 
--- event_finance
 CREATE TABLE event_finance (
     finance_id     BIGSERIAL PRIMARY KEY,
     event_id       BIGINT NOT NULL,
@@ -82,17 +68,12 @@ CREATE TABLE event_finance (
     actual_cost    NUMERIC(15, 2) NOT NULL
 );
 
--- ============================================================
--- RBAC TABLES (Role-Based Access Control)
--- ============================================================
-
--- roles
+-- Bảng phân quyền (RBAC)
 CREATE TABLE roles (
     role_id   SERIAL PRIMARY KEY,
     role_name VARCHAR(50) NOT NULL
 );
 
--- permissions
 CREATE TABLE permissions (
     permission_id   SERIAL PRIMARY KEY,
     permission_name VARCHAR(255) NOT NULL,
@@ -100,14 +81,12 @@ CREATE TABLE permissions (
 );
 CREATE INDEX permissions_permission_name_index ON permissions (permission_name);
 
--- role_permissions (junction table for many-to-many RBAC)
 CREATE TABLE role_permissions (
     role_id       INT NOT NULL,
     permission_id INT NOT NULL,
     PRIMARY KEY (role_id, permission_id)
 );
 
--- users
 CREATE TABLE users (
     user_id       SERIAL PRIMARY KEY,
     username      VARCHAR(255) NOT NULL,
@@ -117,7 +96,6 @@ CREATE TABLE users (
 );
 CREATE INDEX users_username_index ON users (username);
 
--- wishlists (User event bookmarks)
 CREATE TABLE wishlists (
     wishlist_id   BIGSERIAL PRIMARY KEY,
     user_id       BIGINT NOT NULL,
@@ -127,10 +105,7 @@ CREATE TABLE wishlists (
 );
 CREATE INDEX wishlists_user_id_index ON wishlists (user_id);
 
--- ============================================================
--- FOREIGN KEYS
--- ============================================================
-
+-- Ràng buộc khóa ngoại
 ALTER TABLE users ADD CONSTRAINT users_role_id_foreign FOREIGN KEY (role_id) REFERENCES roles (role_id);
 ALTER TABLE users ADD CONSTRAINT users_guest_id_foreign FOREIGN KEY (guest_id) REFERENCES guests (guest_id);
 ALTER TABLE registrations ADD CONSTRAINT registrations_guest_id_foreign FOREIGN KEY (guest_id) REFERENCES guests (guest_id);
@@ -145,11 +120,7 @@ ALTER TABLE event_categories ADD CONSTRAINT event_categories_category_id_foreign
 ALTER TABLE wishlists ADD CONSTRAINT wishlists_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE;
 ALTER TABLE wishlists ADD CONSTRAINT wishlists_event_id_foreign FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE;
 
--- ============================================================
--- FUNCTIONS & TRIGGERS
--- ============================================================
-
--- Function: Enforce Event Capacity (replaces MySQL trigger)
+-- Trigger kiểm tra sức chứa địa điểm
 CREATE OR REPLACE FUNCTION fn_enforce_capacity()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -177,11 +148,7 @@ CREATE TRIGGER trg_enforce_capacity
 BEFORE INSERT ON registrations
 FOR EACH ROW EXECUTE FUNCTION fn_enforce_capacity();
 
--- ============================================================
--- VIEWS
--- ============================================================
-
--- View: Event Attendance Summary
+-- Khung nhìn báo cáo điểm danh và tài chính
 CREATE VIEW vw_event_attendance_summary AS
 SELECT
     e.event_id,
@@ -202,7 +169,6 @@ LEFT JOIN registrations r ON e.event_id = r.event_id
 GROUP BY e.event_id, e.event_name, e.event_date, v.venue_name
 ORDER BY e.event_date DESC;
 
--- View: Finance Summary
 CREATE OR REPLACE VIEW vw_finance_summary AS
 SELECT
     f.finance_id,

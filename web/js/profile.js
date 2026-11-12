@@ -1,8 +1,5 @@
 'use strict';
 
-/* ============================================================
-   MOCK DATA
-   ============================================================ */
 var MOCK_BOOKINGS = [
   {
     bookingId: 'EVT-BK-1731234567001',
@@ -202,18 +199,12 @@ var MOCK_WISHLIST = [
   EVENT_CATALOG[4]
 ];
 
-/* ============================================================
-   STATE
-   ============================================================ */
 var allBookings = [];
 var currentUser = {};
 var wishlist = [];
 var activeTicketFilter = 'upcoming';
 var currentBookingForModal = null;
 
-/* ============================================================
-   HELPER FUNCTIONS
-   ============================================================ */
 
 function formatVND(amount) {
   return new Intl.NumberFormat('vi-VN', {
@@ -279,7 +270,7 @@ function generateQRSVG(seed) {
     return (s >>> 0) / 4294967296;
   }
 
-  // Build grid
+  // Khởi tạo lưới ma trận QR 21x21
   var grid = [];
   var i, j;
   for (i = 0; i < size; i++) {
@@ -289,7 +280,7 @@ function generateQRSVG(seed) {
     }
   }
 
-  // Helper: draw finder pattern at top-left corner (r,c)
+  // Vẽ cụm định vị góc Finder Pattern (7x7)
   function drawFinder(r, c) {
     var fr, fc;
     for (fr = 0; fr < 7; fr++) {
@@ -305,17 +296,17 @@ function generateQRSVG(seed) {
   drawFinder(0, size - 7);
   drawFinder(size - 7, 0);
 
-  // Timing strips
+  // Vẽ đường định thời Timing Pattern
   for (i = 8; i < size - 8; i++) {
     grid[6][i] = (i % 2 === 0) ? 1 : 0;
     grid[i][6] = (i % 2 === 0) ? 1 : 0;
   }
 
-  // Reserved separator zones (leave as 0 — already initialised)
-  // Fill data modules with LCG
+  
+  // Sinh dữ liệu ô vuông bằng thuật toán LCG
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) {
-      // Skip finder pattern areas + separators + timing
+      // Bỏ qua vùng định vị góc và đường định thời
       var inTopLeft = (i < 8 && j < 8);
       var inTopRight = (i < 8 && j >= size - 8);
       var inBottomLeft = (i >= size - 8 && j < 8);
@@ -392,12 +383,9 @@ function normalizeBooking(b) {
   };
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
 
 function init() {
-  // Load data
+  // Nạp dữ liệu
   try {
     var storedBookings = localStorage.getItem('eventhub_bookings');
     var rawList = storedBookings ? JSON.parse(storedBookings) : MOCK_BOOKINGS;
@@ -491,7 +479,7 @@ function init() {
   // Đồng bộ vé đã mua và danh sách yêu thích từ Database
   syncProfileDataWithDB();
 
-  // Escape key for modal
+  // Đóng modal khi nhấn phím Escape
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeQRModal();
   });
@@ -573,7 +561,7 @@ async function syncProfileDataWithDB() {
       }
     }
   } catch (err) {
-    // API backend offline -> fallback to local data
+    // Backend ngắt kết nối -> dự phòng dùng dữ liệu local
   }
 
   // 2. Đồng bộ danh sách yêu thích (Wishlist) từ DB & Events API
@@ -654,13 +642,10 @@ async function syncProfileDataWithDB() {
     renderHero();
     renderWishlist();
   } catch (err) {
-    // API backend offline -> fallback to local data
+    // Backend ngắt kết nối -> dự phòng dùng dữ liệu local
   }
 }
 
-/* ============================================================
-   HERO
-   ============================================================ */
 
 function renderHero() {
   var parts = (currentUser.name || '').trim().split(/\s+/);
@@ -713,7 +698,7 @@ function renderHero() {
     }
   }
 
-  // Role-based permissions
+  // Phân quyền người dùng
   var role = (currentUser.role || '').toLowerCase();
   var hasAdminAccess = (role === 'admin' || role === 'organizer');
   var navCreateLi = document.getElementById('pr-nav-create-li');
@@ -728,7 +713,7 @@ function renderHero() {
   if (ddAdmin)     ddAdmin.style.display     = hasAdminAccess ? 'flex' : 'none';
   if (adminActions)adminActions.style.display= hasAdminAccess ? 'inline-flex' : 'none';
 
-  // Dropdown text
+  // Thông tin menu thả xuống
   var ddName = document.getElementById('pr-dropdown-name');
   var ddEmail = document.getElementById('pr-dropdown-email');
   var ddRole = document.getElementById('pr-dropdown-role');
@@ -744,7 +729,7 @@ function renderHero() {
     joinDateEl.textContent = 'Thành viên từ ' + formatDateShort(currentUser.joinDate);
   }
 
-  // 1. Total tickets bought (sum of all ticket quantities for valid bookings)
+  // Tính tổng số vé đã mua hợp lệ
   var totalTicketsBought = allBookings.reduce(function (sum, b) {
     if (b.status === 'cancelled') return sum;
     var qty = (b.items || []).reduce(function (s, it) { return s + (it.quantity || 0); }, 0);
@@ -753,7 +738,7 @@ function renderHero() {
   var statTickets = document.getElementById('pr-stat-tickets');
   if (statTickets) statTickets.textContent = totalTicketsBought;
 
-  // 2. Events attended: non-cancelled bookings where eventDate is in the past
+  // Tính số sự kiện đã tham gia
   var attendedCount = allBookings.filter(function (b) {
     return b.status !== 'cancelled' && !isUpcoming(b.eventDate);
   }).length;
@@ -803,9 +788,6 @@ document.addEventListener('click', function(e) {
   }
 });
 
-/* ============================================================
-   TAB NAVIGATION
-   ============================================================ */
 
 function initTabNav() {
   var tabBtns = document.querySelectorAll('.pr-tab-btn');
@@ -864,9 +846,6 @@ window.addEventListener('hashchange', function () {
   }
 });
 
-/* ============================================================
-   TICKET RENDERING
-   ============================================================ */
 
 function initFilterBtns() {
   var filterBtns = document.querySelectorAll('.pr-filter-btn');
@@ -883,7 +862,7 @@ function initFilterBtns() {
 function renderTickets(filter) {
   activeTicketFilter = filter;
 
-  // Dynamic counts for each status
+  // Đếm số lượng vé theo từng trạng thái
   var upcomingCount = allBookings.filter(function (b) {
     return b.status !== 'cancelled' && isUpcoming(b.eventDate);
   }).length;
@@ -901,7 +880,7 @@ function renderTickets(filter) {
   if (btnAttended) btnAttended.innerHTML = '✅ Đã tham gia <span class="pr-filter-count">(' + attendedCount + ')</span>';
   if (btnCancelled) btnCancelled.innerHTML = '❌ Đã hủy <span class="pr-filter-count">(' + cancelledCount + ')</span>';
 
-  // Update active filter button
+  // Cập nhật nút lọc đang chọn
   var filterBtns = document.querySelectorAll('.pr-filter-btn');
   filterBtns.forEach(function (btn) {
     if (btn.dataset.filter === filter) {
@@ -911,7 +890,7 @@ function renderTickets(filter) {
     }
   });
 
-  // Attach click handlers (idempotent via replacing)
+  // Gắn sự kiện click cho các nút lọc
   initFilterBtns();
 
   var filtered = allBookings.filter(function (b) {
@@ -957,7 +936,7 @@ function renderTickets(filter) {
     });
     grid.innerHTML = html;
 
-    // Render mini QRs
+    // Kết xuất mã QR SVG thu nhỏ
     filtered.forEach(function (b) {
       var qrMini = document.getElementById('qr-mini-' + b.bookingId);
       if (qrMini) {
@@ -1039,7 +1018,7 @@ function addToCalendar(bookingId) {
   }
 
   var start = toBasic(booking.eventDate);
-  // end = start + 2 hours
+  // Thời gian kết thúc mặc định sau 2 giờ
   var endD = new Date(new Date(booking.eventDate).getTime() + 2 * 60 * 60 * 1000);
   var end = toBasic(endD.toISOString());
 
@@ -1055,9 +1034,6 @@ function requestSupport(bookingId) {
   showToast('📧 Yêu cầu hỗ trợ đã được gửi cho mã vé ' + bookingId, 'info');
 }
 
-/* ============================================================
-   QR MODAL
-   ============================================================ */
 
 function openQRModal(bookingId) {
   var booking = null;
@@ -1093,9 +1069,6 @@ function closeQRModal(event) {
   document.body.style.overflow = '';
 }
 
-/* ============================================================
-   WISHLIST
-   ============================================================ */
 
 function renderWishlist() {
   var grid = document.getElementById('pr-wishlist-grid');
@@ -1161,9 +1134,6 @@ function removeFromWishlist(eventId) {
   showToast('💔 Đã xóa khỏi danh sách yêu thích', 'info');
 }
 
-/* ============================================================
-   PROFILE FORM
-   ============================================================ */
 
 function prefillProfileForm() {
   var el = function (id) { return document.getElementById(id); };
@@ -1233,11 +1203,8 @@ function saveProfile() {
   }
 }
 
-/* ============================================================
-   SECURITY / PASSWORD
-   ============================================================ */
 
-// Called directly from oninput="checkPasswordStrength(this.value)" in HTML
+// Kiểm tra độ mạnh mật khẩu
 function checkPasswordStrength(val) {
   var score = 0;
   if (val.length >= 8) score++;
@@ -1330,7 +1297,7 @@ function changePassword() {
   if (el('sec-new-pw')) el('sec-new-pw').value = '';
   if (el('sec-confirm-pw')) el('sec-confirm-pw').value = '';
 
-  // Reset strength bar
+  // Đặt lại thanh đo độ mạnh mật khẩu
   var fill = document.getElementById('pw-strength-fill');
   var label = document.getElementById('pw-strength-label');
   if (fill) { fill.style.width = '0%'; }
@@ -1344,21 +1311,13 @@ function logoutAll() {
   }, 1500);
 }
 
-/* ============================================================
-   BOOT
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', init);
 
-/* ============================================================
-   ALIASES & MISSING FUNCTIONS (patched for HTML compatibility)
-   ============================================================ */
 
-// HTML uses filterTickets(); existing code has renderTickets()
 function filterTickets(filter) {
   renderTickets(filter);
 }
 
-// Toggle password field visibility
+// Ẩn / hiện mật khẩu
 function togglePwVisibility(inputId, btn) {
   var input = document.getElementById(inputId);
   if (!input) return;
@@ -1371,7 +1330,7 @@ function togglePwVisibility(inputId, btn) {
   }
 }
 
-// Delete account placeholder
+// Xóa tài khoản
 function deleteAccount() {
   showToast('⚠️ Tính năng này sẽ sớm được hỗ trợ', 'info');
 }

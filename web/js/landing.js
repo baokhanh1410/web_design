@@ -1,12 +1,3 @@
-/**
- * EventHub Landing Page - landing.js
- * Pure Vanilla JS, no dependencies
- */
-
-// ============================================================
-// 1. DATA
-// ============================================================
-
 const LP_EVENTS = [
   {
     id: 1,
@@ -233,9 +224,6 @@ const LP_USERS = {
   Guest:     { name: "Nguyễn Văn Khang",   role: "Guest",     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80" }
 };
 
-// ============================================================
-// 2. STATE
-// ============================================================
 
 const lpState = {
   user: null,
@@ -247,9 +235,6 @@ const lpState = {
   statsAnimated: false
 };
 
-// ============================================================
-// 3. INIT
-// ============================================================
 
 function initLanding() {
   loadUser();
@@ -313,9 +298,6 @@ if (document.readyState === 'loading') {
   initLanding();
 }
 
-// ============================================================
-// 4. AUTH
-// ============================================================
 
 function loadUser() {
   try {
@@ -357,7 +339,7 @@ function updateAuthUI() {
     if (menuName) menuName.textContent = lpState.user.name;
     if (menuRole) menuRole.textContent = lpState.user.role || 'Thành viên';
 
-    // Role-based permissions: Admin and Organizer have access to Create Event & ML
+    // Phân quyền theo vai trò: Admin và Organizer có quyền tạo sự kiện
     const role = (lpState.user.role || '').toLowerCase();
     const hasAdminAccess = (role === 'admin' || role === 'organizer');
 
@@ -379,7 +361,7 @@ function updateAuthUI() {
     if (mobAdmin)   mobAdmin.style.display   = 'none';
   }
 
-  // Also sync with global header if present
+  // Đồng bộ với header toàn cục
   if (typeof renderHubHeader === 'function') {
     renderHubHeader();
   }
@@ -411,7 +393,7 @@ function quickLogin(role) {
   if (!profile) return;
   lpState.user = { ...profile };
   localStorage.setItem('eventhub_user', JSON.stringify(lpState.user));
-  // Also sync to main app
+  // Đồng bộ dữ liệu
   updateAuthUI();
   closeAuthModal();
   showToast(`✅ Đăng nhập thành công! Chào ${profile.name}`, 'success');
@@ -459,21 +441,18 @@ function toggleUserMenu() {
   if (menu) menu.classList.toggle('open');
 }
 
-// Close user menu on outside click
+// Đóng menu khi click ra ngoài
 document.addEventListener('click', (e) => {
   const authUser = document.getElementById('lp-auth-user');
   if (authUser && !authUser.contains(e.target)) {
     const menu = document.getElementById('lp-user-menu');
     if (menu) menu.classList.remove('open');
   }
-  // Close auth modal on backdrop click
+  // Đóng modal khi click ra ngoài nền mờ
   const backdrop = document.getElementById('lp-auth-modal');
   if (backdrop && e.target === backdrop) closeAuthModal();
 });
 
-// ============================================================
-// 5. HEADER
-// ============================================================
 
 function toggleMobileMenu() {
   const nav = document.getElementById('lp-mobile-nav');
@@ -498,9 +477,6 @@ function setupScrollEffects() {
   }, { passive: true });
 }
 
-// ============================================================
-// 6. CATEGORIES
-// ============================================================
 
 function renderCategories() {
   const grid = document.getElementById('lp-categories-grid');
@@ -517,7 +493,7 @@ function renderCategories() {
 }
 
 function filterByCategory(catId, evt) {
-  // Map category id to tab name
+  // Ánh xạ mã danh mục sang tab tương ứng
   const map = {
     music: 'Âm nhạc & Concert',
     tech: 'Công nghệ & AI',
@@ -527,28 +503,25 @@ function filterByCategory(catId, evt) {
   };
   const tabVal = map[catId] || 'all';
 
-  // Highlight card
+  // Đánh dấu thẻ danh mục đang chọn
   document.querySelectorAll('.lp-category-card').forEach(c => c.classList.remove('active'));
   const target = (evt && evt.currentTarget) || (window.event && window.event.currentTarget);
   if (target) target.classList.add('active');
 
-  // Switch events tab
+  // Chuyển tab sự kiện
   renderEvents(tabVal);
   document.querySelectorAll('.lp-tab-btn').forEach(btn => {
     const bTab = (btn.dataset.tab || '').replace(/&amp;/g, '&');
     btn.classList.toggle('active', bTab === tabVal);
   });
 
-  // Scroll to events
+  // Cuộn đến khu vực sự kiện
   setTimeout(() => {
     const el = document.getElementById('events');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
 }
 
-// ============================================================
-// 7. EVENTS
-// ============================================================
 
 function setupTabFilters() {
   document.querySelectorAll('.lp-tab-btn').forEach(btn => {
@@ -707,7 +680,7 @@ function toggleLike(e, id) {
     localStorage.setItem('eventhub_wishlist', JSON.stringify(list));
   } catch (err) {}
 
-  // Sync to backend DB if user is logged in
+  // Đồng bộ lên cơ sở dữ liệu nếu đã đăng nhập
   try {
     const userStr = localStorage.getItem('eventhub_user');
     const u = userStr ? JSON.parse(userStr) : null;
@@ -729,14 +702,11 @@ function toggleLike(e, id) {
     }
   } catch (err) {}
 
-  // Re-render current tab
+  // Vẽ lại danh sách sự kiện của tab hiện tại
   const activeTab = document.querySelector('.lp-tab-btn.active');
   renderEvents(activeTab ? activeTab.dataset.tab : 'all');
 }
 
-// ============================================================
-// 8. SEARCH
-// ============================================================
 
 function setupSearch() {
   const input = document.getElementById('lp-keyword');
@@ -807,9 +777,6 @@ function quickSearch(keyword) {
   handleSearch(new Event('submit'));
 }
 
-// ============================================================
-// 9. PROMO SLIDER
-// ============================================================
 
 function startSlider() {
   lpState.slideInterval = setInterval(() => slidePromo(1), 5000);
@@ -837,15 +804,12 @@ function applySlide() {
   });
 }
 
-// ============================================================
-// 10. COUNTDOWN TIMER
-// ============================================================
 
 function startCountdown() {
   const container = document.getElementById('lp-countdown');
   if (!container) return;
 
-  // Target: end of this weekend
+  // Mốc thời gian đếm ngược
   const now = new Date();
   const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
   const target = new Date(now);
@@ -871,9 +835,6 @@ function startCountdown() {
   setInterval(update, 1000);
 }
 
-// ============================================================
-// 11. STATS COUNTER ANIMATION
-// ============================================================
 
 function randomizeMarketingStats() {
   document.querySelectorAll('.lp-stat-number').forEach(el => {
@@ -919,9 +880,6 @@ function animateStats() {
   });
 }
 
-// ============================================================
-// 12. COPY PROMO CODE
-// ============================================================
 
 function copyCode(code) {
   if (navigator.clipboard) {
@@ -929,7 +887,7 @@ function copyCode(code) {
       showToast(`📋 Đã sao chép mã: ${code}`, 'success');
     });
   } else {
-    // Fallback
+    // Dự phòng
     const el = document.createElement('textarea');
     el.value = code;
     document.body.appendChild(el);
@@ -940,9 +898,6 @@ function copyCode(code) {
   }
 }
 
-// ============================================================
-// 13. TOAST NOTIFICATIONS
-// ============================================================
 
 function showToast(message, type = 'info') {
   const container = document.getElementById('lp-toast-container');
@@ -961,9 +916,6 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-// ============================================================
-// 14. HELPERS
-// ============================================================
 
 function formatVND(amount) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);

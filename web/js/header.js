@@ -1,8 +1,3 @@
-/**
- * EventHub Unified Global Header Logic
- * Ensures 100% consistent role, search, navigation, and state across all pages.
- */
-
 const HUB_ACCOUNTS = {
   Admin: {
     id: 1,
@@ -121,7 +116,7 @@ function renderHubHeader() {
     if (ddName) ddName.textContent = user.name || 'Người dùng';
     if (ddEmail) ddEmail.textContent = user.email || 'user@eventhub.vn';
 
-    // Toggle admin/organizer links
+    // Ẩn/hiện liên kết cho vai trò Admin và Organizer
     const isAdminOrOrg = (user.role === 'Admin' || user.role === 'Organizer');
     const adminLinks = document.querySelectorAll('.hub-role-admin');
     adminLinks.forEach(el => {
@@ -129,10 +124,10 @@ function renderHubHeader() {
     });
   }
 
-  // Highlight active nav link
+  // Đánh dấu liên kết điều hướng đang chọn
   highlightHubActiveNav();
 
-  // Populate search if on events page with query
+  // Nạp từ khóa vào ô tìm kiếm nếu đang ở trang sự kiện
   initHubSearch();
 }
 
@@ -202,7 +197,7 @@ function handleHeaderSearchSubmit(event) {
   const query = input ? input.value.trim() : '';
 
   if (window.location.pathname.includes('events.html')) {
-    // Already on events page: trigger local search if available
+    // Đang ở trang sự kiện: kích hoạt tìm kiếm cục bộ
     const evInput = document.getElementById('ev-header-keyword');
     if (evInput) {
       evInput.value = query;
@@ -211,13 +206,13 @@ function handleHeaderSearchSubmit(event) {
         return;
       }
     }
-    // Fallback: update URL
+    // Cập nhật URL tham số tìm kiếm
     const url = new URL(window.location.href);
     if (query) url.searchParams.set('q', query);
     else url.searchParams.delete('q');
     window.location.href = url.toString();
   } else {
-    // Navigate to events.html
+    // Chuyển sang trang sự kiện
     window.location.href = 'events.html' + (query ? ('?q=' + encodeURIComponent(query)) : '');
   }
 }
@@ -245,7 +240,7 @@ function switchHeaderRole(role) {
     showHubToast(`⚡ Đã chuyển sang vai trò: ${HUB_ACCOUNTS[role].name} (${role})`, 'success');
   }
 
-  // Synchronize with page-specific functions if present
+  // Đồng bộ với hàm của từng trang
   if (typeof window.switchRoleQuickly === 'function') {
     window.switchRoleQuickly(role);
   } else if (typeof window.quickLogin === 'function') {
@@ -283,9 +278,6 @@ function headerLogout() {
   }
 }
 
-/* ============================================================
-   GLOBAL AUTH MODAL & TOAST
-   ============================================================ */
 
 function ensureGlobalAuthModal() {
   let modal = document.getElementById('hub-global-auth-modal');
@@ -455,7 +447,7 @@ function toggleHeaderMobileMenu() {
   }
 }
 
-// Global click listener to close dropdown when clicking outside
+// Đóng menu thả xuống khi nhấp chuột ra ngoài
 document.addEventListener('click', function(e) {
   const dropdown = document.getElementById('hub-user-dropdown');
   const chip = document.getElementById('hub-user-chip');
@@ -467,7 +459,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Auto-initialize on DOM ready
+// Tự động khởi chạy khi tải xong trang
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', renderHubHeader);
 } else {
